@@ -1,0 +1,38 @@
+package com.example.animeecommercebackend.Dto.Response;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class OrderResponseDto {
+
+    private Long id;
+    private Integer orderNumber;
+    private LocalDateTime orderDate;
+    private Boolean status;
+    private BigDecimal totalAmount;
+    private BigDecimal subTotal;
+    private BigDecimal shippingFee;
+    private BigDecimal discountAmount;
+    private String shippingAddress;
+    private Long userId;
+    private List<Long> productVariantIds;
+    private Long couponId;
+    private Long paymentId;
+    private Long shipmentId;
+    private List<Long> returnsId;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+
+
+}

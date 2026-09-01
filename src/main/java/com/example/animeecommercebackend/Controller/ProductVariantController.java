@@ -1,0 +1,90 @@
+package com.example.animeecommercebackend.Controller;
+
+import com.example.animeecommercebackend.Dto.ApiResponseDto;
+import com.example.animeecommercebackend.Dto.Request.ProductVariantRequestDto;
+import com.example.animeecommercebackend.Dto.Response.ProductVariantResponseDto;
+import com.example.animeecommercebackend.Service.Impl.ProductVariantServiceImpl;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/productVariant")
+public class ProductVariantController {
+
+    private final ProductVariantServiceImpl productVariantServiceImpl;
+
+    public ProductVariantController( ProductVariantServiceImpl productVariantServiceImpl) {
+        this.productVariantServiceImpl = productVariantServiceImpl;
+    }
+
+    @PostMapping
+    public ResponseEntity<ApiResponseDto<ProductVariantResponseDto>> createProductVariant(@RequestBody @Valid ProductVariantRequestDto dto){
+        ProductVariantResponseDto productVariant = productVariantServiceImpl.createProductVariant(dto);
+
+        ApiResponseDto<ProductVariantResponseDto> response = new ApiResponseDto<>(
+                true,
+                "Product Variant Created Successfully",
+                productVariant
+        );
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponseDto<ProductVariantResponseDto>> getProductVariantById(@PathVariable @Positive Long id){
+        ProductVariantResponseDto productVariant = productVariantServiceImpl.getProductVariantById(id);
+
+        ApiResponseDto<ProductVariantResponseDto> response = new ApiResponseDto<>(
+                true,
+                "Product Variant Retrieved Successfully",
+                productVariant
+        );
+        return ResponseEntity.ok(response);
+    }
+    @GetMapping
+    public ResponseEntity<ApiResponseDto<List<ProductVariantResponseDto>>> getAllProductVariant(){
+        List<ProductVariantResponseDto> productVariants = productVariantServiceImpl.getAllProductVariant();
+        ApiResponseDto<List<ProductVariantResponseDto>> response = new ApiResponseDto<>(
+                true,
+                "Product Variant Retrieved Successfully",
+                productVariants
+        );
+        return ResponseEntity.ok(response);
+    }
+    @GetMapping("/{productId}")
+    public ResponseEntity<ApiResponseDto<List<ProductVariantResponseDto>>> getProductVariantByProductid(@PathVariable @Positive Long productId){
+        List<ProductVariantResponseDto> productVariants = productVariantServiceImpl.getVariantByProductId(productId);
+
+        ApiResponseDto<List<ProductVariantResponseDto>> response = new ApiResponseDto<>(
+                true,
+                "Product Variant Retrieved Successfully",
+                productVariants
+        );
+        return ResponseEntity.ok(response);
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponseDto<ProductVariantResponseDto>> updateProductVariant(@PathVariable @Positive Long id, @RequestBody @Valid ProductVariantRequestDto dto){
+        ProductVariantResponseDto productVariants = productVariantServiceImpl.updateProductVariant(id,dto);
+
+        ApiResponseDto<ProductVariantResponseDto> response = new ApiResponseDto<>(
+                true,
+                "Product Variant Updated Successfully",
+                productVariants
+        );
+        return ResponseEntity.ok(response);
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponseDto<Void>> deleteProductVariant(@PathVariable @Positive Long id){
+        productVariantServiceImpl.deleteProductVariant(id);
+        ApiResponseDto<Void> response = new ApiResponseDto<>(
+                true,
+                "Product Variant Deleted Successfully",
+                null
+        );
+        return ResponseEntity.ok(response);
+    }
+}

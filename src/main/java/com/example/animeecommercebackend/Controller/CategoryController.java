@@ -1,0 +1,81 @@
+package com.example.animeecommercebackend.Controller;
+
+import com.example.animeecommercebackend.Dto.ApiResponseDto;
+import com.example.animeecommercebackend.Dto.Request.CategoryRequestDto;
+import com.example.animeecommercebackend.Dto.Response.CategoryResponseDto;
+import com.example.animeecommercebackend.Entity.Category;
+import com.example.animeecommercebackend.Repository.CategoryRepository;
+import com.example.animeecommercebackend.Service.Impl.CategoryServiceImpl;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/category")
+public class CategoryController {
+
+    private final CategoryServiceImpl categoryServiceImpl;
+
+    public CategoryController(CategoryServiceImpl categoryServiceImpl) {
+        this.categoryServiceImpl = categoryServiceImpl;
+    }
+
+    @PostMapping
+    public ResponseEntity<ApiResponseDto<CategoryResponseDto>> createCategory(@RequestBody @Valid CategoryRequestDto dto){
+        CategoryResponseDto category = categoryServiceImpl.createCategory(dto);
+
+        ApiResponseDto<CategoryResponseDto> response = new ApiResponseDto<>(
+                true,
+                "Category Created Successfully!",
+                category
+        );
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponseDto<CategoryResponseDto>> getCategoryById(@PathVariable @Positive Long id){
+        CategoryResponseDto category = categoryServiceImpl.getCategoryById(id);
+
+        ApiResponseDto<CategoryResponseDto> response = new ApiResponseDto<>(
+                true,
+                "Category Retrieved Successfully!",
+                category
+        );
+        return ResponseEntity.ok(response);
+    }
+    @GetMapping
+    public ResponseEntity<ApiResponseDto<List<CategoryResponseDto>>> getAllCategory(){
+        List<CategoryResponseDto> categories = categoryServiceImpl.getAllCategory();
+
+        ApiResponseDto<List<CategoryResponseDto>> response = new ApiResponseDto<>(
+                true,
+                "Category Retrieved Successfully",
+                categories
+        );
+        return ResponseEntity.ok(response);
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponseDto<CategoryResponseDto>> updateCategory(@PathVariable @Positive Long id, @RequestBody @Valid CategoryRequestDto dto){
+        CategoryResponseDto category = categoryServiceImpl.updateCategory(id,dto);
+
+        ApiResponseDto<CategoryResponseDto> response = new ApiResponseDto<>(
+                true,
+                "Category Updated Successfully!",
+                category
+        );
+        return ResponseEntity.ok(response);
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponseDto<Void>> deleteCategory(@PathVariable @Positive Long id){
+        categoryServiceImpl.deleteCategory(id);
+        ApiResponseDto<Void> response = new ApiResponseDto<>(
+                true,
+                "Category Deleted Successfully",
+                null
+        );
+        return ResponseEntity.ok(response);
+    }
+}
