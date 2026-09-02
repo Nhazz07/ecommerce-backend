@@ -46,7 +46,7 @@ public class RefundController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{returnId}")
+    @GetMapping("/refund/{returnId}")
     public ResponseEntity<ApiResponseDto<RefundResponseDto>> getRefundByOrderId(@PathVariable @Positive Long returnId){
         RefundResponseDto refund = refundServiceImpl.getRefundByReturnId(returnId);
 

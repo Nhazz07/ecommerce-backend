@@ -46,7 +46,7 @@ public class ProductImageController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{productId}")
+    @GetMapping("/productId/{productId}")
     public ResponseEntity<ApiResponseDto<List<ProductImageResponseDto>>> getProductImageByProductId(@PathVariable @Positive Long productId){
         List<ProductImageResponseDto> productImage = productImageServiceImpl.getImageByProductId(productId);
 

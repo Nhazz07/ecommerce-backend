@@ -42,7 +42,7 @@ public class ReturnController {
         );
         return ResponseEntity.ok(response);
     }
-    @GetMapping("/{orderId}")
+    @GetMapping("/orderId/{orderId}")
     public ResponseEntity<ApiResponseDto<List<ReturnResponseDto>>> getReturnByOrderId(@PathVariable @Positive Long orderId ){
         List<ReturnResponseDto> returns = returnServiceImpl.getReturnByOrderId(orderId);
 

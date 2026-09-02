@@ -45,7 +45,7 @@ public class PromotionController {
         );
         return ResponseEntity.ok(response);
     }
-    @GetMapping("/{productId}")
+    @GetMapping("/productId/{productId}")
     public ResponseEntity<ApiResponseDto<PromotionResponseDto>> getPromotionByProductId(@PathVariable @Positive Long productId){
         PromotionResponseDto promotion = promotionServiceImpl.getPromotionByProductId(productId);
 

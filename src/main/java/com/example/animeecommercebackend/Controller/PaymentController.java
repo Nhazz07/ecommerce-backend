@@ -45,7 +45,7 @@ public class PaymentController {
         );
         return ResponseEntity.ok(response);
     }
-    @GetMapping("/{orderId}")
+    @GetMapping("/order/{orderId}")
     public ResponseEntity<ApiResponseDto<PaymentResponseDto>> getPaymentByOrderId(@PathVariable @Positive Long orderId){
         PaymentResponseDto payment = paymentServiceImpl.getPaymentByOrderId(orderId);
 

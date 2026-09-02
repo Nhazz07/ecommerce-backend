@@ -44,7 +44,7 @@ public class OrderController {
         );
         return ResponseEntity.ok(response);
     }
-    @GetMapping("/{userId}")
+    @GetMapping("/userId/{userId}")
     public ResponseEntity<ApiResponseDto<OrderResponseDto>> getOrderByUserId(@PathVariable @Positive Long userId){
         OrderResponseDto order = orderServiceImpl.getOrderByUserId(userId);
 

@@ -55,7 +55,7 @@ public class GiftCardController {
         );
         return ResponseEntity.ok(response);
     }
-    @GetMapping("/{userId}")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<ApiResponseDto<List<GiftCardResponseDto>>> getGiftCardByUser(@PathVariable @Positive Long userId){
         List<GiftCardResponseDto> giftCards = giftCardServiceImpl.getGiftCardsByUserId(userId);
 

@@ -44,7 +44,7 @@ public class ShipmentController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{orderId}")
+    @GetMapping("/orderId/{orderId}")
     public ResponseEntity<ApiResponseDto<ShipmentResponseDto>> getShipmentByOrderId(@PathVariable @Positive Long orderId){
         ShipmentResponseDto shipment = shipmentServiceImpl.getShipmentByOrderId(orderId);
 

@@ -56,7 +56,7 @@ public class InventoryController {
         );
         return ResponseEntity.ok(response);
     }
-    @GetMapping("/{productVariantId}")
+    @GetMapping("/product-variant/{productVariantId}")
     public ResponseEntity<ApiResponseDto<InventoryResponseDto>> getInventoryByProductVariantId(@PathVariable @Positive Long productVariantId){
         InventoryResponseDto inventory = inventoryServiceImpl.getInventoryByProductVariantId(productVariantId);
 

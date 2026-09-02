@@ -7,6 +7,8 @@ import com.example.animeecommercebackend.Service.Impl.ProductImageServiceImpl;
 import com.example.animeecommercebackend.Service.Impl.ProductServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +38,18 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @GetMapping
+    public ResponseEntity<ApiResponseDto<Page<ProductResponseDto>>> getAllProduct(Pageable pageable){
+        Page<ProductResponseDto> products = productServiceImpl.getAllProduct(pageable);
+
+        ApiResponseDto<Page<ProductResponseDto>> response = new ApiResponseDto<>(
+                true,
+                "Product Retrieved Successfully",
+                products
+        );
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseDto<ProductResponseDto>> getProductById(@PathVariable @Positive Long id){
         ProductResponseDto product = productServiceImpl.getProductById(id);
@@ -47,7 +61,7 @@ public class ProductController {
         );
         return ResponseEntity.ok(response);
     }
-    @GetMapping("/{categoryId}")
+    @GetMapping("/category/{categoryId}")
     public ResponseEntity<ApiResponseDto<List<ProductResponseDto>>> getProductByCategoryId(@PathVariable @Positive Long categoryId){
         List<ProductResponseDto> products = productServiceImpl.getProductByCategoryId(categoryId);
 
@@ -58,7 +72,7 @@ public class ProductController {
         );
         return ResponseEntity.ok(response);
     }
-    @GetMapping("/{brandId}")
+    @GetMapping("/brand/{brandId}")
     public ResponseEntity<ApiResponseDto<List<ProductResponseDto>>> getProductByBrandId(@PathVariable @Positive Long brandId){
         List<ProductResponseDto> products = productServiceImpl.getProductByBrandId(brandId);
         ApiResponseDto<List<ProductResponseDto>> response = new ApiResponseDto<>(
@@ -68,7 +82,7 @@ public class ProductController {
         );
         return ResponseEntity.ok(response);
     }
-    @GetMapping("/{seriesId}")
+    @GetMapping("/series/{seriesId}")
     public ResponseEntity<ApiResponseDto<List<ProductResponseDto>>> getProductBySeriesId(@PathVariable @Positive Long seriesId){
         List<ProductResponseDto> products = productServiceImpl.getProductBySeriesId(seriesId);
 

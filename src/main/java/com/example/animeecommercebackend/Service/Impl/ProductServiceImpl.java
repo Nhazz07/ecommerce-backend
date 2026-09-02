@@ -14,6 +14,8 @@ import com.example.animeecommercebackend.Repository.ProductRepository;
 import com.example.animeecommercebackend.Repository.SeriesRepository;
 import com.example.animeecommercebackend.Service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -72,15 +74,12 @@ public class ProductServiceImpl implements ProductService {
         return ProductMapper.toResponse(product);
     }
 
-
     @Override
-    public List<ProductResponseDto> getAllProduct() {
-
-        return productRepository.findAll()
-                .stream()
-                .map(ProductMapper::toResponse)
-                .toList();
+    public Page<ProductResponseDto> getAllProduct(Pageable pageable) {
+        Page<Product> products = productRepository.findAll(pageable);
+        return products.map(ProductMapper::toResponse);
     }
+
 
 
     @Override

@@ -40,12 +40,12 @@ public class ReviewController {
         ReviewResponseDto review = reviewServiceImpl.getReviewById(id);
         ApiResponseDto<ReviewResponseDto> response = new ApiResponseDto<>(
                 true,
-                "Review Retrieved Successdully",
+                "Review Retrieved Successfully",
                 review
         );
         return ResponseEntity.ok(response);
     }
-    @GetMapping("/{productId}")
+    @GetMapping("/productId/{productId}")
     public ResponseEntity<ApiResponseDto<List<ReviewResponseDto>>> getReviewByProductId(@PathVariable @Positive Long productId){
         List<ReviewResponseDto> review = reviewServiceImpl.getReviewByProductId(productId);
 
@@ -56,7 +56,7 @@ public class ReviewController {
         );
         return ResponseEntity.ok(response);
     }
-    @GetMapping("/{userId}")
+    @GetMapping("/userId/{userId}")
     public ResponseEntity<ApiResponseDto<List<ReviewResponseDto>>> getPReviewByUserId(@PathVariable @Positive Long userId){
         List<ReviewResponseDto> reviews = reviewServiceImpl.getReviewByUserId(userId);
         ApiResponseDto<List<ReviewResponseDto>> response = new ApiResponseDto<>(

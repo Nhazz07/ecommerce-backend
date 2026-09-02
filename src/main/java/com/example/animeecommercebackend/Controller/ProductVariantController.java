@@ -55,7 +55,7 @@ public class ProductVariantController {
         );
         return ResponseEntity.ok(response);
     }
-    @GetMapping("/{productId}")
+    @GetMapping("/productId/{productId}")
     public ResponseEntity<ApiResponseDto<List<ProductVariantResponseDto>>> getProductVariantByProductid(@PathVariable @Positive Long productId){
         List<ProductVariantResponseDto> productVariants = productVariantServiceImpl.getVariantByProductId(productId);
 
