@@ -25,6 +25,7 @@ public class CategoryMapper {
     public static CategoryResponseDto toResponse(Category category){
         CategoryResponseDto dto = new CategoryResponseDto();
 
+        dto.setId(category.getId());
         dto.setName(category.getName());
         dto.setDescription(category.getDescription());
         dto.setImageUrl(category.getImageUrl());
