@@ -32,7 +32,6 @@ public class WishlistMapper {
         dto.setIsPublic(wishlist.getIsPublic());
         dto.setCreatedAt(wishlist.getCreatedAt());
         dto.setUpdatedAt(wishlist.getUpdatedAt());
-
         if (wishlist.getProducts() != null) {
 
             dto.setProductIds(

@@ -23,4 +23,6 @@ public class BrandResponseDto {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+
 }

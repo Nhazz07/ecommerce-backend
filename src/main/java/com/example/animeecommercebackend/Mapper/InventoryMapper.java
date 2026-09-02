@@ -27,7 +27,8 @@ public class InventoryMapper {
         dto.setReorderLevel(inventory.getReOrderLevel());
         dto.setAvailableQuantity(inventory.getAvailableQuantity());
         dto.setUpdatedAt(inventory.getUpdateAt());
-
+        dto.setCreatedAt(inventory.getCreatedAt());
+        dto.setUpdatedAt(inventory.getUpdateAt());
         if(inventory.getProductVariant() != null){
             dto.setProductVariantId(inventory.getProductVariant().getId());
         }

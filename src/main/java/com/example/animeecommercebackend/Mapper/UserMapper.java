@@ -30,7 +30,8 @@ public class UserMapper {
         dto.setLastName(user.getLastName());
         dto.setPhoneNumber(user.getPhoneNumber());
         dto.setStatus(user.getStatus());
-
+        dto.setCreatedAt(user.getUpdatedAt());
+        dto.setUpdatedAt(user.getUpdatedAt());
         return dto;
     }
 }

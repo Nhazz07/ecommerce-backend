@@ -62,7 +62,8 @@ public class CartMapper {
         dto.setQuantity(cartItem.getQuantity());
         dto.setCreatedAt(cartItem.getCreatedAt());
         dto.setUpdatedAt(cartItem.getUpdatedAt());
-
+        dto.setCreatedAt(cartItem.getCreatedAt());
+        dto.setCreatedAt(cartItem.getUpdatedAt());
         if (cartItem.getProductVariant() != null) {
 
             dto.setProductVariantId(

@@ -28,7 +28,9 @@ public class BrandMapper {
         dto.setDescription(brand.getDescription());
         dto.setName(brand.getName());
         dto.setLogoUrl(brand.getLogoUrl());
-
+        dto.setCreatedAt(brand.getCreatedAt());
+        dto.setUpdatedAt(brand.getUpdatedAt());
+        
         if(brand.getProducts() != null){
             dto.setProductId(brand.getProducts().stream().map(Product::getId).toList());
         }else{

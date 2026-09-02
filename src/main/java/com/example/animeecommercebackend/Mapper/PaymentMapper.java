@@ -28,7 +28,8 @@ public class PaymentMapper {
         dto.setAmount(payment.getAmount());
         dto.setStatus(payment.getStatus());
         dto.setPaidAt(payment.getPaidAt());
-
+        dto.setCreatedAt(payment.getCreatedAt());
+        dto.setUpdatedAt(payment.getUpdatedAt());
         if(payment.getOrder() != null){
             dto.setOrderId(payment.getOrder().getId());
         }

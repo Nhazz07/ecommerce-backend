@@ -34,6 +34,8 @@ public class AddressMapper {
         dto.setCountry(address.getCountry());
         dto.setAddressType(address.getAddressType());
         dto.setIsDefault(address.getIsDefault());
+        dto.setCreatedAt(address.getCreatedAt());
+        dto.setUpdatedAt(address.getUpdatedAt());
 
         if(address.getUser() != null){
             dto.setUserId(address.getUser().getId());

@@ -31,7 +31,8 @@ public class SeriesMapper {
         dto.setName(series.getName());
         dto.setDescription(series.getDescription());
         dto.setImageUrl(series.getImageUrl());
-
+        dto.setCreatedAt(series.getCreatedAt());
+        dto.setUpdatedAt(series.getUpdatedAt());
         if(series.getProducts() != null){
             dto.setProductIds(series.getProducts().stream().map(Product::getId).toList());
         }else{

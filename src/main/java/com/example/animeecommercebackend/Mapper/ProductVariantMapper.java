@@ -35,7 +35,8 @@ public class ProductVariantMapper {
         dto.setPrice(productVariant.getPrice());
         dto.setSize(productVariant.getSize());
         dto.setColor(productVariant.getColor());
-
+        dto.setCreatedAt(productVariant.getCreatedAt());
+        dto.setUpdatedAt(productVariant.getUpdatedAt());
         if(productVariant.getProduct() != null){
             dto.setProductId(productVariant.getProduct().getId());
             dto.setProductName(productVariant.getProduct().getProductName());

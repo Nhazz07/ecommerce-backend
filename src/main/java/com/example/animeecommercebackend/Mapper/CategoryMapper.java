@@ -28,7 +28,8 @@ public class CategoryMapper {
         dto.setName(category.getName());
         dto.setDescription(category.getDescription());
         dto.setImageUrl(category.getImageUrl());
-
+        dto.setCreatedAt(category.getCreatedAt());
+        dto.setUpdatedAt(category.getUpdatedAt());
         if(category.getProducts() != null){
             dto.setProductId(category.getProducts().stream().map(Product::getId).toList());
         }else{

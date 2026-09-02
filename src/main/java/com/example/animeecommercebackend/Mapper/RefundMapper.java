@@ -31,7 +31,8 @@ public class RefundMapper {
         dto.setReason(refund.getReason());
         dto.setStatus(refund.getStatus());
         dto.setRefundAt(refund.getRefundAt());
-
+        dto.setCreatedAt(refund.getCreatedAt());
+        dto.setUpdatedAt(refund.getUpdatedAt());
         if(refund.getAReturn() != null){
             dto.setReturnId(refund.getAReturn().getId());
         }

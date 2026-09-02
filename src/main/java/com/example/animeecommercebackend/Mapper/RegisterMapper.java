@@ -31,6 +31,8 @@ public class RegisterMapper {
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
         dto.setPhoneNumber(user.getPhoneNumber());
+        dto.setCreatedAt(user.getCreatedAt());
+        dto.setUpdatedAt(user.getUpdatedAt());
         return dto;
     }
 }

@@ -32,7 +32,8 @@ public class ReviewMapper {
         dto.setComment(review.getComment());
         dto.setCreatedAt(review.getCreatedAt());
         dto.setUpdatedAt(review.getUpdatedAt());
-
+        dto.setCreatedAt(review.getCreatedAt());
+        dto.setUpdatedAt(review.getUpdatedAt());
         if(review.getUser() != null){
             dto.setUserId(review.getUser().getId());
             dto.setUserName(review.getUser().getUsername());

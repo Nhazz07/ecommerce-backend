@@ -39,7 +39,8 @@ public class PromotionMapper {
         dto.setDiscountValue(promotion.getDiscountValue());
         dto.setStartDate(promotion.getStartDate());
         dto.setStartDate(promotion.getStartDate());
-
+        dto.setCreatedAt(promotion.getCreatedAt());
+        dto.setUpdatedAt(promotion.getUpdatedAt());
         if(promotion.getProducts() != null){
             dto.setProductIds(promotion.getProducts().stream().map(Product::getId).toList());
         }else{

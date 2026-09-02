@@ -36,6 +36,8 @@ public class ProductMapper {
         dto.setPrice(product.getPrice());
         dto.setStatus(product.getStatus());
         dto.setReleaseDate(product.getReleaseDate());
+        dto.setCreatedAt(product.getCreatedAt());
+        dto.setUpdatedAt(product.getUpdatedAt());
 
 
         if(product.getCategory() != null){

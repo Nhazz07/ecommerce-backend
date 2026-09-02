@@ -40,8 +40,7 @@ public class CouponMapper {
         dto.setStartDate(coupon.getStartDate());
         dto.setEndDate(coupon.getEndDate());
         dto.setUsageLimit(coupon.getUsageLimit());
-        dto.setActive(coupon.getActive());
-
+        dto.setUpdatedAt(coupon.getUpdatedAt());
         if(coupon.getOrders() != null){
             dto.setOrderId(coupon.getOrders().stream().map(Order::getId).toList());
         }else{

@@ -29,7 +29,8 @@ public class ReturnMapper {
         dto.setStatus(aReturn.getStatus());
         dto.setRequestedAt(aReturn.getRequestedAt());
         dto.setProcessedAt(aReturn.getProcessedAt());
-
+        dto.setCreatedAt(aReturn.getCreatedAt());
+        dto.setUpdatedAt(aReturn.getUpdatedAt());
         if(aReturn.getOrder() != null){
             dto.setOrderId(aReturn.getOrder().getId());
         }

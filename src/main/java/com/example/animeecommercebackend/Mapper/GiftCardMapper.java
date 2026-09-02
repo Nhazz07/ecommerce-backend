@@ -28,7 +28,8 @@ public class GiftCardMapper {
         dto.setInitialBalance(giftCard.getInitialBalance());
         dto.setRemainingBalance(giftCard.getRemainingBalance());
         dto.setStatus(giftCard.getStatus());
-
+        dto.setCreatedAt(dto.getCreatedAt());
+        dto.setUpdatedAt(dto.getUpdatedAt());
         if(giftCard.getUser() != null){
             dto.setUserId(giftCard.getUser().getId());
         }

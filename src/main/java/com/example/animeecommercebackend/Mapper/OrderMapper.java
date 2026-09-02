@@ -38,6 +38,8 @@ public class OrderMapper {
 
         dto.setShippingAddress(order.getShippingAddress());
 
+        dto.setCreatedAt(order.getCreatedAt());
+        dto.setUpdatedAt(order.getUpdatedAt());
         if(order.getUser() != null){
             dto.setUserId((order.getUser().getId()));
         }

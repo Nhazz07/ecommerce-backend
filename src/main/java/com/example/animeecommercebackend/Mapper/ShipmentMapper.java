@@ -33,7 +33,8 @@ public class ShipmentMapper {
         dto.setShippedAt(shipment.getShippedAt());
         dto.setEstimatedDeliveryDate(shipment.getEstimatedDeliveryDate());
         dto.setDeliveredAt(shipment.getDeliveryAt());
-
+        dto.setCreatedAt(shipment.getCreatedAt());
+        dto.setUpdatedAt(shipment.getUpdatedAt());
         if(shipment.getOrder() != null){
             dto.setOrderId(shipment.getOrder().getId());
         }
