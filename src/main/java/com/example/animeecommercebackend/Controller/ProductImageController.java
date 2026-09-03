@@ -1,14 +1,15 @@
 package com.example.animeecommercebackend.Controller;
 
 import com.example.animeecommercebackend.Dto.ApiResponseDto;
-import com.example.animeecommercebackend.Dto.Request.ProductImageRequestDto;
 import com.example.animeecommercebackend.Dto.Response.ProductImageResponseDto;
 import com.example.animeecommercebackend.Service.Impl.ProductImageServiceImpl;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,74 +23,151 @@ public class ProductImageController {
         this.productImageServiceImpl = productImageServiceImpl;
     }
 
-    @PostMapping
-    public ResponseEntity<ApiResponseDto<ProductImageResponseDto>> createProduct(@RequestBody @Valid ProductImageRequestDto dto){
-        ProductImageResponseDto productImage = productImageServiceImpl.createProductImage(dto);
+    // CREATE PRODUCT IMAGE
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponseDto<ProductImageResponseDto>> createProductImage(
+            @RequestParam("productId")
+            @Positive Long productId,
 
-        ApiResponseDto<ProductImageResponseDto> response = new ApiResponseDto<>(
-                true,
-                "Product Image Created Successfully",
-                productImage
-        );
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            @RequestParam("file")
+            MultipartFile file,
+
+            @RequestParam("altText")
+            String altText,
+
+            @RequestParam("displayOrder")
+            @PositiveOrZero Integer displayOrder
+
+    ) {
+
+        ProductImageResponseDto productImage =
+                productImageServiceImpl.createProductImage(
+                        productId,
+                        file,
+                        altText,
+                        displayOrder
+                );
+
+        ApiResponseDto<ProductImageResponseDto> response =
+                new ApiResponseDto<>(
+                        true,
+                        "Product Image Created Successfully",
+                        productImage
+                );
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
     }
 
+    // GET PRODUCT IMAGE BY ID
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<ProductImageResponseDto>> getProductImageById(@PathVariable @Positive Long id){
-        ProductImageResponseDto productImage = productImageServiceImpl.getProductImageById(id);
+    public ResponseEntity<ApiResponseDto<ProductImageResponseDto>> getProductImageById(
+            @PathVariable
+            @Positive Long id
+    ) {
 
-        ApiResponseDto<ProductImageResponseDto> response = new ApiResponseDto<>(
-                true,
-                "Product Image Retrieved Successfully",
-                productImage
-        );
+        ProductImageResponseDto productImage =
+                productImageServiceImpl.getProductImageById(id);
+
+        ApiResponseDto<ProductImageResponseDto> response =
+                new ApiResponseDto<>(
+                        true,
+                        "Product Image Retrieved Successfully",
+                        productImage
+                );
+
         return ResponseEntity.ok(response);
     }
 
+    // GET PRODUCT IMAGES BY PRODUCT ID
     @GetMapping("/productId/{productId}")
-    public ResponseEntity<ApiResponseDto<List<ProductImageResponseDto>>> getProductImageByProductId(@PathVariable @Positive Long productId){
-        List<ProductImageResponseDto> productImage = productImageServiceImpl.getImageByProductId(productId);
+    public ResponseEntity<ApiResponseDto<List<ProductImageResponseDto>>> getProductImageByProductId(
+            @PathVariable
+            @Positive Long productId
+    ) {
 
-        ApiResponseDto<List<ProductImageResponseDto>> response = new ApiResponseDto<>(
-                true,
-                "Product Image Updated Successfully",
-                productImage
-        );
+        List<ProductImageResponseDto> productImages =
+                productImageServiceImpl.getImageByProductId(productId);
+
+        ApiResponseDto<List<ProductImageResponseDto>> response =
+                new ApiResponseDto<>(
+                        true,
+                        "Product Images Retrieved Successfully",
+                        productImages
+                );
+
         return ResponseEntity.ok(response);
     }
 
+    // GET ALL PRODUCT IMAGES
     @GetMapping
-    public ResponseEntity<ApiResponseDto<List<ProductImageResponseDto>>> getAllProductImage(){
-        List<ProductImageResponseDto> productImages = productImageServiceImpl.getAllProductImages();
+    public ResponseEntity<ApiResponseDto<List<ProductImageResponseDto>>> getAllProductImage() {
 
-        ApiResponseDto<List<ProductImageResponseDto>> response = new ApiResponseDto<>(
-                true,
-                "Product Images Retrieved Successfully",
-                productImages
-        );
+        List<ProductImageResponseDto> productImages =
+                productImageServiceImpl.getAllProductImages();
+
+        ApiResponseDto<List<ProductImageResponseDto>> response =
+                new ApiResponseDto<>(
+                        true,
+                        "Product Images Retrieved Successfully",
+                        productImages
+                );
+
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<ProductImageResponseDto>> updateProductImage(@PathVariable @Positive Long id, @RequestBody  @Valid ProductImageRequestDto dto){
-        ProductImageResponseDto productImage = productImageServiceImpl.updateProductImage(id,dto);
+    // UPDATE PRODUCT IMAGE
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponseDto<ProductImageResponseDto>> updateProductImage(
+            @PathVariable
+            @Positive Long id,
 
-        ApiResponseDto<ProductImageResponseDto> response = new ApiResponseDto<>(
-                true,
-                "Product Image Updated Successfully",
-                productImage
-        );
+            @RequestParam("file")
+            MultipartFile file,
+
+            @RequestParam("altText")
+            String altText,
+
+            @RequestParam("displayOrder")
+            @PositiveOrZero
+            Integer displayOrder
+    ) {
+
+        ProductImageResponseDto productImage =
+                productImageServiceImpl.updateProductImage(
+                        id,
+                        file,
+                        altText,
+                        displayOrder
+                );
+
+        ApiResponseDto<ProductImageResponseDto> response =
+                new ApiResponseDto<>(
+                        true,
+                        "Product Image Updated Successfully",
+                        productImage
+                );
+
         return ResponseEntity.ok(response);
     }
+
+    // DELETE PRODUCT IMAGE
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<Void>> deleteProductImage(@PathVariable @Positive Long id){
+    public ResponseEntity<ApiResponseDto<Void>> deleteProductImage(
+            @PathVariable
+            @Positive Long id
+    ) {
+
         productImageServiceImpl.deleteProductImage(id);
 
-        ApiResponseDto<Void> response = new ApiResponseDto<>(
-                true,
-                "Product Image Delete Successfully!",
-                null
-        );
+        ApiResponseDto<Void> response =
+                new ApiResponseDto<>(
+                        true,
+                        "Product Image Deleted Successfully!",
+                        null
+                );
+
         return ResponseEntity.ok(response);
     }
 }

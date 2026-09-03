@@ -1,19 +1,31 @@
 package com.example.animeecommercebackend.Service;
 
-import com.example.animeecommercebackend.Dto.Request.ProductImageRequestDto;
-import com.example.animeecommercebackend.Dto.Request.ProductRequestDto;
 import com.example.animeecommercebackend.Dto.Response.ProductImageResponseDto;
-import com.example.animeecommercebackend.Entity.ProductImages;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface ProductImageService {
-    ProductImageResponseDto createProductImage(ProductImageRequestDto dto);
+
+    ProductImageResponseDto createProductImage(
+            Long productId,
+            MultipartFile file,
+            String altText,
+            Integer displayOrder
+    );
+
     ProductImageResponseDto getProductImageById(Long id);
+
     List<ProductImageResponseDto> getAllProductImages();
+
     List<ProductImageResponseDto> getImageByProductId(Long productId);
-    ProductImageResponseDto updateProductImage(Long id, ProductImageRequestDto dto);
+
+    ProductImageResponseDto updateProductImage(
+            Long id,
+            MultipartFile file,
+            String altText,
+            Integer displayOrder
+    );
+
     void deleteProductImage(Long id);
-
-
 }

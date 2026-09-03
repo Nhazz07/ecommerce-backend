@@ -25,7 +25,8 @@ public class ProductImages {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Image URL is required")
+    private String publicId;
+
     private String imageUrl;
 
     @NotBlank(message = "Alt text is required")
