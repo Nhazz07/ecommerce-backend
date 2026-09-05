@@ -27,7 +27,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponseDto getOrderById(Long id) {
-        Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Order Not Found!"));
+        Order order = orderRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Order Not Found!"));
         return OrderMapper.toResponse(order);
     }
 
@@ -47,7 +48,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponseDto updateOrder(Long id, OrderRequestDto dto) {
-        Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Order Not Found!"));
+        Order order = orderRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Order Not Found!"));
 
         order.setShippingAddress(dto.getShippingAddress());
 
@@ -57,7 +59,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void deleteOrder(Long id) {
-        Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Order Not Found!"));
+        Order order = orderRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Order Not Found!"));
 
         orderRepository.delete(order);
     }

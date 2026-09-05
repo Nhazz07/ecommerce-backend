@@ -24,7 +24,8 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseDto<ReviewResponseDto>> createReview(@RequestBody @Valid ReviewRequestDto dto){
+    public ResponseEntity<ApiResponseDto<ReviewResponseDto>> createReview(
+            @RequestBody @Valid ReviewRequestDto dto){
         ReviewResponseDto review = reviewServiceImpl.createReview(dto);
 
         ApiResponseDto<ReviewResponseDto> response = new ApiResponseDto<>(
@@ -36,7 +37,8 @@ public class ReviewController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<ReviewResponseDto>> getReviewById(@PathVariable @Positive Long id){
+    public ResponseEntity<ApiResponseDto<ReviewResponseDto>> getReviewById(
+            @PathVariable @Positive Long id){
         ReviewResponseDto review = reviewServiceImpl.getReviewById(id);
         ApiResponseDto<ReviewResponseDto> response = new ApiResponseDto<>(
                 true,
@@ -46,7 +48,8 @@ public class ReviewController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/productId/{productId}")
-    public ResponseEntity<ApiResponseDto<List<ReviewResponseDto>>> getReviewByProductId(@PathVariable @Positive Long productId){
+    public ResponseEntity<ApiResponseDto<List<ReviewResponseDto>>> getReviewByProductId(
+            @PathVariable @Positive Long productId){
         List<ReviewResponseDto> review = reviewServiceImpl.getReviewByProductId(productId);
 
         ApiResponseDto<List<ReviewResponseDto>> response = new ApiResponseDto<>(
@@ -57,7 +60,8 @@ public class ReviewController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/userId/{userId}")
-    public ResponseEntity<ApiResponseDto<List<ReviewResponseDto>>> getPReviewByUserId(@PathVariable @Positive Long userId){
+    public ResponseEntity<ApiResponseDto<List<ReviewResponseDto>>> getPReviewByUserId(
+            @PathVariable @Positive Long userId){
         List<ReviewResponseDto> reviews = reviewServiceImpl.getReviewByUserId(userId);
         ApiResponseDto<List<ReviewResponseDto>> response = new ApiResponseDto<>(
                 true,
@@ -79,7 +83,9 @@ public class ReviewController {
         return ResponseEntity.ok(response);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<ReviewResponseDto>> updateReview(@PathVariable @Positive Long id, @RequestBody @Valid ReviewRequestDto dto){
+    public ResponseEntity<ApiResponseDto<ReviewResponseDto>> updateReview(
+            @PathVariable @Positive Long id,
+            @RequestBody @Valid ReviewRequestDto dto){
         ReviewResponseDto review = reviewServiceImpl.updateReview(id,dto);
 
         ApiResponseDto<ReviewResponseDto> response = new ApiResponseDto<>(
@@ -91,7 +97,8 @@ public class ReviewController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<Void>> deleteReview(@PathVariable @Positive Long id){
+    public ResponseEntity<ApiResponseDto<Void>> deleteReview(
+            @PathVariable @Positive Long id){
         reviewServiceImpl.deleteReview(id);
 
         ApiResponseDto<Void> response = new ApiResponseDto<>(

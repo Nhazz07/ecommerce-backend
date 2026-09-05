@@ -28,7 +28,8 @@ public class RefundServiceImpl implements RefundService {
 
     @Override
     public RefundResponseDto getRefundById(Long id) {
-        Refund refund = refundRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Refund Not Found!"));
+        Refund refund = refundRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Refund Not Found!"));
         return RefundMapper.toResponse(refund);
     }
 
@@ -46,7 +47,8 @@ public class RefundServiceImpl implements RefundService {
 
     @Override
     public RefundResponseDto updateRefund(Long id, RefundRequestDto dto) {
-        Refund refund = refundRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Refund Not Found!"));
+        Refund refund = refundRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Refund Not Found!"));
 
         refund.setReason(dto.getReason());
         refund.setAmount(dto.getAmount());
@@ -57,7 +59,8 @@ public class RefundServiceImpl implements RefundService {
 
     @Override
     public void deleteRefund(Long id) {
-        Refund refund = refundRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Refund Not Found"));
+        Refund refund = refundRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Refund Not Found"));
 
         refundRepository.delete(refund);
     }

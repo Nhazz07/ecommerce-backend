@@ -42,7 +42,8 @@ public class SeriesServiceImpl implements SeriesService {
 
     @Override
     public SeriesResponseDto getSeriesById(Long id) {
-        Series series = seriesRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Series Not Found"));
+        Series series = seriesRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Series Not Found"));
 
         return SeriesMapper.toResponse(series);
     }
@@ -58,7 +59,8 @@ public class SeriesServiceImpl implements SeriesService {
                                           String name,
                                           String description
                                           ) {
-        Series series = seriesRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Series Not Found"));
+        Series series = seriesRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Series Not Found"));
 
         // delete old series image from Cloudinary
         if(series.getPublicId() != null){
@@ -82,7 +84,8 @@ public class SeriesServiceImpl implements SeriesService {
 
     @Override
     public void deleteSeries(Long id) {
-        Series series = seriesRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Series Not Found"));
+        Series series = seriesRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Series Not Found"));
         seriesRepository.delete(series);
     }
 }

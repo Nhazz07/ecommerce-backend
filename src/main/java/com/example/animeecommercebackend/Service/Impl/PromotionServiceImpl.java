@@ -26,7 +26,8 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public PromotionResponseDto getPromotionById(Long id) {
-        Promotion promotion = promotionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Promotion Not Found"));
+        Promotion promotion = promotionRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Promotion Not Found"));
         return PromotionMapper.toResponse(promotion);
     }
 
@@ -46,7 +47,8 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public PromotionResponseDto updatePromotion(Long id, PromotionRequestDto dto) {
-        Promotion promotion = promotionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Promotion Not Found"));
+        Promotion promotion = promotionRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Promotion Not Found"));
 
         promotion.setName(dto.getName());
         promotion.setDescription(dto.getDescription());
@@ -61,7 +63,8 @@ public class PromotionServiceImpl implements PromotionService {
     }
     @Override
     public void deletePromotion(Long id) {
-        Promotion promotion = promotionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Promotion Not Found"));
+        Promotion promotion = promotionRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Promotion Not Found"));
 
         promotionRepository.delete(promotion);
     }

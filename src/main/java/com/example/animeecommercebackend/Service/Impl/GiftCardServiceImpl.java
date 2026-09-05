@@ -20,7 +20,8 @@ public class GiftCardServiceImpl implements GiftCardService {
     private final GiftCardRepository giftCardRepository;
     private final UserRepository userRepository;
     @Override
-    public GiftCardResponseDto createGiftCard(GiftCardRequestDto dto) {
+    public GiftCardResponseDto createGiftCard(
+            GiftCardRequestDto dto) {
         GiftCard giftCard = GiftCardMapper.toEntity(dto);
 
         GiftCard saved = giftCardRepository.save(giftCard);
@@ -29,7 +30,8 @@ public class GiftCardServiceImpl implements GiftCardService {
 
     @Override
     public GiftCardResponseDto getGiftCardById(Long id) {
-        GiftCard giftCard = giftCardRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("GiftCard Not Found!!"));
+        GiftCard giftCard = giftCardRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("GiftCard Not Found!!"));
         return GiftCardMapper.toResponse(giftCard);
     }
 
@@ -46,7 +48,8 @@ public class GiftCardServiceImpl implements GiftCardService {
 
     @Override
     public GiftCardResponseDto updateGiftCard(Long id, GiftCardRequestDto dto) {
-        GiftCard giftCard = giftCardRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("GiftCard Not Found!!"));
+        GiftCard giftCard = giftCardRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("GiftCard Not Found!!"));
 
         giftCard.setCode(dto.getCode());
         giftCard.setExpirationDate(dto.getExpirationDate());
@@ -59,7 +62,8 @@ public class GiftCardServiceImpl implements GiftCardService {
 
     @Override
     public void deleteGiftCard(Long id) {
-        GiftCard giftCard = giftCardRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("GiftCard Not Found!!"));
+        GiftCard giftCard = giftCardRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("GiftCard Not Found!!"));
 
         giftCardRepository.delete(giftCard);
 

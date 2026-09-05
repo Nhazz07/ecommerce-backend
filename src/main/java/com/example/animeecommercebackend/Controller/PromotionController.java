@@ -24,7 +24,8 @@ public class PromotionController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseDto<PromotionResponseDto>> createPromotion(@RequestBody @Valid PromotionRequestDto dto){
+    public ResponseEntity<ApiResponseDto<PromotionResponseDto>> createPromotion(
+            @RequestBody @Valid PromotionRequestDto dto){
         PromotionResponseDto promotion = promotionServiceImpl.createPromotion(dto);
 
         ApiResponseDto<PromotionResponseDto> response = new ApiResponseDto<>(
@@ -35,7 +36,8 @@ public class PromotionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<PromotionResponseDto>> getPromotionById(@PathVariable @Positive Long id){
+    public ResponseEntity<ApiResponseDto<PromotionResponseDto>> getPromotionById(
+            @PathVariable @Positive Long id){
         PromotionResponseDto promotion = promotionServiceImpl.getPromotionById(id);
 
         ApiResponseDto<PromotionResponseDto> response = new ApiResponseDto<>(
@@ -46,7 +48,8 @@ public class PromotionController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/productId/{productId}")
-    public ResponseEntity<ApiResponseDto<PromotionResponseDto>> getPromotionByProductId(@PathVariable @Positive Long productId){
+    public ResponseEntity<ApiResponseDto<PromotionResponseDto>> getPromotionByProductId(
+            @PathVariable @Positive Long productId){
         PromotionResponseDto promotion = promotionServiceImpl.getPromotionByProductId(productId);
 
         ApiResponseDto<PromotionResponseDto> response = new ApiResponseDto<>(
@@ -70,7 +73,9 @@ public class PromotionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<PromotionResponseDto>> updatePromotion(@PathVariable @Positive Long id, @RequestBody @Valid PromotionRequestDto dto){
+    public ResponseEntity<ApiResponseDto<PromotionResponseDto>> updatePromotion(
+            @PathVariable @Positive Long id,
+            @RequestBody @Valid PromotionRequestDto dto){
         PromotionResponseDto promotion = promotionServiceImpl.updatePromotion(id,dto);
 
         ApiResponseDto<PromotionResponseDto> response = new ApiResponseDto<>(
@@ -82,7 +87,8 @@ public class PromotionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<Void>> deletePromotion(@PathVariable @Positive Long id){
+    public ResponseEntity<ApiResponseDto<Void>> deletePromotion(
+            @PathVariable @Positive Long id){
         promotionServiceImpl.deletePromotion(id);
 
         ApiResponseDto<Void> response = new ApiResponseDto<>(

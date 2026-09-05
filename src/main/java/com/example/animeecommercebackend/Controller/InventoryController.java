@@ -23,7 +23,8 @@ public class InventoryController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseDto<InventoryResponseDto>> createInventory(@RequestBody @Valid InventoryRequestDto dto){
+    public ResponseEntity<ApiResponseDto<InventoryResponseDto>> createInventory(
+            @RequestBody @Valid InventoryRequestDto dto){
         InventoryResponseDto inventory = inventoryServiceImpl.createInventory(dto);
 
         ApiResponseDto<InventoryResponseDto> response = new ApiResponseDto<>(
@@ -35,7 +36,8 @@ public class InventoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<InventoryResponseDto>> getInventoryById(@PathVariable @Positive Long id){
+    public ResponseEntity<ApiResponseDto<InventoryResponseDto>> getInventoryById(
+            @PathVariable @Positive Long id){
         InventoryResponseDto inventory = inventoryServiceImpl.getInventoryById(id);
 
         ApiResponseDto<InventoryResponseDto> response = new ApiResponseDto<>(
@@ -57,7 +59,8 @@ public class InventoryController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/product-variant/{productVariantId}")
-    public ResponseEntity<ApiResponseDto<InventoryResponseDto>> getInventoryByProductVariantId(@PathVariable @Positive Long productVariantId){
+    public ResponseEntity<ApiResponseDto<InventoryResponseDto>> getInventoryByProductVariantId(
+            @PathVariable @Positive Long productVariantId){
         InventoryResponseDto inventory = inventoryServiceImpl.getInventoryByProductVariantId(productVariantId);
 
         ApiResponseDto<InventoryResponseDto> response = new ApiResponseDto<>(
@@ -68,7 +71,9 @@ public class InventoryController {
         return ResponseEntity.ok(response);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<InventoryResponseDto>> updateInventory(@PathVariable @Positive Long id, @RequestBody @Valid InventoryRequestDto dto){
+    public ResponseEntity<ApiResponseDto<InventoryResponseDto>> updateInventory(
+            @PathVariable @Positive Long id,
+            @RequestBody @Valid InventoryRequestDto dto){
         InventoryResponseDto inventory = inventoryServiceImpl.updateInventory(id,dto);
 
         ApiResponseDto<InventoryResponseDto> response = new ApiResponseDto<>(
@@ -80,7 +85,8 @@ public class InventoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<Void>> deleteInventory(@PathVariable @Positive Long id){
+    public ResponseEntity<ApiResponseDto<Void>> deleteInventory(
+            @PathVariable @Positive Long id){
         inventoryServiceImpl.deleteInventory(id);
         ApiResponseDto<Void> response = new ApiResponseDto<>(
                 true,

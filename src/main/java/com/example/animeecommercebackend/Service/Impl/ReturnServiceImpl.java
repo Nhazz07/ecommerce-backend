@@ -26,7 +26,8 @@ public class ReturnServiceImpl implements ReturnService {
 
     @Override
     public ReturnResponseDto getReturnById(Long id) {
-        Return Areturn = returnRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Return Not Found"));
+        Return Areturn = returnRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Return Not Found"));
 
         return ReturnMapper.toResponse(Areturn);
     }
@@ -47,7 +48,8 @@ public class ReturnServiceImpl implements ReturnService {
 
     @Override
     public ReturnResponseDto updateReturn(Long id, ReturnRequestDto dto) {
-        Return Areturn = returnRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Return Not Found!"));
+        Return Areturn = returnRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Return Not Found!"));
 
         Areturn.setReason(dto.getReason());
 
@@ -57,7 +59,8 @@ public class ReturnServiceImpl implements ReturnService {
 
     @Override
     public void deleteReturn(Long id) {
-        Return Areturn = returnRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Return Not Found"));
+        Return Areturn = returnRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Return Not Found"));
 
         returnRepository.delete(Areturn);
     }

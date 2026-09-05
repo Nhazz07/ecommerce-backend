@@ -22,7 +22,9 @@ public class AddressController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseDto<AddressResponseDto>> createAddress(@RequestBody @Valid AddressRequestDto dto){
+    public ResponseEntity<ApiResponseDto<AddressResponseDto>> createAddress(
+            @RequestBody @Valid
+            AddressRequestDto dto){
         AddressResponseDto address = addressServiceImpl.createdAddress(dto);
         ApiResponseDto<AddressResponseDto> response = new ApiResponseDto<>(
                 true,
@@ -32,7 +34,9 @@ public class AddressController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<AddressResponseDto>> getAddressById(@PathVariable @Positive Long id){
+    public ResponseEntity<ApiResponseDto<AddressResponseDto>> getAddressById(
+            @PathVariable @Positive
+            Long id){
         AddressResponseDto address = addressServiceImpl.getAddressById(id);
 
         ApiResponseDto<AddressResponseDto> response = new ApiResponseDto<>(
@@ -55,7 +59,9 @@ public class AddressController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<AddressResponseDto>> updateAddress(@PathVariable @Positive Long id, @RequestBody @Valid AddressRequestDto dto){
+    public ResponseEntity<ApiResponseDto<AddressResponseDto>> updateAddress(
+            @PathVariable @Positive Long id,
+            @RequestBody @Valid AddressRequestDto dto){
         AddressResponseDto address = addressServiceImpl.updateAddress(id,dto);
 
         ApiResponseDto<AddressResponseDto> response = new ApiResponseDto<>(
@@ -77,7 +83,9 @@ public class AddressController {
         return ResponseEntity.ok(response);
     }
     @PutMapping("/{addressId}/default/{userId}")
-    public ResponseEntity<ApiResponseDto<AddressResponseDto>> setDefaultAddress(@PathVariable @Positive Long addressId, @PathVariable  @Positive Long userId){
+    public ResponseEntity<ApiResponseDto<AddressResponseDto>> setDefaultAddress(
+            @PathVariable @Positive Long addressId,
+            @PathVariable  @Positive Long userId){
       AddressResponseDto address = addressServiceImpl.setDefaultAddress(addressId,userId);
 
       ApiResponseDto<AddressResponseDto> response = new ApiResponseDto<>(

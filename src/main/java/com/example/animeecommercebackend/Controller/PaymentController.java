@@ -23,7 +23,8 @@ public class PaymentController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseDto<PaymentResponseDto>> createPayment(@RequestBody @Valid PaymentRequestDto dto){
+    public ResponseEntity<ApiResponseDto<PaymentResponseDto>> createPayment(
+            @RequestBody @Valid PaymentRequestDto dto){
         PaymentResponseDto payment = paymentServiceImpl.creatPayment(dto);
 
         ApiResponseDto<PaymentResponseDto> response = new ApiResponseDto<>(
@@ -35,7 +36,8 @@ public class PaymentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<PaymentResponseDto>> getPaymentById(@PathVariable @Positive Long id){
+    public ResponseEntity<ApiResponseDto<PaymentResponseDto>> getPaymentById(
+            @PathVariable @Positive Long id){
         PaymentResponseDto payment = paymentServiceImpl.getPaymentById(id);
 
         ApiResponseDto<PaymentResponseDto> response = new ApiResponseDto<>(
@@ -46,7 +48,8 @@ public class PaymentController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/order/{orderId}")
-    public ResponseEntity<ApiResponseDto<PaymentResponseDto>> getPaymentByOrderId(@PathVariable @Positive Long orderId){
+    public ResponseEntity<ApiResponseDto<PaymentResponseDto>> getPaymentByOrderId(
+            @PathVariable @Positive Long orderId){
         PaymentResponseDto payment = paymentServiceImpl.getPaymentByOrderId(orderId);
 
         ApiResponseDto<PaymentResponseDto> response = new ApiResponseDto<>(
@@ -69,7 +72,9 @@ public class PaymentController {
         return ResponseEntity.ok(response);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<PaymentResponseDto>> updatePayment(@PathVariable @Positive Long id, @RequestBody @Valid PaymentRequestDto dto){
+    public ResponseEntity<ApiResponseDto<PaymentResponseDto>> updatePayment(
+            @PathVariable @Positive Long id,
+            @RequestBody @Valid PaymentRequestDto dto){
         PaymentResponseDto payment = paymentServiceImpl.updatePayment(id,dto);
 
         ApiResponseDto<PaymentResponseDto> response = new ApiResponseDto<>(
@@ -80,7 +85,8 @@ public class PaymentController {
         return ResponseEntity.ok(response);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<Void>> deletePayment(@PathVariable @Positive Long id){
+    public ResponseEntity<ApiResponseDto<Void>> deletePayment(
+            @PathVariable @Positive Long id){
         paymentServiceImpl.deletePayment(id);
         ApiResponseDto<Void> response = new ApiResponseDto<>(
                 true,

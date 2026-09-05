@@ -1,10 +1,8 @@
 package com.example.animeecommercebackend.Controller;
 
 import com.example.animeecommercebackend.Dto.ApiResponseDto;
-import com.example.animeecommercebackend.Dto.Request.SeriesRequestDto;
 import com.example.animeecommercebackend.Dto.Response.SeriesResponseDto;
 import com.example.animeecommercebackend.Service.Impl.SeriesServiceImpl;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

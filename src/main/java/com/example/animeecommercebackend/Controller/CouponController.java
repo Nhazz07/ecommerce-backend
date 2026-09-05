@@ -23,7 +23,8 @@ public class CouponController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseDto<CouponResponseDto>> createCoupon(@RequestBody @Valid CouponRequestDto dto){
+    public ResponseEntity<ApiResponseDto<CouponResponseDto>> createCoupon(
+            @RequestBody @Valid CouponRequestDto dto){
         CouponResponseDto coupon = couponServiceImpl.createCoupon(dto);
 
         ApiResponseDto<CouponResponseDto> response = new ApiResponseDto<>(
@@ -34,7 +35,8 @@ public class CouponController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<CouponResponseDto>> getCouponById(@PathVariable @Positive Long id){
+    public ResponseEntity<ApiResponseDto<CouponResponseDto>> getCouponById(
+            @PathVariable @Positive Long id){
         CouponResponseDto coupon = couponServiceImpl.getCouponById(id);
 
         ApiResponseDto<CouponResponseDto> response = new ApiResponseDto<>(
@@ -45,7 +47,8 @@ public class CouponController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/code/{code}")
-    public ResponseEntity<ApiResponseDto<CouponResponseDto>> getCouponByCode(@PathVariable String code){
+    public ResponseEntity<ApiResponseDto<CouponResponseDto>> getCouponByCode(
+            @PathVariable String code){
         CouponResponseDto coupon = couponServiceImpl.getCouponByCode(code);
 
         ApiResponseDto<CouponResponseDto> response = new ApiResponseDto<>(
@@ -66,7 +69,9 @@ public class CouponController {
         return ResponseEntity.ok(response);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<CouponResponseDto>> updateCoupon(@PathVariable @Positive Long id, @RequestBody @Valid CouponRequestDto dto){
+    public ResponseEntity<ApiResponseDto<CouponResponseDto>> updateCoupon(
+            @PathVariable @Positive Long id,
+            @RequestBody @Valid CouponRequestDto dto){
         CouponResponseDto coupon = couponServiceImpl.updateCoupon(id,dto);
 
         ApiResponseDto<CouponResponseDto> response = new ApiResponseDto<>(
@@ -77,7 +82,8 @@ public class CouponController {
         return ResponseEntity.ok(response);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<Void>> deleteCoupon(@PathVariable @Positive Long id){
+    public ResponseEntity<ApiResponseDto<Void>> deleteCoupon(
+            @PathVariable @Positive Long id){
         couponServiceImpl.deleteCoupon(id);
 
         ApiResponseDto<Void> response = new ApiResponseDto<>(

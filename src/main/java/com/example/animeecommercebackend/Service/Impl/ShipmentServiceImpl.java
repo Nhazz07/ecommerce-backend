@@ -28,7 +28,8 @@ public class ShipmentServiceImpl implements ShipmentService {
 
     @Override
     public ShipmentResponseDto getShipmentById(Long id) {
-        Shipment shipment = shipmentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Shipment Not Found"));
+        Shipment shipment = shipmentRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Shipment Not Found"));
         return ShipmentMapper.toResponse(shipment);
     }
 
@@ -48,7 +49,8 @@ public class ShipmentServiceImpl implements ShipmentService {
 
     @Override
     public ShipmentResponseDto updateShipment(Long id, ShipmentRequestDto dto) {
-        Shipment shipment = shipmentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Shipment Not Found"));
+        Shipment shipment = shipmentRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Shipment Not Found"));
         shipment.setShipmentMethod(dto.getShippingMethod());
         shipment.setCarrier(dto.getCarrier());
 
@@ -58,7 +60,8 @@ public class ShipmentServiceImpl implements ShipmentService {
 
     @Override
     public void deleteShipment(Long id) {
-        Shipment shipment = shipmentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Shipment Not Found"));
+        Shipment shipment = shipmentRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Shipment Not Found"));
 
         shipmentRepository.delete(shipment);
     }

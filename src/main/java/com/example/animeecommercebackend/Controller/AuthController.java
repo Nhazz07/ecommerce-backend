@@ -22,7 +22,8 @@ public class AuthController {
         this.authServiceImpl = authServiceImpl;
     }
     @PostMapping("/register")
-    public ResponseEntity<ApiResponseDto<RegisterResponseDto>> register(@RequestBody @Valid RegisterRequestDto dto){
+    public ResponseEntity<ApiResponseDto<RegisterResponseDto>> register(
+            @RequestBody @Valid RegisterRequestDto dto){
         RegisterResponseDto register = authServiceImpl.register(dto);
 
         ApiResponseDto<RegisterResponseDto> response = new ApiResponseDto<>(
@@ -34,7 +35,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponseDto<LoginResponseDto>> login(@RequestBody @Valid LoginRequestDto dto){
+    public ResponseEntity<ApiResponseDto<LoginResponseDto>> login(
+            @RequestBody @Valid LoginRequestDto dto){
         LoginResponseDto login = authServiceImpl.login(dto);
 
         ApiResponseDto<LoginResponseDto> response = new ApiResponseDto<>(

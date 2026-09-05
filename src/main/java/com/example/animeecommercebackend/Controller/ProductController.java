@@ -27,7 +27,8 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseDto<ProductResponseDto>> createProduct(@RequestBody @Valid ProductRequestDto dto){
+    public ResponseEntity<ApiResponseDto<ProductResponseDto>> createProduct(
+            @RequestBody @Valid ProductRequestDto dto){
         ProductResponseDto product = productServiceImpl.createProduct(dto);
 
         ApiResponseDto<ProductResponseDto> response = new ApiResponseDto<>(
@@ -39,7 +40,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponseDto<Page<ProductResponseDto>>> getAllProduct(Pageable pageable){
+    public ResponseEntity<ApiResponseDto<Page<ProductResponseDto>>> getAllProduct(
+            Pageable pageable){
         Page<ProductResponseDto> products = productServiceImpl.getAllProduct(pageable);
 
         ApiResponseDto<Page<ProductResponseDto>> response = new ApiResponseDto<>(
@@ -51,7 +53,8 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<ProductResponseDto>> getProductById(@PathVariable @Positive Long id){
+    public ResponseEntity<ApiResponseDto<ProductResponseDto>> getProductById(
+            @PathVariable @Positive Long id){
         ProductResponseDto product = productServiceImpl.getProductById(id);
 
         ApiResponseDto<ProductResponseDto> response = new ApiResponseDto<>(
@@ -62,7 +65,8 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/category/{categoryId}")
-    public ResponseEntity<ApiResponseDto<List<ProductResponseDto>>> getProductByCategoryId(@PathVariable @Positive Long categoryId){
+    public ResponseEntity<ApiResponseDto<List<ProductResponseDto>>> getProductByCategoryId(
+            @PathVariable @Positive Long categoryId){
         List<ProductResponseDto> products = productServiceImpl.getProductByCategoryId(categoryId);
 
         ApiResponseDto<List<ProductResponseDto>> response = new ApiResponseDto<>(
@@ -73,7 +77,8 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/brand/{brandId}")
-    public ResponseEntity<ApiResponseDto<List<ProductResponseDto>>> getProductByBrandId(@PathVariable @Positive Long brandId){
+    public ResponseEntity<ApiResponseDto<List<ProductResponseDto>>> getProductByBrandId(
+            @PathVariable @Positive Long brandId){
         List<ProductResponseDto> products = productServiceImpl.getProductByBrandId(brandId);
         ApiResponseDto<List<ProductResponseDto>> response = new ApiResponseDto<>(
                 true,
@@ -83,7 +88,8 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/series/{seriesId}")
-    public ResponseEntity<ApiResponseDto<List<ProductResponseDto>>> getProductBySeriesId(@PathVariable @Positive Long seriesId){
+    public ResponseEntity<ApiResponseDto<List<ProductResponseDto>>> getProductBySeriesId(
+            @PathVariable @Positive Long seriesId){
         List<ProductResponseDto> products = productServiceImpl.getProductBySeriesId(seriesId);
 
         ApiResponseDto<List<ProductResponseDto>> response = new ApiResponseDto<>(
@@ -94,7 +100,9 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<ProductResponseDto>> updateProductById(@PathVariable @Positive Long id, @RequestBody @Valid ProductRequestDto dto){
+    public ResponseEntity<ApiResponseDto<ProductResponseDto>> updateProductById(
+            @PathVariable @Positive Long id,
+            @RequestBody @Valid ProductRequestDto dto){
         ProductResponseDto product = productServiceImpl.updateProduct(id,dto);
 
         ApiResponseDto<ProductResponseDto> response = new ApiResponseDto<>(
@@ -106,7 +114,8 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<Void>> deleteProduct(@PathVariable @Positive Long id){
+    public ResponseEntity<ApiResponseDto<Void>> deleteProduct(
+            @PathVariable @Positive Long id){
         productServiceImpl.deleteProduct(id);
         ApiResponseDto<Void> response = new ApiResponseDto<>(
                 true,

@@ -25,7 +25,8 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseDto<CategoryResponseDto>> createCategory(@RequestBody @Valid CategoryRequestDto dto){
+    public ResponseEntity<ApiResponseDto<CategoryResponseDto>> createCategory(
+            @RequestBody @Valid CategoryRequestDto dto){
         CategoryResponseDto category = categoryServiceImpl.createCategory(dto);
 
         ApiResponseDto<CategoryResponseDto> response = new ApiResponseDto<>(
@@ -36,7 +37,8 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<CategoryResponseDto>> getCategoryById(@PathVariable @Positive Long id){
+    public ResponseEntity<ApiResponseDto<CategoryResponseDto>> getCategoryById(
+            @PathVariable @Positive Long id){
         CategoryResponseDto category = categoryServiceImpl.getCategoryById(id);
 
         ApiResponseDto<CategoryResponseDto> response = new ApiResponseDto<>(
@@ -58,7 +60,9 @@ public class CategoryController {
         return ResponseEntity.ok(response);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<CategoryResponseDto>> updateCategory(@PathVariable @Positive Long id, @RequestBody @Valid CategoryRequestDto dto){
+    public ResponseEntity<ApiResponseDto<CategoryResponseDto>> updateCategory(
+            @PathVariable @Positive Long id,
+            @RequestBody @Valid CategoryRequestDto dto){
         CategoryResponseDto category = categoryServiceImpl.updateCategory(id,dto);
 
         ApiResponseDto<CategoryResponseDto> response = new ApiResponseDto<>(
@@ -69,7 +73,8 @@ public class CategoryController {
         return ResponseEntity.ok(response);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<Void>> deleteCategory(@PathVariable @Positive Long id){
+    public ResponseEntity<ApiResponseDto<Void>> deleteCategory(
+            @PathVariable @Positive Long id){
         categoryServiceImpl.deleteCategory(id);
         ApiResponseDto<Void> response = new ApiResponseDto<>(
                 true,

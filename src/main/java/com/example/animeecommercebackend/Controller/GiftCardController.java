@@ -23,7 +23,8 @@ public class GiftCardController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseDto<GiftCardResponseDto>> createGiftCard(@RequestBody @Valid GiftCardRequestDto dto){
+    public ResponseEntity<ApiResponseDto<GiftCardResponseDto>> createGiftCard(
+            @RequestBody @Valid GiftCardRequestDto dto){
         GiftCardResponseDto giftCard = giftCardServiceImpl.createGiftCard(dto);
 
         ApiResponseDto<GiftCardResponseDto> response = new ApiResponseDto<>(
@@ -34,7 +35,8 @@ public class GiftCardController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<GiftCardResponseDto>> getGiftCard(@PathVariable @Positive Long id){
+    public ResponseEntity<ApiResponseDto<GiftCardResponseDto>> getGiftCard(
+            @PathVariable @Positive Long id){
         GiftCardResponseDto giftCard = giftCardServiceImpl.getGiftCardById(id);
 
         ApiResponseDto<GiftCardResponseDto> response = new ApiResponseDto<>(
@@ -56,7 +58,8 @@ public class GiftCardController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/user/{userId}")
-    public ResponseEntity<ApiResponseDto<List<GiftCardResponseDto>>> getGiftCardByUser(@PathVariable @Positive Long userId){
+    public ResponseEntity<ApiResponseDto<List<GiftCardResponseDto>>> getGiftCardByUser(
+            @PathVariable @Positive Long userId){
         List<GiftCardResponseDto> giftCards = giftCardServiceImpl.getGiftCardsByUserId(userId);
 
         ApiResponseDto<List<GiftCardResponseDto>> response = new ApiResponseDto<>(
@@ -67,7 +70,9 @@ public class GiftCardController {
         return ResponseEntity.ok(response);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<GiftCardResponseDto>> updateGiftCard(@PathVariable @Positive Long id, @RequestBody @Valid GiftCardRequestDto dto){
+    public ResponseEntity<ApiResponseDto<GiftCardResponseDto>> updateGiftCard(
+            @PathVariable @Positive Long id,
+            @RequestBody @Valid GiftCardRequestDto dto){
         GiftCardResponseDto giftCard = giftCardServiceImpl.updateGiftCard(id,dto);
 
         ApiResponseDto<GiftCardResponseDto> response = new ApiResponseDto<>(
@@ -78,7 +83,8 @@ public class GiftCardController {
         return ResponseEntity.ok(response);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<Void>> deleteGiftCard(@PathVariable @Positive Long id){
+    public ResponseEntity<ApiResponseDto<Void>> deleteGiftCard(
+            @PathVariable @Positive Long id){
         giftCardServiceImpl.deleteGiftCard(id);
 
         ApiResponseDto<Void> response = new ApiResponseDto<>(

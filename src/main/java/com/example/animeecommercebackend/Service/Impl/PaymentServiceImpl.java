@@ -27,7 +27,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PaymentResponseDto getPaymentById(Long id) {
-        Payment payment = paymentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Payment Not Found!"));
+        Payment payment = paymentRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Payment Not Found!"));
         return PaymentMapper.toResponse(payment);
     }
 
@@ -47,7 +48,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PaymentResponseDto updatePayment(Long id, PaymentRequestDto dto) {
-        Payment payment = paymentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Payment Not Found"));
+        Payment payment = paymentRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Payment Not Found"));
 
         payment.setAmount(dto.getAmount());
         payment.setPaymentMethod(dto.getPaymentMethod());
@@ -58,7 +60,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public void deletePayment(Long id) {
-        Payment payment = paymentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Payment Not Found!!"));
+        Payment payment = paymentRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Payment Not Found!!"));
 
         paymentRepository.delete(payment);
     }

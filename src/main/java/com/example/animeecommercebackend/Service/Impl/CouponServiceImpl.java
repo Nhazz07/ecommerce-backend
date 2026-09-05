@@ -27,10 +27,7 @@ public class CouponServiceImpl implements CouponService {
     private final UserRepository userRepository;
     @Override
     public CouponResponseDto createCoupon(CouponRequestDto dto) {
-//        List<Order> orders = orderRepository.findAllById(dto.getOrderId());
-//        if(orders.isEmpty()){
-//            throw new RuntimeException("Product Id Not Found!");
-//        }
+
         Coupon coupon = CouponMapper.toEntity(dto);
 
         Coupon saved = couponRepository.save(coupon);
@@ -39,13 +36,15 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public CouponResponseDto getCouponById(Long id) {
-        Coupon coupon = couponRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Coupon Not Found!"));
+        Coupon coupon = couponRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Coupon Not Found!"));
         return CouponMapper.toResponse(coupon);
     }
 
     @Override
     public CouponResponseDto getCouponByCode(String code) {
-        Coupon coupon = couponRepository.findByCode(code).orElseThrow(() -> new ResourceNotFoundException("Coupon Code Not Found"));
+        Coupon coupon = couponRepository.findByCode(code).orElseThrow(() ->
+                new ResourceNotFoundException("Coupon Code Not Found"));
         return CouponMapper.toResponse(coupon);
     }
 
@@ -56,7 +55,8 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public CouponResponseDto updateCoupon(Long id, CouponRequestDto dto) {
-        Coupon coupon = couponRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Coupon Not Found"));
+        Coupon coupon = couponRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Coupon Not Found"));
 
         coupon.setCode(dto.getCode());
         coupon.setDescription(dto.getDescription());
@@ -74,7 +74,8 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public void deleteCoupon(Long id) {
-        Coupon coupon = couponRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Coupon Not Found!"));
+        Coupon coupon = couponRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Coupon Not Found!"));
         couponRepository.delete(coupon);
     }
 }

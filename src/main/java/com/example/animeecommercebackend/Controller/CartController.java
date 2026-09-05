@@ -22,7 +22,8 @@ public class CartController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseDto<CartResponseDto>> createCart(@RequestBody @Valid CartRequestDto dto){
+    public ResponseEntity<ApiResponseDto<CartResponseDto>> createCart(
+            @RequestBody @Valid CartRequestDto dto){
         CartResponseDto cart = cartServiceImpl.createCart(dto);
 
         ApiResponseDto<CartResponseDto> response = new ApiResponseDto<>(
@@ -33,7 +34,8 @@ public class CartController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<CartResponseDto>> getCartById(@PathVariable @Positive Long id){
+    public ResponseEntity<ApiResponseDto<CartResponseDto>> getCartById(
+            @PathVariable @Positive Long id){
         CartResponseDto cart = cartServiceImpl.getCartById(id);
 
         ApiResponseDto<CartResponseDto> response = new ApiResponseDto<>(
@@ -55,7 +57,9 @@ public class CartController {
         return ResponseEntity.ok(response);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<CartResponseDto>> updateCartById(@PathVariable @Positive Long id, @RequestBody @Valid CartRequestDto dto){
+    public ResponseEntity<ApiResponseDto<CartResponseDto>> updateCartById(
+            @PathVariable @Positive Long id,
+            @RequestBody @Valid CartRequestDto dto){
         CartResponseDto cart = cartServiceImpl.updateCart(id,dto);
 
         ApiResponseDto<CartResponseDto> response = new ApiResponseDto<>(
@@ -66,7 +70,8 @@ public class CartController {
         return ResponseEntity.ok(response);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<Void>> deleteCart(@PathVariable @Positive Long id){
+    public ResponseEntity<ApiResponseDto<Void>> deleteCart(
+            @PathVariable @Positive Long id){
         cartServiceImpl.deleteCart(id);
         ApiResponseDto<Void> response = new ApiResponseDto<>(
                 true,
@@ -76,7 +81,9 @@ public class CartController {
         return ResponseEntity.ok(response);
     }
     @PostMapping("/{cartId}/products/{productVariantId}")
-    public ResponseEntity<ApiResponseDto<CartResponseDto>> addProductVariant(@PathVariable @Positive Long cartId, @PathVariable @Positive Long productVariantId){
+    public ResponseEntity<ApiResponseDto<CartResponseDto>> addProductVariant(
+            @PathVariable @Positive Long cartId,
+            @PathVariable @Positive Long productVariantId){
         CartResponseDto cart = cartServiceImpl.addProductVariant(cartId,productVariantId);
 
         ApiResponseDto<CartResponseDto> response = new ApiResponseDto<>(
@@ -87,7 +94,9 @@ public class CartController {
         return ResponseEntity.ok(response);
     }
     @DeleteMapping("/{cartId}/products/{productVariantId}")
-    public ResponseEntity<ApiResponseDto<CartResponseDto>> removeProductVariant(@PathVariable @Positive Long cartId, @PathVariable @Positive Long productVariantId){
+    public ResponseEntity<ApiResponseDto<CartResponseDto>> removeProductVariant(
+            @PathVariable @Positive Long cartId,
+            @PathVariable @Positive Long productVariantId){
         CartResponseDto cart = cartServiceImpl.removeProductVariant(cartId,productVariantId);
 
         ApiResponseDto<CartResponseDto> response = new ApiResponseDto<>(

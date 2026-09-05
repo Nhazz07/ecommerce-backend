@@ -28,14 +28,15 @@ public class CartServiceImpl implements CartService {
     private ProductVariantRepository productVariantRepository;
 
     @Override
-    public CartResponseDto createCart(CartRequestDto dto) {
-        User user = userRepository.findById(dto.getUserId()).orElseThrow(() -> new RuntimeException("User Not Found!"));
-//        List<Product>products = productRepository.findAllById(List.of(dto.getProductId()));
-//        if(products.isEmpty()){
-//            throw new ResourceNotFoundException("No Product Found!!");
-//        }
+    public CartResponseDto createCart(
+            CartRequestDto dto) {
+        User user = userRepository.findById(dto.getUserId()).orElseThrow(() ->
+                new ResourceNotFoundException("User Not Found!"));
 
-        List<ProductVariant> productVariants = productVariantRepository.findAllById(List.of(dto.getProductVariantId()).stream().toList());
+        List<ProductVariant> productVariants =
+                productVariantRepository.findAllById(
+                        List.of(dto.getProductVariantId()).stream().toList()
+                );
         if(productVariants.isEmpty()){
             throw new ResourceNotFoundException("No Product Variant Found!");
         }
@@ -61,7 +62,8 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CartResponseDto getCartById(Long id) {
-        Cart cart = cartRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(("Cart Not Found!!")));
+        Cart cart = cartRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(("Cart Not Found!!")));
         return CartMapper.toResponse(cart);
     }
 
@@ -71,7 +73,8 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<CartResponseDto> getCartByUserId(Long userId) {
+    public List<CartResponseDto> getCartByUserId(
+            Long userId) {
         List<Cart> carts = cartRepository.findByUserId(userId);
         if(carts.isEmpty()){
             throw new ResourceNotFoundException("Cart Not Found!");
@@ -81,16 +84,17 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CartResponseDto updateCart(Long id, CartRequestDto dto) {
-        User user = userRepository.findById(dto.getUserId()).orElseThrow(() -> new ResourceNotFoundException("User Not Found"));
-//        List<Product> products = productRepository.findAllById(List.of(dto.getProductId()));
-//        if(products.isEmpty()){
-//            throw new ResourceNotFoundException("No Product Found!!");
-//        }
-        List<ProductVariant> productVariants = productVariantRepository.findAllById(List.of(dto.getProductVariantId()));
+        User user = userRepository.findById(dto.getUserId()).orElseThrow(() ->
+                new ResourceNotFoundException("User Not Found"));
+
+        List<ProductVariant> productVariants = productVariantRepository.findAllById(
+                List.of(dto.getProductVariantId())
+        );
         if(productVariants.isEmpty()){
             throw new ResourceNotFoundException("No Product Variant Found!");
         }
-        Cart cart = cartRepository.findById(id).orElseThrow(() -> new RuntimeException("Cart Not Found"));
+        Cart cart = cartRepository.findById(id).orElseThrow(() ->
+                new RuntimeException("Cart Not Found"));
 
         cart.setUser(user);
 
@@ -112,7 +116,8 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void deleteCart(Long id) {
-        Cart cart = cartRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cart Not Found"));
+        Cart cart = cartRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Cart Not Found"));
         cartRepository.delete(cart);
     }
 
@@ -120,10 +125,12 @@ public class CartServiceImpl implements CartService {
     public CartResponseDto addProductVariant(Long cartId, Long productVariantId) {
 
         Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new ResourceNotFoundException("Cart Not Found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Cart Not Found"));
 
         ProductVariant productVariant = productVariantRepository.findById(productVariantId)
-                .orElseThrow(() -> new ResourceNotFoundException("Product Variant Not Found!"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Product Variant Not Found!"));
 
         CartItem cartItem = new CartItem();
         cartItem.setCart(cart);
@@ -140,10 +147,12 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartResponseDto removeProductVariant(Long cartId, Long productVariantId) {
         Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new ResourceNotFoundException("Cart Not Found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Cart Not Found"));
 
         ProductVariant productVariant = productVariantRepository.findById(productVariantId)
-                .orElseThrow(() -> new ResourceNotFoundException("Product Variant Not Found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Product Variant Not Found"));
 
         cart.getCartItems().remove(productVariant);
 

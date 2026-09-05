@@ -23,7 +23,8 @@ public class ShipmentController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseDto<ShipmentResponseDto>> createShipment(@RequestBody @Valid ShipmentRequestDto dto){
+    public ResponseEntity<ApiResponseDto<ShipmentResponseDto>> createShipment(
+            @RequestBody @Valid ShipmentRequestDto dto){
         ShipmentResponseDto shipment = shipmentServiceImpl.createShipment(dto);
 
         ApiResponseDto<ShipmentResponseDto> response = new ApiResponseDto<>(
@@ -34,7 +35,8 @@ public class ShipmentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<ShipmentResponseDto>> getShipmentById(@PathVariable @Positive Long id){
+    public ResponseEntity<ApiResponseDto<ShipmentResponseDto>> getShipmentById(
+            @PathVariable @Positive Long id){
         ShipmentResponseDto shipment = shipmentServiceImpl.getShipmentById(id);
         ApiResponseDto<ShipmentResponseDto> response = new ApiResponseDto<>(
                 true,
@@ -45,7 +47,8 @@ public class ShipmentController {
     }
 
     @GetMapping("/orderId/{orderId}")
-    public ResponseEntity<ApiResponseDto<ShipmentResponseDto>> getShipmentByOrderId(@PathVariable @Positive Long orderId){
+    public ResponseEntity<ApiResponseDto<ShipmentResponseDto>> getShipmentByOrderId(
+            @PathVariable @Positive Long orderId){
         ShipmentResponseDto shipment = shipmentServiceImpl.getShipmentByOrderId(orderId);
 
         ApiResponseDto<ShipmentResponseDto> response = new ApiResponseDto<>(
@@ -66,7 +69,9 @@ public class ShipmentController {
         return ResponseEntity.ok(response);
     }
     @PutMapping("{id}")
-    public ResponseEntity<ApiResponseDto<ShipmentResponseDto>> updateShipment(@PathVariable @Positive Long id, @RequestBody @Valid ShipmentRequestDto dto){
+    public ResponseEntity<ApiResponseDto<ShipmentResponseDto>> updateShipment(
+            @PathVariable @Positive Long id,
+            @RequestBody @Valid ShipmentRequestDto dto){
         ShipmentResponseDto shipment = shipmentServiceImpl.updateShipment(id,dto);
 
         ApiResponseDto<ShipmentResponseDto> response = new ApiResponseDto<>(
@@ -77,7 +82,8 @@ public class ShipmentController {
         return ResponseEntity.ok(response);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<Void>> deleteShipment(@PathVariable @Positive Long id){
+    public ResponseEntity<ApiResponseDto<Void>> deleteShipment(
+            @PathVariable @Positive Long id){
         shipmentServiceImpl.deleteShipment(id);
         ApiResponseDto<Void> response = new ApiResponseDto<>(
                 true,

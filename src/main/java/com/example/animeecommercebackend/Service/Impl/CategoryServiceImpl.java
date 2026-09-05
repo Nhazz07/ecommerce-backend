@@ -20,11 +20,8 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
     @Override
-    public CategoryResponseDto createCategory(CategoryRequestDto dto) {
-//        List<Product> products = productRepository.findAllById(dto.getProductId());
-//        if(products.isEmpty()){
-//            throw new ResourceNotFoundException("Product Not Found");
-//        }
+    public CategoryResponseDto createCategory(
+            CategoryRequestDto dto) {
 
         Category category = CategoryMapper.toEntity(dto);
 
@@ -37,7 +34,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponseDto getCategoryById(Long id) {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category Not Found!!"));
+        Category category = categoryRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Category Not Found!!"));
         return CategoryMapper.toResponse(category);
     }
 
@@ -53,11 +51,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryResponseDto updateCategory(Long id, CategoryRequestDto dto) {
 
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category Not Found!!"));
-//        List<Product> products = productRepository.findAllById(dto.getProductId());
-//        if(products.isEmpty()){
-//            throw  new ResourceNotFoundException("Product Not Found!");
-//        }
+        Category category = categoryRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Category Not Found!!"));
+
         category.setName(dto.getName());
         category.setImageUrl(dto.getImageUrl());
         category.setDescription(dto.getDescription());
@@ -68,7 +64,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteCategory(Long id) {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category Id Not Found!"));
+        Category category = categoryRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Category Id Not Found!"));
         categoryRepository.delete(category);
     }
 }
