@@ -9,7 +9,6 @@ import java.util.List;
 
 public interface SeriesService {
     SeriesResponseDto createSeries(
-            Long seriesId,
             MultipartFile file,
             String name,
             String description

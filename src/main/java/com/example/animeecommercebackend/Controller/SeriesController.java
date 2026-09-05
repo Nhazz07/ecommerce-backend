@@ -26,8 +26,6 @@ public class SeriesController {
 
     @PostMapping(consumes = MULTIPART_FORM_DATA)
     public ResponseEntity<ApiResponseDto<SeriesResponseDto>> createSeries(
-            @RequestParam("seriesId")
-            @Positive Long seriesId,
 
             @RequestParam("file")
             MultipartFile file,
@@ -39,7 +37,6 @@ public class SeriesController {
             String description
             ){
         SeriesResponseDto series = seriesServiceImpl.createSeries(
-                seriesId,
                 file,
                 name,
                 description

@@ -9,7 +9,6 @@ import java.util.List;
 public interface BrandService {
 
     BrandResponseDto createBrand(
-            Long brandId,
             MultipartFile file,
             String name,
             String description);

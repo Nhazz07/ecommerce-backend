@@ -21,16 +21,14 @@ public class SeriesServiceImpl implements SeriesService {
     private final SeriesRepository seriesRepository;
     private final CloudinaryService cloudinaryService;
     @Override
-    public SeriesResponseDto createSeries(Long seriesId,
+    public SeriesResponseDto createSeries(
                                           MultipartFile file,
                                           String name,
                                           String description
                                           ) {
-        Series series = seriesRepository.findById(seriesId)
-                .orElseThrow(() -> new ResourceNotFoundException("Series Not Found"));
 
         CloudinaryUploadResponseDto cloudinaryUploadResponseDto = cloudinaryService.uploadImage(file);
-
+        Series series = new Series();
         series.setImageUrl(cloudinaryUploadResponseDto.getImageUrl());
         series.setPublicId(cloudinaryUploadResponseDto.getPublicId());
         series.setName(name);

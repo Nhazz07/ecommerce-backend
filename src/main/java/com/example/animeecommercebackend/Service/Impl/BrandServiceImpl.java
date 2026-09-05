@@ -28,15 +28,14 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public BrandResponseDto createBrand(
-            Long brandId,
             MultipartFile file,
             String name,
             String description) {
 
-        Brand brand = brandRepository.findById(brandId).orElseThrow(() -> new ResourceNotFoundException("Brand Not Found"));
 
         CloudinaryUploadResponseDto cloudinaryUploadResponseDto = cloudinaryService.uploadImage(file);
 
+        Brand brand = new Brand();
         brand.setLogoUrl(cloudinaryUploadResponseDto.getImageUrl());
         brand.setPublicId(cloudinaryUploadResponseDto.getPublicId());
         brand.setName(name);

@@ -28,8 +28,6 @@ public class BrandController {
 
     @PostMapping(consumes = MULTIPART_FORM_DATA)
     public ResponseEntity<ApiResponseDto<BrandResponseDto>> createBrand(
-            @RequestParam("brand id")
-            @Positive Long brandId,
 
             @RequestParam("file")
             MultipartFile file,
@@ -41,7 +39,6 @@ public class BrandController {
             String description
     ){
         BrandResponseDto brand = brandServiceImpl.createBrand(
-                brandId,
                 file,
                 name,
                 description
