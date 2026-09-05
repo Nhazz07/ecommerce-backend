@@ -24,8 +24,15 @@ public class JwtService {
     }
 
     public String generateToken(UserDetails userDetails) {
+        String role = userDetails
+                .getAuthorities()
+                .stream()
+                .findFirst()
+                .map(authority -> authority.getAuthority())
+                .orElse("");
         return Jwts.builder()
                 .subject(userDetails.getUsername())
+                .claim("role", role)
                 .issuedAt(new Date())
                 .expiration(new Date(
                         System.currentTimeMillis() + expiration
@@ -37,6 +44,12 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
+    public String extractRole(String token){
+        return  extractClaim(
+                token,
+                claims -> claims.get("role", String.class)
+        );
+    }
     public boolean isTokenValid(
             String token,
             UserDetails userDetails

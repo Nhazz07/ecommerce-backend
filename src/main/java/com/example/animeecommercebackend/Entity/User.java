@@ -1,5 +1,6 @@
 package com.example.animeecommercebackend.Entity;
 
+import com.example.animeecommercebackend.Entity.Enums.UserRole;
 import com.example.animeecommercebackend.Entity.Enums.UserStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -49,6 +50,11 @@ public class User {
 
     @NotBlank(message = "Phone number is required")
     private String phoneNumber;
+
+    @NotNull(message = "User role is required")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role;
 
     @NotNull(message = "User status is required")
     @Enumerated(EnumType.STRING)
