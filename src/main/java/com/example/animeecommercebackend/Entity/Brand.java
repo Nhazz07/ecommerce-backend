@@ -28,6 +28,8 @@ public class Brand {
     @Column(nullable = false, length = 100)
     private String name;
 
+    private String publicId;
+
     @Column(length = 250)
     private String description;
 

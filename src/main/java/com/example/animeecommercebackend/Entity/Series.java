@@ -27,6 +27,8 @@ public class Series {
     @NotBlank(message = "Name is required")
     private String name;
 
+    private String publicId;
+
     private String description;
 
     private String imageUrl;

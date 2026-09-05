@@ -1,14 +1,17 @@
 package com.example.animeecommercebackend.Service.Impl;
 
 import com.example.animeecommercebackend.Dto.Request.SeriesRequestDto;
+import com.example.animeecommercebackend.Dto.Response.CloudinaryUploadResponseDto;
 import com.example.animeecommercebackend.Dto.Response.SeriesResponseDto;
 import com.example.animeecommercebackend.Entity.Series;
 import com.example.animeecommercebackend.Exception.ResourceNotFoundException;
 import com.example.animeecommercebackend.Mapper.SeriesMapper;
 import com.example.animeecommercebackend.Repository.SeriesRepository;
+import com.example.animeecommercebackend.Service.CloudinaryService;
 import com.example.animeecommercebackend.Service.SeriesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -16,9 +19,22 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SeriesServiceImpl implements SeriesService {
     private final SeriesRepository seriesRepository;
+    private final CloudinaryService cloudinaryService;
     @Override
-    public SeriesResponseDto createSeries(SeriesRequestDto dto) {
-        Series series = SeriesMapper.toEntity(dto);
+    public SeriesResponseDto createSeries(Long seriesId,
+                                          MultipartFile file,
+                                          String name,
+                                          String description
+                                          ) {
+        Series series = seriesRepository.findById(seriesId)
+                .orElseThrow(() -> new ResourceNotFoundException("Series Not Found"));
+
+        CloudinaryUploadResponseDto cloudinaryUploadResponseDto = cloudinaryService.uploadImage(file);
+
+        series.setImageUrl(cloudinaryUploadResponseDto.getImageUrl());
+        series.setPublicId(cloudinaryUploadResponseDto.getPublicId());
+        series.setName(name);
+        series.setDescription(description);
 
         Series saved = seriesRepository.save(series);
 
@@ -39,14 +55,30 @@ public class SeriesServiceImpl implements SeriesService {
     }
 
     @Override
-    public SeriesResponseDto updateSeries(Long id, SeriesRequestDto dto) {
+    public SeriesResponseDto updateSeries(Long id,
+                                          MultipartFile file,
+                                          String name,
+                                          String description
+                                          ) {
         Series series = seriesRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Series Not Found"));
 
-        series.setImageUrl(dto.getImageUrl());
-        series.setDescription(dto.getDescription());
-        series.setName(dto.getName());
+        // delete old series image from Cloudinary
+        if(series.getPublicId() != null){
+            cloudinaryService.deleteImage(
+                    series.getPublicId()
+            );
+        }
+
+        // upload new image
+        CloudinaryUploadResponseDto cloudinaryUploadResponseDto = cloudinaryService.uploadImage(file);
+
+        series.setImageUrl(cloudinaryUploadResponseDto.getImageUrl());
+        series.setPublicId(cloudinaryUploadResponseDto.getPublicId());
+        series.setName(name);
+        series.setDescription(description);
 
         Series updated = seriesRepository.save(series);
+
         return SeriesMapper.toResponse(updated);
     }
 

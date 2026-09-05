@@ -2,6 +2,7 @@ package com.example.animeecommercebackend.Service.Impl;
 
 import com.example.animeecommercebackend.Dto.Request.BrandRequestDto;
 import com.example.animeecommercebackend.Dto.Response.BrandResponseDto;
+import com.example.animeecommercebackend.Dto.Response.CloudinaryUploadResponseDto;
 import com.example.animeecommercebackend.Entity.Brand;
 import com.example.animeecommercebackend.Entity.Product;
 import com.example.animeecommercebackend.Exception.ResourceNotFoundException;
@@ -9,8 +10,10 @@ import com.example.animeecommercebackend.Mapper.BrandMapper;
 import com.example.animeecommercebackend.Repository.BrandRepository;
 import com.example.animeecommercebackend.Repository.ProductRepository;
 import com.example.animeecommercebackend.Service.BrandService;
+import com.example.animeecommercebackend.Service.CloudinaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,13 +24,23 @@ public class BrandServiceImpl implements BrandService {
 
     private final BrandRepository brandRepository;
     private final ProductRepository productRepository;
+    private final CloudinaryService cloudinaryService;
 
     @Override
-    public BrandResponseDto createBrand(BrandRequestDto dto) {
+    public BrandResponseDto createBrand(
+            Long brandId,
+            MultipartFile file,
+            String name,
+            String description) {
 
-        Brand brand = BrandMapper.toEntity(dto);
+        Brand brand = brandRepository.findById(brandId).orElseThrow(() -> new ResourceNotFoundException("Brand Not Found"));
 
+        CloudinaryUploadResponseDto cloudinaryUploadResponseDto = cloudinaryService.uploadImage(file);
 
+        brand.setLogoUrl(cloudinaryUploadResponseDto.getImageUrl());
+        brand.setPublicId(cloudinaryUploadResponseDto.getPublicId());
+        brand.setName(name);
+        brand.setDescription(description);
 
         Brand saved = brandRepository.save(brand);
         return BrandMapper.toResponse(saved);
@@ -45,14 +58,25 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public BrandResponseDto updateBrand(Long id, BrandRequestDto dto) {
-        Brand brand = brandRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Brand Not Found!1"));
+    public BrandResponseDto updateBrand(
+            Long id,
+            MultipartFile file,
+            String name,
+            String description
+            ) {
+        Brand brand = brandRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Brand Not Found!"));
 
-
-
-        brand.setName(dto.getName());
-        brand.setLogoUrl(dto.getLogoUrl());
-        brand.setDescription(dto.getDescription());
+        // delete old brand image
+        if(brand.getPublicId() != null){
+            cloudinaryService.deleteImage(
+                    brand.getPublicId()
+            );
+        }
+        CloudinaryUploadResponseDto cloudinaryUploadResponseDto = cloudinaryService.uploadImage(file);
+        brand.setLogoUrl(cloudinaryUploadResponseDto.getImageUrl());
+        brand.setPublicId(cloudinaryUploadResponseDto.getPublicId());
+        brand.setName(name);
+        brand.setDescription(description);
 
         Brand updated = brandRepository.save(brand);
         return BrandMapper.toResponse(updated);

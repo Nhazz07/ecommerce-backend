@@ -9,8 +9,11 @@ import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
+import static org.apache.tomcat.util.http.fileupload.FileUploadBase.MULTIPART_FORM_DATA;
 
 @RestController
 @RequestMapping("/api/series")
@@ -21,9 +24,26 @@ public class SeriesController {
         this.seriesServiceImpl = seriesServiceImpl;
     }
 
-    @PostMapping
-    public ResponseEntity<ApiResponseDto<SeriesResponseDto>> createSeries(@RequestBody @Valid SeriesRequestDto dto){
-        SeriesResponseDto series = seriesServiceImpl.createSeries(dto);
+    @PostMapping(consumes = MULTIPART_FORM_DATA)
+    public ResponseEntity<ApiResponseDto<SeriesResponseDto>> createSeries(
+            @RequestParam("seriesId")
+            @Positive Long seriesId,
+
+            @RequestParam("file")
+            MultipartFile file,
+
+            @RequestParam("name")
+            String name,
+
+            @RequestParam("description")
+            String description
+            ){
+        SeriesResponseDto series = seriesServiceImpl.createSeries(
+                seriesId,
+                file,
+                name,
+                description
+        );
 
         ApiResponseDto<SeriesResponseDto> response = new ApiResponseDto<>(
                 true,
@@ -33,7 +53,7 @@ public class SeriesController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", consumes = MULTIPART_FORM_DATA)
     public ResponseEntity<ApiResponseDto<SeriesResponseDto>> getSeriesById(@PathVariable @Positive Long id){
         SeriesResponseDto series = seriesServiceImpl.getSeriesById(id);
 
@@ -56,8 +76,25 @@ public class SeriesController {
         return ResponseEntity.ok(response);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<SeriesResponseDto>> updateSeries(@PathVariable @Positive Long id, @RequestBody @Valid SeriesRequestDto dto){
-        SeriesResponseDto series = seriesServiceImpl.updateSeries(id,dto);
+    public ResponseEntity<ApiResponseDto<SeriesResponseDto>> updateSeries(
+            @PathVariable
+            @Positive Long id,
+
+            @RequestParam("file")
+            MultipartFile file,
+
+            @RequestParam("name")
+            String name,
+
+            @RequestParam("description")
+            String description
+            ){
+        SeriesResponseDto series = seriesServiceImpl.updateSeries(
+                id,
+                file,
+                name,
+                description
+                );
 
         ApiResponseDto<SeriesResponseDto> response = new ApiResponseDto<>(
                 true,

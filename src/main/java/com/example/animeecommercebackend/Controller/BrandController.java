@@ -10,8 +10,11 @@ import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
+import static org.apache.tomcat.util.http.fileupload.FileUploadBase.MULTIPART_FORM_DATA;
 
 @RestController
 @RequestMapping("/api/brand")
@@ -23,9 +26,26 @@ public class BrandController {
         this.brandServiceImpl = brandServiceImpl;
     }
 
-    @PostMapping
-    public ResponseEntity<ApiResponseDto<BrandResponseDto>> createBrand(@RequestBody @Valid BrandRequestDto dto){
-        BrandResponseDto brand = brandServiceImpl.createBrand(dto);
+    @PostMapping(consumes = MULTIPART_FORM_DATA)
+    public ResponseEntity<ApiResponseDto<BrandResponseDto>> createBrand(
+            @RequestParam("brand id")
+            @Positive Long brandId,
+
+            @RequestParam("file")
+            MultipartFile file,
+
+            @RequestParam("name")
+            String name,
+
+            @RequestParam("description")
+            String description
+    ){
+        BrandResponseDto brand = brandServiceImpl.createBrand(
+                brandId,
+                file,
+                name,
+                description
+        );
 
         ApiResponseDto<BrandResponseDto> response = new ApiResponseDto<>(
                 true,
@@ -57,9 +77,27 @@ public class BrandController {
         );
         return ResponseEntity.ok(response);
     }
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<BrandResponseDto>> updateBrand(@PathVariable @Positive Long id, @RequestBody @Valid BrandRequestDto dto){
-        BrandResponseDto brand = brandServiceImpl.updateBrand(id, dto);
+    @PutMapping(value = "/{id}", consumes = MULTIPART_FORM_DATA)
+    public ResponseEntity<ApiResponseDto<BrandResponseDto>> updateBrand(
+
+            @PathVariable
+            @Positive Long id,
+
+            @RequestParam("file")
+            MultipartFile file,
+
+            @RequestParam("name")
+            String name,
+
+            @RequestParam("description")
+            String description
+            ){
+        BrandResponseDto brand = brandServiceImpl.updateBrand(
+                id,
+                file,
+                name,
+                description
+                );
 
         ApiResponseDto<BrandResponseDto> response = new ApiResponseDto<>(
                 true,
