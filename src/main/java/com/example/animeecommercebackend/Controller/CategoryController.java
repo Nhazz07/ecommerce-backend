@@ -8,21 +8,22 @@ import com.example.animeecommercebackend.Repository.CategoryRepository;
 import com.example.animeecommercebackend.Service.Impl.CategoryServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/category")
+@Validated
+@RequiredArgsConstructor
 public class CategoryController {
 
     private final CategoryServiceImpl categoryServiceImpl;
 
-    public CategoryController(CategoryServiceImpl categoryServiceImpl) {
-        this.categoryServiceImpl = categoryServiceImpl;
-    }
 
     @PostMapping
     public ResponseEntity<ApiResponseDto<CategoryResponseDto>> createCategory(

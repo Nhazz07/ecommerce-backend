@@ -5,20 +5,20 @@ import com.example.animeecommercebackend.Dto.Response.ReturnResponseDto;
 import com.example.animeecommercebackend.Service.Impl.ReturnServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/return")
+@Validated
+@RequiredArgsConstructor
 public class ReturnController {
     private final ReturnServiceImpl returnServiceImpl;
-
-    public ReturnController(ReturnServiceImpl returnServiceImpl) {
-        this.returnServiceImpl = returnServiceImpl;
-    }
 
     @PostMapping
     public ResponseEntity<ApiResponseDto<ReturnResponseDto>> createReturn(

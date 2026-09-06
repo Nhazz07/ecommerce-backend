@@ -6,20 +6,20 @@ import com.example.animeecommercebackend.Dto.Response.CartResponseDto;
 import com.example.animeecommercebackend.Service.Impl.CartServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/cart")
+@Validated
+@RequiredArgsConstructor
 public class CartController {
 
     private final CartServiceImpl cartServiceImpl;
-
-    public CartController(CartServiceImpl cartServiceImpl) {
-        this.cartServiceImpl = cartServiceImpl;
-    }
 
     @PostMapping
     public ResponseEntity<ApiResponseDto<CartResponseDto>> createCart(

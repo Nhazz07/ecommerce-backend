@@ -5,9 +5,11 @@ import com.example.animeecommercebackend.Dto.Response.ProductImageResponseDto;
 import com.example.animeecommercebackend.Service.Impl.ProductImageServiceImpl;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,13 +17,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/productImage")
+@Validated
+@RequiredArgsConstructor
 public class ProductImageController {
 
     private final ProductImageServiceImpl productImageServiceImpl;
 
-    public ProductImageController(ProductImageServiceImpl productImageServiceImpl) {
-        this.productImageServiceImpl = productImageServiceImpl;
-    }
 
     // CREATE PRODUCT IMAGE
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

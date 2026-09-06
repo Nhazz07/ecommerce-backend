@@ -4,8 +4,10 @@ import com.example.animeecommercebackend.Dto.ApiResponseDto;
 import com.example.animeecommercebackend.Dto.Response.SeriesResponseDto;
 import com.example.animeecommercebackend.Service.Impl.SeriesServiceImpl;
 import jakarta.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,12 +17,10 @@ import static org.apache.tomcat.util.http.fileupload.FileUploadBase.MULTIPART_FO
 
 @RestController
 @RequestMapping("/api/series")
+@Validated
+@RequiredArgsConstructor
 public class SeriesController {
     private final SeriesServiceImpl seriesServiceImpl;
-
-    public SeriesController(SeriesServiceImpl seriesServiceImpl) {
-        this.seriesServiceImpl = seriesServiceImpl;
-    }
 
     @PostMapping(consumes = MULTIPART_FORM_DATA)
     public ResponseEntity<ApiResponseDto<SeriesResponseDto>> createSeries(

@@ -7,20 +7,20 @@ import com.example.animeecommercebackend.Mapper.RefundMapper;
 import com.example.animeecommercebackend.Service.Impl.RefundServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/refund")
+@Validated
+@RequiredArgsConstructor
 public class RefundController {
     private final RefundServiceImpl refundServiceImpl;
-
-    public RefundController(RefundServiceImpl refundServiceImpl) {
-        this.refundServiceImpl = refundServiceImpl;
-    }
 
     @PostMapping
     public ResponseEntity<ApiResponseDto<RefundResponseDto>> createRefund(

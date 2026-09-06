@@ -6,20 +6,20 @@ import com.example.animeecommercebackend.Dto.Response.AddressResponseDto;
 import com.example.animeecommercebackend.Service.Impl.AddressServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/address")
+@Validated
+@RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:5173")
 public class AddressController {
     private final AddressServiceImpl addressServiceImpl;
-
-    public AddressController(AddressServiceImpl addressServiceImpl) {
-        this.addressServiceImpl = addressServiceImpl;
-    }
 
     @PostMapping
     public ResponseEntity<ApiResponseDto<AddressResponseDto>> createAddress(

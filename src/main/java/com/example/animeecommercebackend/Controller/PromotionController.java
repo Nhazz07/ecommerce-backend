@@ -7,21 +7,22 @@ import com.example.animeecommercebackend.Entity.Promotion;
 import com.example.animeecommercebackend.Service.Impl.PromotionServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/promotion")
+@Validated
+@RequiredArgsConstructor
 public class PromotionController {
 
     private final PromotionServiceImpl promotionServiceImpl;
 
-    public PromotionController(PromotionServiceImpl promotionServiceImpl) {
-        this.promotionServiceImpl = promotionServiceImpl;
-    }
 
     @PostMapping
     public ResponseEntity<ApiResponseDto<PromotionResponseDto>> createPromotion(

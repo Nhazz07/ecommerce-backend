@@ -6,21 +6,22 @@ import com.example.animeecommercebackend.Dto.Response.ProductVariantResponseDto;
 import com.example.animeecommercebackend.Service.Impl.ProductVariantServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/productVariant")
+@Validated
+@RequiredArgsConstructor
 public class ProductVariantController {
 
     private final ProductVariantServiceImpl productVariantServiceImpl;
 
-    public ProductVariantController( ProductVariantServiceImpl productVariantServiceImpl) {
-        this.productVariantServiceImpl = productVariantServiceImpl;
-    }
 
     @PostMapping
     public ResponseEntity<ApiResponseDto<ProductVariantResponseDto>> createProductVariant(

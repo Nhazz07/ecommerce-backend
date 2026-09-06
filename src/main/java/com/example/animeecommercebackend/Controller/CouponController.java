@@ -7,20 +7,20 @@ import com.example.animeecommercebackend.Entity.Coupon;
 import com.example.animeecommercebackend.Service.Impl.CouponServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/coupon")
+@Validated
+@RequiredArgsConstructor
 public class CouponController {
     private final CouponServiceImpl couponServiceImpl;
-
-    public CouponController(CouponServiceImpl couponServiceImpl) {
-        this.couponServiceImpl = couponServiceImpl;
-    }
 
     @PostMapping
     public ResponseEntity<ApiResponseDto<CouponResponseDto>> createCoupon(

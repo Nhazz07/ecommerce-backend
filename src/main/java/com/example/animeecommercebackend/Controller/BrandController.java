@@ -1,11 +1,13 @@
 package com.example.animeecommercebackend.Controller;
-
 import com.example.animeecommercebackend.Dto.ApiResponseDto;
 import com.example.animeecommercebackend.Dto.Response.BrandResponseDto;
 import com.example.animeecommercebackend.Service.Impl.BrandServiceImpl;
 import jakarta.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,15 +17,29 @@ import static org.apache.tomcat.util.http.fileupload.FileUploadBase.MULTIPART_FO
 
 @RestController
 @RequestMapping("/api/brand")
+@Validated
+@RequiredArgsConstructor
 public class BrandController {
 
     private final BrandServiceImpl brandServiceImpl;
 
-    public BrandController(BrandServiceImpl brandServiceImpl) {
-        this.brandServiceImpl = brandServiceImpl;
-    }
+    // Customer Controller
+    @GetMapping("/available")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<ApiResponseDto<List<BrandResponseDto>>> getALLBrand(){
 
+        List<BrandResponseDto> brands = brandServiceImpl.getAllBrand();
+
+        ApiResponseDto<List<BrandResponseDto>> response = new ApiResponseDto<>(
+                true,
+                "Brand Retrieved Successfully!",
+                brands
+        );
+        return ResponseEntity.ok(response);
+    }
+    // Admin Controller
     @PostMapping(consumes = MULTIPART_FORM_DATA)
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<BrandResponseDto>> createBrand(
 
             @RequestParam("file")
@@ -50,6 +66,7 @@ public class BrandController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<BrandResponseDto>> getBrandById(@PathVariable @Positive Long id){
         BrandResponseDto brand = brandServiceImpl.getBrandById(id);
 
@@ -61,6 +78,7 @@ public class BrandController {
         return ResponseEntity.ok(response);
     }
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<List<BrandResponseDto>>> getAllBrand(){
         List<BrandResponseDto> brand = brandServiceImpl.getAllBrand();
 
@@ -72,6 +90,7 @@ public class BrandController {
         return ResponseEntity.ok(response);
     }
     @PutMapping(value = "/{id}", consumes = MULTIPART_FORM_DATA)
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<BrandResponseDto>> updateBrand(
 
             @PathVariable
@@ -101,6 +120,7 @@ public class BrandController {
         return ResponseEntity.ok(response);
     }
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<Void>> deleteBrand(@PathVariable @Positive Long id){
         brandServiceImpl.deleteBrand(id);
 

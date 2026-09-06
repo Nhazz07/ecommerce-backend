@@ -6,20 +6,21 @@ import com.example.animeecommercebackend.Dto.Response.OrderResponseDto;
 import com.example.animeecommercebackend.Service.Impl.OrderServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("api/order")
+@Validated
+@RequiredArgsConstructor
 public class OrderController {
     private final OrderServiceImpl orderServiceImpl;
 
-    public OrderController(OrderServiceImpl orderServiceImpl) {
-        this.orderServiceImpl = orderServiceImpl;
-    }
 
     @PostMapping
     public ResponseEntity<ApiResponseDto<OrderResponseDto>> createOrder(

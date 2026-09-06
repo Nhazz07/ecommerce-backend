@@ -6,21 +6,22 @@ import com.example.animeecommercebackend.Dto.Response.GiftCardResponseDto;
 import com.example.animeecommercebackend.Service.Impl.GiftCardServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/giftCard")
+@Validated
+@RequiredArgsConstructor
 public class GiftCardController {
 
     private final GiftCardServiceImpl giftCardServiceImpl;
 
-    public GiftCardController(GiftCardServiceImpl giftCardServiceImpl) {
-        this.giftCardServiceImpl = giftCardServiceImpl;
-    }
 
     @PostMapping
     public ResponseEntity<ApiResponseDto<GiftCardResponseDto>> createGiftCard(

@@ -6,21 +6,21 @@ import com.example.animeecommercebackend.Dto.Response.InventoryResponseDto;
 import com.example.animeecommercebackend.Service.Impl.InventoryServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/inventory")
+@Validated
+@RequiredArgsConstructor
 public class InventoryController {
 
     private final InventoryServiceImpl inventoryServiceImpl;
-
-    public InventoryController(InventoryServiceImpl inventoryServiceImpl) {
-        this.inventoryServiceImpl = inventoryServiceImpl;
-    }
 
     @PostMapping
     public ResponseEntity<ApiResponseDto<InventoryResponseDto>> createInventory(

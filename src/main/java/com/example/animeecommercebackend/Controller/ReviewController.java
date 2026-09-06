@@ -8,20 +8,20 @@ import com.example.animeecommercebackend.Entity.Review;
 import com.example.animeecommercebackend.Service.Impl.ReviewServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/review")
+@Validated
+@RequiredArgsConstructor
 public class ReviewController {
     private final ReviewServiceImpl reviewServiceImpl;
-
-    public ReviewController(ReviewServiceImpl reviewServiceImpl) {
-        this.reviewServiceImpl = reviewServiceImpl;
-    }
 
     @PostMapping
     public ResponseEntity<ApiResponseDto<ReviewResponseDto>> createReview(
