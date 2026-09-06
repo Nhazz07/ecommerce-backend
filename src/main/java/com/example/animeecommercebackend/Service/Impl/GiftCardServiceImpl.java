@@ -3,14 +3,17 @@ package com.example.animeecommercebackend.Service.Impl;
 import com.example.animeecommercebackend.Dto.Request.GiftCardRequestDto;
 import com.example.animeecommercebackend.Dto.Response.GiftCardResponseDto;
 import com.example.animeecommercebackend.Entity.GiftCard;
+import com.example.animeecommercebackend.Entity.User;
 import com.example.animeecommercebackend.Exception.ResourceNotFoundException;
 import com.example.animeecommercebackend.Mapper.GiftCardMapper;
 import com.example.animeecommercebackend.Repository.GiftCardRepository;
 import com.example.animeecommercebackend.Repository.UserRepository;
+import com.example.animeecommercebackend.Service.CurrentUserService;
 import com.example.animeecommercebackend.Service.GiftCardService;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
-
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @Service
@@ -19,6 +22,7 @@ public class GiftCardServiceImpl implements GiftCardService {
 
     private final GiftCardRepository giftCardRepository;
     private final UserRepository userRepository;
+    private final CurrentUserService currentUserService;
     @Override
     public GiftCardResponseDto createGiftCard(
             GiftCardRequestDto dto) {
@@ -40,8 +44,14 @@ public class GiftCardServiceImpl implements GiftCardService {
         return giftCardRepository.findAll().stream().map(GiftCardMapper::toResponse).toList();
     }
 
+    @SneakyThrows
     @Override
     public List<GiftCardResponseDto> getGiftCardsByUserId(Long userId) {
+        User currentUser = currentUserService.getCurrentUser();
+
+        if(!currentUser.getId().equals(userId)){
+            throw new AccessDeniedException("You cannot access another user's gift card");
+        }
         List<GiftCard> giftCards = giftCardRepository.findByUserId(userId);
         return giftCards.stream().map(GiftCardMapper::toResponse).toList();
     }

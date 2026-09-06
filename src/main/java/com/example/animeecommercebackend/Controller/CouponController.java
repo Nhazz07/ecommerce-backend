@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,7 @@ public class CouponController {
     private final CouponServiceImpl couponServiceImpl;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<CouponResponseDto>> createCoupon(
             @RequestBody @Valid CouponRequestDto dto){
         CouponResponseDto coupon = couponServiceImpl.createCoupon(dto);
@@ -35,6 +37,7 @@ public class CouponController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<CouponResponseDto>> getCouponById(
             @PathVariable @Positive Long id){
         CouponResponseDto coupon = couponServiceImpl.getCouponById(id);
@@ -47,6 +50,7 @@ public class CouponController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/code/{code}")
+    @PreAuthorize("hasAnyRole('CUSTOMER','ADMIN')")
     public ResponseEntity<ApiResponseDto<CouponResponseDto>> getCouponByCode(
             @PathVariable String code){
         CouponResponseDto coupon = couponServiceImpl.getCouponByCode(code);
@@ -59,6 +63,7 @@ public class CouponController {
         return ResponseEntity.ok(response);
     }
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<List<CouponResponseDto>>> getAllCoupon(){
         List<CouponResponseDto> coupons = couponServiceImpl.getAllCoupon();
         ApiResponseDto<List<CouponResponseDto>> response = new ApiResponseDto<>(
@@ -69,6 +74,7 @@ public class CouponController {
         return ResponseEntity.ok(response);
     }
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<CouponResponseDto>> updateCoupon(
             @PathVariable @Positive Long id,
             @RequestBody @Valid CouponRequestDto dto){
@@ -82,6 +88,7 @@ public class CouponController {
         return ResponseEntity.ok(response);
     }
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<Void>> deleteCoupon(
             @PathVariable @Positive Long id){
         couponServiceImpl.deleteCoupon(id);

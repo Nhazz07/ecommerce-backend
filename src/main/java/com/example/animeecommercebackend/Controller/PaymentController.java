@@ -21,7 +21,6 @@ import java.util.List;
 public class PaymentController {
 
     private final PaymentServiceImpl paymentServiceImpl;
-
     @PostMapping
     public ResponseEntity<ApiResponseDto<PaymentResponseDto>> createPayment(
             @RequestBody @Valid PaymentRequestDto dto){

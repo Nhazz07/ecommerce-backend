@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,20 +23,21 @@ public class GiftCardController {
 
     private final GiftCardServiceImpl giftCardServiceImpl;
 
-
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<GiftCardResponseDto>> createGiftCard(
             @RequestBody @Valid GiftCardRequestDto dto){
         GiftCardResponseDto giftCard = giftCardServiceImpl.createGiftCard(dto);
 
         ApiResponseDto<GiftCardResponseDto> response = new ApiResponseDto<>(
                 true,
-                "GiftCard Created SSuccessfully",
+                "GiftCard Created Successfully",
                 giftCard
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('CUSTOMER','ADMIN')")
     public ResponseEntity<ApiResponseDto<GiftCardResponseDto>> getGiftCard(
             @PathVariable @Positive Long id){
         GiftCardResponseDto giftCard = giftCardServiceImpl.getGiftCardById(id);
@@ -48,6 +50,7 @@ public class GiftCardController {
         return ResponseEntity.ok(response);
     }
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<List<GiftCardResponseDto>>> getAllGiftCard(){
         List<GiftCardResponseDto> giftCard = giftCardServiceImpl.getAllGiftCard();
 
@@ -59,6 +62,7 @@ public class GiftCardController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/user/{userId}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ApiResponseDto<List<GiftCardResponseDto>>> getGiftCardByUser(
             @PathVariable @Positive Long userId){
         List<GiftCardResponseDto> giftCards = giftCardServiceImpl.getGiftCardsByUserId(userId);
@@ -71,6 +75,7 @@ public class GiftCardController {
         return ResponseEntity.ok(response);
     }
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<GiftCardResponseDto>> updateGiftCard(
             @PathVariable @Positive Long id,
             @RequestBody @Valid GiftCardRequestDto dto){
@@ -84,6 +89,7 @@ public class GiftCardController {
         return ResponseEntity.ok(response);
     }
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<Void>> deleteGiftCard(
             @PathVariable @Positive Long id){
         giftCardServiceImpl.deleteGiftCard(id);
