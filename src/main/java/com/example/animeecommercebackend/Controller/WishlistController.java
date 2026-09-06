@@ -3,6 +3,7 @@ package com.example.animeecommercebackend.Controller;
 import com.example.animeecommercebackend.Dto.ApiResponseDto;
 import com.example.animeecommercebackend.Dto.Request.WishlistRequestDto;
 import com.example.animeecommercebackend.Dto.Response.WishlistResponseDto;
+import com.example.animeecommercebackend.Service.CurrentUserService;
 import com.example.animeecommercebackend.Service.Impl.WishlistServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
@@ -17,9 +18,11 @@ import java.util.List;
 public class WishlistController {
 
     private final WishlistServiceImpl wishlistServiceImpl;
+    private final CurrentUserService currentUserService;
 
-    public WishlistController(WishlistServiceImpl wishlistServiceImpl) {
+    public WishlistController(WishlistServiceImpl wishlistServiceImpl, CurrentUserService currentUserService) {
         this.wishlistServiceImpl = wishlistServiceImpl;
+        this.currentUserService = currentUserService;
     }
 
     @PostMapping
@@ -56,10 +59,9 @@ public class WishlistController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<ApiResponseDto<List<WishlistResponseDto>>> getWishlistByUserId(
-            @PathVariable @Positive Long userId) {
-
+    @GetMapping("/my")
+    public ResponseEntity<ApiResponseDto<List<WishlistResponseDto>>> getMyWishlist() {
+        Long userId = currentUserService.getCurrentUser().getId();
         List<WishlistResponseDto> wishlists =
                 wishlistServiceImpl.getWishlistByUserId(userId);
 

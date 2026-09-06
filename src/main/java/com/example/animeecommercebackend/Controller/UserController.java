@@ -3,10 +3,13 @@ package com.example.animeecommercebackend.Controller;
 import com.example.animeecommercebackend.Dto.ApiResponseDto;
 import com.example.animeecommercebackend.Dto.Request.UserRequestDto;
 import com.example.animeecommercebackend.Dto.Response.UserResponseDto;
+import com.example.animeecommercebackend.Entity.User;
+import com.example.animeecommercebackend.Service.CurrentUserService;
 import com.example.animeecommercebackend.Service.Impl.UserServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,13 +19,48 @@ import java.util.List;
 public class UserController {
 
     private final UserServiceImpl userServiceImpl;
+    private final CurrentUserService currentUserService;
 
-    public UserController(UserServiceImpl userServiceImpl) {
+    public UserController(UserServiceImpl userServiceImpl, CurrentUserService currentUserService) {
         this.userServiceImpl = userServiceImpl;
+        this.currentUserService = currentUserService;
     }
 
+    // Customer controller
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<ApiResponseDto<UserResponseDto>> getMyProfile(){
+        User currentUser = currentUserService.getCurrentUser();
+
+        UserResponseDto user = userServiceImpl.getUserById(currentUser.getId());
+
+        ApiResponseDto<UserResponseDto> response = new ApiResponseDto<>(
+                true,
+                "Current user retrieved successfully",
+                user
+        );
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/me")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<ApiResponseDto<UserResponseDto>> updateProfile(@RequestBody @Valid UserRequestDto dto){
+        User currentUser = currentUserService.getCurrentUser();
+
+        UserResponseDto user = userServiceImpl.updateUser(currentUser.getId(), dto);
+
+        ApiResponseDto<UserResponseDto> response = new ApiResponseDto<>(
+                true,
+                "Profile update successfully!",
+                user
+        );
+        return ResponseEntity.ok(response);
+    }
+
+    // Admin Controller
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole(ADMIN)")
     public ResponseEntity<ApiResponseDto<UserResponseDto>> getUserById(
             @PathVariable @Positive Long id) {
 
@@ -41,6 +79,7 @@ public class UserController {
 
 
     @GetMapping
+    @PreAuthorize("hasRole(ADMIN)")
     public ResponseEntity<ApiResponseDto<List<UserResponseDto>>> getAllUsers() {
 
         List<UserResponseDto> users =
@@ -58,6 +97,7 @@ public class UserController {
 
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole(ADMIN)")
     public ResponseEntity<ApiResponseDto<UserResponseDto>> updateUser(
             @PathVariable @Positive Long id,
             @RequestBody @Valid UserRequestDto dto) {
@@ -77,6 +117,7 @@ public class UserController {
 
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole(ADMIN)")
     public ResponseEntity<ApiResponseDto<Void>> deleteUser(
             @PathVariable @Positive Long id) {
 
