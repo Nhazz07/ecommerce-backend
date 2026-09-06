@@ -11,6 +11,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,7 @@ public class CategoryController {
 
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<CategoryResponseDto>> createCategory(
             @RequestBody @Valid CategoryRequestDto dto){
         CategoryResponseDto category = categoryServiceImpl.createCategory(dto);
@@ -38,6 +40,7 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('CUSTOMER','ADMIN')")
     public ResponseEntity<ApiResponseDto<CategoryResponseDto>> getCategoryById(
             @PathVariable @Positive Long id){
         CategoryResponseDto category = categoryServiceImpl.getCategoryById(id);
@@ -50,6 +53,7 @@ public class CategoryController {
         return ResponseEntity.ok(response);
     }
     @GetMapping
+    @PreAuthorize("hasAnyRole('CUSTOMER','ADMIN')")
     public ResponseEntity<ApiResponseDto<List<CategoryResponseDto>>> getAllCategory(){
         List<CategoryResponseDto> categories = categoryServiceImpl.getAllCategory();
 
@@ -61,6 +65,7 @@ public class CategoryController {
         return ResponseEntity.ok(response);
     }
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<CategoryResponseDto>> updateCategory(
             @PathVariable @Positive Long id,
             @RequestBody @Valid CategoryRequestDto dto){
@@ -74,6 +79,7 @@ public class CategoryController {
         return ResponseEntity.ok(response);
     }
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<Void>> deleteCategory(
             @PathVariable @Positive Long id){
         categoryServiceImpl.deleteCategory(id);
