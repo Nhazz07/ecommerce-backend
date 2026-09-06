@@ -4,9 +4,11 @@ import com.example.animeecommercebackend.Dto.Request.LoginRequestDto;
 import com.example.animeecommercebackend.Dto.Request.RegisterRequestDto;
 import com.example.animeecommercebackend.Dto.Response.LoginResponseDto;
 import com.example.animeecommercebackend.Dto.Response.RegisterResponseDto;
+import com.example.animeecommercebackend.Entity.Enums.UserRole;
 import com.example.animeecommercebackend.Entity.User;
 import com.example.animeecommercebackend.Mapper.RegisterMapper;
-import com.example.animeecommercebackend.Mapper.UserMapper;
+import com.example.animeecommercebackend.Security.CustomerUserDetails;
+import com.example.animeecommercebackend.Security.JwtService;
 import com.example.animeecommercebackend.Repository.UserRepository;
 import com.example.animeecommercebackend.Service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     @Override
     public RegisterResponseDto register(RegisterRequestDto dto) {
@@ -35,6 +38,9 @@ public class AuthServiceImpl implements AuthService {
 
         // Convert DTO → Entity
         User user = RegisterMapper.toEntity(dto);
+
+        // set default role
+        user.setRole(UserRole.CUSTOMER);
 
         // Hash password before saving
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
@@ -55,17 +61,23 @@ public class AuthServiceImpl implements AuthService {
                 );
 
         // Check password
-        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(
+                dto.getPassword(),
+                user.getPassword())) {
             throw new IllegalArgumentException("Invalid email or password!");
         }
 
-        // For now, return basic login response
+        String accessToken = jwtService.generateToken(
+                new CustomerUserDetails(user));
+
+        // For now, return basic login response + access token
         return new LoginResponseDto(
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getCreatedAt(),
-                user.getUpdatedAt()
+                user.getUpdatedAt(),
+                accessToken
         );
     }
 }

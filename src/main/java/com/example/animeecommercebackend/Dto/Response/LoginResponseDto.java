@@ -21,4 +21,5 @@ public class LoginResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    private  String accessToken;
 }
