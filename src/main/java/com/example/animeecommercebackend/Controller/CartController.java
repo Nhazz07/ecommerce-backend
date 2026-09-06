@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,9 +18,11 @@ import java.util.List;
 @RequestMapping("/api/cart")
 @Validated
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('CUSTOMER')")
 public class CartController {
 
     private final CartServiceImpl cartServiceImpl;
+
 
     @PostMapping
     public ResponseEntity<ApiResponseDto<CartResponseDto>> createCart(
