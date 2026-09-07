@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,7 @@ public class InventoryController {
     private final InventoryServiceImpl inventoryServiceImpl;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<InventoryResponseDto>> createInventory(
             @RequestBody @Valid InventoryRequestDto dto){
         InventoryResponseDto inventory = inventoryServiceImpl.createInventory(dto);
@@ -36,6 +38,7 @@ public class InventoryController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<InventoryResponseDto>> getInventoryById(
             @PathVariable @Positive Long id){
         InventoryResponseDto inventory = inventoryServiceImpl.getInventoryById(id);
@@ -48,6 +51,7 @@ public class InventoryController {
         return ResponseEntity.ok(response);
     }
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<List<InventoryResponseDto>>> getAllInventory(){
         List<InventoryResponseDto> inventories = inventoryServiceImpl.getAllInventory();
 
@@ -59,6 +63,7 @@ public class InventoryController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/product-variant/{productVariantId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<InventoryResponseDto>> getInventoryByProductVariantId(
             @PathVariable @Positive Long productVariantId){
         InventoryResponseDto inventory = inventoryServiceImpl.getInventoryByProductVariantId(productVariantId);
@@ -71,6 +76,7 @@ public class InventoryController {
         return ResponseEntity.ok(response);
     }
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<InventoryResponseDto>> updateInventory(
             @PathVariable @Positive Long id,
             @RequestBody @Valid InventoryRequestDto dto){
@@ -85,6 +91,7 @@ public class InventoryController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<Void>> deleteInventory(
             @PathVariable @Positive Long id){
         inventoryServiceImpl.deleteInventory(id);

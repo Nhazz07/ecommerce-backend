@@ -10,6 +10,6 @@ public interface PaymentService {
     PaymentResponseDto getPaymentById(Long id);
     PaymentResponseDto getPaymentByOrderId(Long orderId);
     List<PaymentResponseDto> getAllPayment();
-    PaymentResponseDto updatePayment(Long id, PaymentRequestDto dto);
-    void deletePayment(Long id);
+//    PaymentResponseDto updatePayment(Long id, PaymentRequestDto dto);
+//    void deletePayment(Long id);
 }

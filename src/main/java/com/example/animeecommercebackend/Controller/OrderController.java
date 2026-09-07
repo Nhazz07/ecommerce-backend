@@ -9,13 +9,14 @@ import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/order")
+@RequestMapping("/api/order")
 @Validated
 @RequiredArgsConstructor
 public class OrderController {
@@ -23,6 +24,7 @@ public class OrderController {
 
 
     @PostMapping
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponseDto<OrderResponseDto>> createOrder(
             @RequestBody @Valid OrderRequestDto dto){
         OrderResponseDto order = orderServiceImpl.createOrder(dto);
@@ -35,7 +37,20 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @GetMapping("/my")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<ApiResponseDto<List<OrderResponseDto>>> getMyOrder(){
+        List<OrderResponseDto> orders = orderServiceImpl.getMyOrders();
+
+        ApiResponseDto<List<OrderResponseDto>> response = new ApiResponseDto<>(
+                true,
+                "Order Retrieved Successfully",
+                orders
+        );
+        return ResponseEntity.ok(response);
+    }
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponseDto<OrderResponseDto>> getOrderById(
             @PathVariable @Positive Long id){
         OrderResponseDto order = orderServiceImpl.getOrderById(id);
@@ -48,6 +63,7 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/userId/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<OrderResponseDto>> getOrderByUserId(
             @PathVariable @Positive Long userId){
         OrderResponseDto order = orderServiceImpl.getOrderByUserId(userId);
@@ -61,6 +77,7 @@ public class OrderController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<List<OrderResponseDto>>> getAllOrder(){
         List<OrderResponseDto> orders = orderServiceImpl.getAllOrder();
 
@@ -72,6 +89,7 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponseDto<OrderResponseDto>> updateOrder(
             @PathVariable @Positive Long id,
             @RequestBody @Valid OrderRequestDto dto){
@@ -85,6 +103,7 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponseDto<Void>> deleteOrder(
             @PathVariable @Positive Long id){
         orderServiceImpl.deleteOrder(id);
