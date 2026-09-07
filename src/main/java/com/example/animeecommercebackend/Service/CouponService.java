@@ -3,6 +3,7 @@ package com.example.animeecommercebackend.Service;
 import com.example.animeecommercebackend.Dto.Request.CouponRequestDto;
 import com.example.animeecommercebackend.Dto.Response.CouponResponseDto;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface CouponService {
@@ -12,4 +13,6 @@ public interface CouponService {
     List<CouponResponseDto> getAllCoupon();
     CouponResponseDto updateCoupon(Long id, CouponRequestDto dto);
     void deleteCoupon(Long id);
+    BigDecimal calculateDiscount(Long couponId, BigDecimal orderAmount);
+    void increaseUsage(Long couponId);
 }

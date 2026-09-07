@@ -48,8 +48,6 @@ public class ProductVariant {
     @OneToOne(mappedBy = "productVariant")
     private Inventory inventory;
 
-    @ManyToMany(mappedBy = "productVariants")
-    private Set<Order> orders = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "product_id")

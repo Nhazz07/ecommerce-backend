@@ -62,7 +62,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             new WebAuthenticationDetailsSource()
                                     .buildDetails(request)
                     );
-
+                    System.out.println("EMAIL: " + userDetails.getUsername());
+                    System.out.println("AUTHORITIES: " + userDetails.getAuthorities());
                     // Tell spring security who is the user
                     SecurityContextHolder
                             .getContext()

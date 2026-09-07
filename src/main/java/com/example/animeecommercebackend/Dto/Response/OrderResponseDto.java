@@ -1,5 +1,6 @@
 package com.example.animeecommercebackend.Dto.Response;
 
+import com.example.animeecommercebackend.Entity.Enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ public class OrderResponseDto {
     private Long id;
     private Integer orderNumber;
     private LocalDateTime orderDate;
-    private Boolean status;
+    private OrderStatus status;
     private BigDecimal totalAmount;
     private BigDecimal subTotal;
     private BigDecimal shippingFee;

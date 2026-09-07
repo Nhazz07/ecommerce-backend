@@ -55,6 +55,9 @@ public class Coupon {
     @Min(value = 1, message = "Usage Limit must be at lease 1")
     private Integer usageLimit;
 
+
+    private Integer usedCount;
+
     @NotNull(message = "Active status is required")
     private Boolean active;
 
@@ -73,4 +76,6 @@ private Set<Order> orders;
     @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+
 }

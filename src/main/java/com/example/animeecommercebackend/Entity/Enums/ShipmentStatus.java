@@ -7,5 +7,5 @@ public enum ShipmentStatus {
     OUT_FOR_DELIVERY,
     DELIVERED,
     FAILED,
-    RETURNED
+    PROCESSING, RETURNED
 }

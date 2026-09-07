@@ -4,6 +4,7 @@ import com.example.animeecommercebackend.Dto.ApiResponseDto;
 import com.example.animeecommercebackend.Dto.Request.OrderRequestDto;
 import com.example.animeecommercebackend.Dto.Response.OrderResponseDto;
 import com.example.animeecommercebackend.Service.Impl.OrderServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -23,19 +24,20 @@ public class OrderController {
     private final OrderServiceImpl orderServiceImpl;
 
 
-    @PostMapping
-    @PreAuthorize("hasRole('CUSTOMER')")
-    public ResponseEntity<ApiResponseDto<OrderResponseDto>> createOrder(
-            @RequestBody @Valid OrderRequestDto dto){
-        OrderResponseDto order = orderServiceImpl.createOrder(dto);
+        @PostMapping
+        @PreAuthorize("hasRole('CUSTOMER')")
+        @SecurityRequirement(name = "bearerAuth")
+        public ResponseEntity<ApiResponseDto<OrderResponseDto>> createOrder(
+                @RequestBody @Valid OrderRequestDto dto){
+            OrderResponseDto order = orderServiceImpl.createOrder(dto);
 
-        ApiResponseDto<OrderResponseDto> response = new ApiResponseDto<>(
-                true,
-                "Order Created Successfully!",
-                order
-        );
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
+            ApiResponseDto<OrderResponseDto> response = new ApiResponseDto<>(
+                    true,
+                    "Order Created Successfully!",
+                    order
+            );
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        }
 
     @GetMapping("/my")
     @PreAuthorize("hasRole('CUSTOMER')")

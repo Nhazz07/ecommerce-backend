@@ -44,11 +44,7 @@ public class ProductVariantMapper {
         if(productVariant.getInventory() != null){
             dto.setInventoryId(productVariant.getInventory().getId());
         }
-        if(productVariant.getOrders()!=null){
-            dto.setOrderId(productVariant.getOrders().stream().map(Order::getId).toList());
-        }else{
-            dto.setOrderId(List.of());
-        }
+
         if(productVariant.getCartItems() != null){
             dto.setCartId(productVariant.getCartItems().stream().map(CartItem::getId).toList());
         }else{

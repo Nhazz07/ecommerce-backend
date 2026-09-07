@@ -1,5 +1,6 @@
 package com.example.animeecommercebackend.Entity;
 
+import com.example.animeecommercebackend.Entity.Enums.OrderStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
@@ -14,6 +15,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -36,7 +38,7 @@ public class Order {
     @NotNull(message = "Order date is required")
     private LocalDateTime orderDate;
 
-    private boolean status;
+    private OrderStatus status;
 
     @NotNull(message = "Total amount is required")
     @DecimalMin(value = "0.00", message = "Total amount cannot be negative")
@@ -58,24 +60,15 @@ public class Order {
     private String shippingAddress;
 
 
-    @ManyToMany
-    @JoinTable(
-            name = "order_product_variant",
-            joinColumns = @JoinColumn(name = "order_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_variant_id")
+    @OneToMany(
+            mappedBy = "order",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
-    private Set<ProductVariant> productVariants = new HashSet<>();
-
-//    @ManyToMany
-//    @JoinTable(
-//            name = "order_coupons",
-//            joinColumns = @JoinColumn(name = "order_id"),
-//            inverseJoinColumns = @JoinColumn(name = "coupon_id")
-//    )
-//    private Set<Coupon> coupons = new HashSet<>();
-@ManyToOne
-@JoinColumn(name = "coupon_id")
-private Coupon coupon;
+    private List<OrderItem> orderItems = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "coupon_id")
+    private Coupon coupon;
 
     @OneToOne(mappedBy = "order")
     private Payment payment;
@@ -97,4 +90,9 @@ private Coupon coupon;
     @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    public void setDiscount(BigDecimal zero) {
+
+    }
+
 }

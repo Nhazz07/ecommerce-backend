@@ -10,6 +10,8 @@ import com.example.animeecommercebackend.Service.PromotionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -67,5 +69,34 @@ public class PromotionServiceImpl implements PromotionService {
                 new ResourceNotFoundException("Promotion Not Found"));
 
         promotionRepository.delete(promotion);
+    }
+
+    @Override
+    public BigDecimal calculateDiscount(Long productId, BigDecimal price) {
+        Promotion promotion = promotionRepository
+                .findByProductsId(productId)
+                .orElse(null);
+
+        if(promotion == null){
+            return BigDecimal.ZERO;
+        }
+        if(!promotion.isActive()){
+            return BigDecimal.ZERO;
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+
+        if(now.isBefore(promotion.getStartDate()) || now.isAfter(promotion.getEndDate())){
+            return BigDecimal.ZERO;
+        }
+        if(promotion.getDiscountType().equalsIgnoreCase("FIXED")){
+            return promotion.getDiscountValue().min(price);
+        }
+        if(promotion.getDiscountType().equalsIgnoreCase("PERCENTAGE")){
+            return price
+                    .multiply(promotion.getDiscountValue())
+                    .divide(BigDecimal.valueOf(100));
+        }
+        return BigDecimal.ZERO;
     }
 }

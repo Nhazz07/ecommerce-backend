@@ -29,7 +29,7 @@ public class OrderMapper {
         dto.setId(order.getId());
         dto.setOrderNumber(order.getOrderNumber());
         dto.setOrderDate(order.getOrderDate());
-        dto.setStatus(order.isStatus());
+        dto.setStatus(order.getStatus());
 
         dto.setTotalAmount(order.getTotalAmount());
         dto.setSubTotal(order.getSubTotal());
@@ -42,11 +42,6 @@ public class OrderMapper {
         dto.setUpdatedAt(order.getUpdatedAt());
         if(order.getUser() != null){
             dto.setUserId((order.getUser().getId()));
-        }
-        if(order.getProductVariants() != null){
-            dto.setProductVariantIds(order.getProductVariants().stream().map(ProductVariant::getId).toList());
-        }else{
-            dto.setProductVariantIds(List.of());
         }
         if(order.getCoupon() != null){
            dto.setCouponId(order.getCoupon().getId());
