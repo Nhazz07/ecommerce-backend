@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,7 @@ public class ProductVariantController {
 
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<ProductVariantResponseDto>> createProductVariant(
             @RequestBody @Valid ProductVariantRequestDto dto){
         ProductVariantResponseDto productVariant = productVariantServiceImpl.createProductVariant(dto);
@@ -37,6 +39,7 @@ public class ProductVariantController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ApiResponseDto<ProductVariantResponseDto>> getProductVariantById(
             @PathVariable @Positive Long id){
         ProductVariantResponseDto productVariant = productVariantServiceImpl.getProductVariantById(id);
@@ -49,6 +52,7 @@ public class ProductVariantController {
         return ResponseEntity.ok(response);
     }
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<List<ProductVariantResponseDto>>> getAllProductVariant(){
         List<ProductVariantResponseDto> productVariants = productVariantServiceImpl.getAllProductVariant();
         ApiResponseDto<List<ProductVariantResponseDto>> response = new ApiResponseDto<>(
@@ -59,6 +63,7 @@ public class ProductVariantController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/productId/{productId}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ApiResponseDto<List<ProductVariantResponseDto>>> getProductVariantByProductid(
             @PathVariable @Positive Long productId){
         List<ProductVariantResponseDto> productVariants = productVariantServiceImpl.getVariantByProductId(productId);
@@ -71,6 +76,7 @@ public class ProductVariantController {
         return ResponseEntity.ok(response);
     }
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<ProductVariantResponseDto>> updateProductVariant(
             @PathVariable @Positive Long id,
             @RequestBody @Valid ProductVariantRequestDto dto){
@@ -84,6 +90,7 @@ public class ProductVariantController {
         return ResponseEntity.ok(response);
     }
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<Void>> deleteProductVariant(
             @PathVariable @Positive Long id){
         productVariantServiceImpl.deleteProductVariant(id);

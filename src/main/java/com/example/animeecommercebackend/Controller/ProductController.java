@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,7 @@ public class ProductController {
     private final ProductServiceImpl productServiceImpl;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<ProductResponseDto>> createProduct(
             @RequestBody @Valid ProductRequestDto dto){
         ProductResponseDto product = productServiceImpl.createProduct(dto);
@@ -40,6 +42,7 @@ public class ProductController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ApiResponseDto<Page<ProductResponseDto>>> getAllProduct(
             Pageable pageable){
         Page<ProductResponseDto> products = productServiceImpl.getAllProduct(pageable);
@@ -53,6 +56,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ApiResponseDto<ProductResponseDto>> getProductById(
             @PathVariable @Positive Long id){
         ProductResponseDto product = productServiceImpl.getProductById(id);
@@ -65,6 +69,7 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/category/{categoryId}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ApiResponseDto<List<ProductResponseDto>>> getProductByCategoryId(
             @PathVariable @Positive Long categoryId){
         List<ProductResponseDto> products = productServiceImpl.getProductByCategoryId(categoryId);
@@ -77,6 +82,7 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/brand/{brandId}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ApiResponseDto<List<ProductResponseDto>>> getProductByBrandId(
             @PathVariable @Positive Long brandId){
         List<ProductResponseDto> products = productServiceImpl.getProductByBrandId(brandId);
@@ -88,6 +94,7 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/series/{seriesId}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ApiResponseDto<List<ProductResponseDto>>> getProductBySeriesId(
             @PathVariable @Positive Long seriesId){
         List<ProductResponseDto> products = productServiceImpl.getProductBySeriesId(seriesId);
@@ -100,6 +107,7 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<ProductResponseDto>> updateProductById(
             @PathVariable @Positive Long id,
             @RequestBody @Valid ProductRequestDto dto){
@@ -114,6 +122,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<Void>> deleteProduct(
             @PathVariable @Positive Long id){
         productServiceImpl.deleteProduct(id);

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +27,7 @@ public class ProductImageController {
 
     // CREATE PRODUCT IMAGE
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<ProductImageResponseDto>> createProductImage(
             @RequestParam("productId")
             @Positive Long productId,
@@ -63,6 +65,7 @@ public class ProductImageController {
 
     // GET PRODUCT IMAGE BY ID
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ApiResponseDto<ProductImageResponseDto>> getProductImageById(
             @PathVariable
             @Positive Long id
@@ -83,6 +86,7 @@ public class ProductImageController {
 
     // GET PRODUCT IMAGES BY PRODUCT ID
     @GetMapping("/productId/{productId}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ApiResponseDto<List<ProductImageResponseDto>>> getProductImageByProductId(
             @PathVariable
             @Positive Long productId
@@ -103,6 +107,7 @@ public class ProductImageController {
 
     // GET ALL PRODUCT IMAGES
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<List<ProductImageResponseDto>>> getAllProductImage() {
 
         List<ProductImageResponseDto> productImages =
@@ -120,6 +125,7 @@ public class ProductImageController {
 
     // UPDATE PRODUCT IMAGE
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<ProductImageResponseDto>> updateProductImage(
             @PathVariable
             @Positive Long id,
@@ -155,6 +161,7 @@ public class ProductImageController {
 
     // DELETE PRODUCT IMAGE
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<Void>> deleteProductImage(
             @PathVariable
             @Positive Long id
