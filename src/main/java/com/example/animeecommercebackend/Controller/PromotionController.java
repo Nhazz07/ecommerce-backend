@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,7 @@ public class PromotionController {
 
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<PromotionResponseDto>> createPromotion(
             @RequestBody @Valid PromotionRequestDto dto){
         PromotionResponseDto promotion = promotionServiceImpl.createPromotion(dto);
@@ -37,6 +39,7 @@ public class PromotionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ApiResponseDto<PromotionResponseDto>> getPromotionById(
             @PathVariable @Positive Long id){
         PromotionResponseDto promotion = promotionServiceImpl.getPromotionById(id);
@@ -49,6 +52,7 @@ public class PromotionController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/productId/{productId}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ApiResponseDto<PromotionResponseDto>> getPromotionByProductId(
             @PathVariable @Positive Long productId){
         PromotionResponseDto promotion = promotionServiceImpl.getPromotionByProductId(productId);
@@ -62,6 +66,7 @@ public class PromotionController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ApiResponseDto<List<PromotionResponseDto>>> getAllPromotion(){
         List<PromotionResponseDto> promotions = promotionServiceImpl.getAllPromotion();
 
@@ -74,6 +79,7 @@ public class PromotionController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<PromotionResponseDto>> updatePromotion(
             @PathVariable @Positive Long id,
             @RequestBody @Valid PromotionRequestDto dto){
@@ -88,6 +94,7 @@ public class PromotionController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<Void>> deletePromotion(
             @PathVariable @Positive Long id){
         promotionServiceImpl.deletePromotion(id);

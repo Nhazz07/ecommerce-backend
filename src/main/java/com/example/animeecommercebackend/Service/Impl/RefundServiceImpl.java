@@ -6,22 +6,26 @@ import com.example.animeecommercebackend.Entity.Refund;
 import com.example.animeecommercebackend.Exception.ResourceNotFoundException;
 import com.example.animeecommercebackend.Mapper.RefundMapper;
 import com.example.animeecommercebackend.Repository.RefundRepository;
+import com.example.animeecommercebackend.Service.CurrentUserService;
 import com.example.animeecommercebackend.Service.RefundService;
-import com.fasterxml.classmate.types.ResolvedObjectType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class RefundServiceImpl implements RefundService {
     private final RefundRepository refundRepository;
+    private final CurrentUserService currentUserService;
     @Override
     public RefundResponseDto createRefund(RefundRequestDto dto) {
         Refund refund = RefundMapper.toEntity(dto);
 
+        Long currentUserId = currentUserService.getCurrentUser().getId();
+
+        if(!refund.getAReturn().getOrder().getUser().getId().equals(currentUserId)){
+            throw new ResourceNotFoundException("Refund Not Found!");
+        }
         Refund saved = refundRepository.save(refund);
         return RefundMapper.toResponse(saved);
     }
@@ -30,6 +34,13 @@ public class RefundServiceImpl implements RefundService {
     public RefundResponseDto getRefundById(Long id) {
         Refund refund = refundRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Refund Not Found!"));
+
+        Long currentUserId = currentUserService.getCurrentUser().getId();
+
+        if(!refund.getAReturn().getOrder().getUser().getId().equals(currentUserId)){
+           throw new ResourceNotFoundException("Refund Not Found!");
+    }
+
         return RefundMapper.toResponse(refund);
     }
 
@@ -41,6 +52,10 @@ public class RefundServiceImpl implements RefundService {
     public RefundResponseDto getRefundByReturnId(Long returnId) {
         Refund refund = refundRepository.findByAReturnId(returnId)
                 .orElseThrow(() -> new ResourceNotFoundException("Refund Not Found!"));
+        Long currentUserId = currentUserService.getCurrentUser().getId();
+        if(!refund.getAReturn().getOrder().getUser().getId().equals(currentUserId)){
+            throw new ResourceNotFoundException("Refund Not Found!");
+        }
 
         return RefundMapper.toResponse(refund);
     }
