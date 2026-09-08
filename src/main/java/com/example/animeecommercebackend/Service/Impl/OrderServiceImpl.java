@@ -235,4 +235,37 @@ public class OrderServiceImpl implements OrderService {
 
         orderRepository.delete(order);
     }
+
+    @Override
+    public OrderResponseDto updateOrderStatus(Long id, OrderStatus status) {
+        Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Order Not Found!"));
+
+        if(isValidStatusTransition(order.getStatus(),status)){
+            throw new RuntimeException("Invalid order status transition");
+        }
+        order.setStatus(status);
+
+        Order updated = orderRepository.save(order);
+        return OrderMapper.toResponse(updated);
+    }
+
+    private boolean isValidStatusTransition(OrderStatus currentStatus, OrderStatus status) {
+        return switch(currentStatus){
+            case PENDING ->
+                status == OrderStatus.CONFIRMED||
+                status == OrderStatus.CANCELED;
+            case CONFIRMED ->
+                status == OrderStatus.PAID||
+                status == OrderStatus.CANCELED;
+            case PAID ->
+                status == OrderStatus.PROCESSING;
+            case PROCESSING ->
+                status == OrderStatus.SHIPPED;
+            case SHIPPED ->
+                status == OrderStatus.DELIVERED;
+            case DELIVERED,
+                 CANCELED ->
+                false;
+        };
+    }
 }

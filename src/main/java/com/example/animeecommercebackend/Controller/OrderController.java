@@ -3,6 +3,7 @@ package com.example.animeecommercebackend.Controller;
 import com.example.animeecommercebackend.Dto.ApiResponseDto;
 import com.example.animeecommercebackend.Dto.Request.OrderRequestDto;
 import com.example.animeecommercebackend.Dto.Response.OrderResponseDto;
+import com.example.animeecommercebackend.Entity.Enums.OrderStatus;
 import com.example.animeecommercebackend.Service.Impl.OrderServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -116,5 +117,18 @@ public class OrderController {
                 null
         );
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("{id}/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponseDto<OrderResponseDto>> updatedOrderStatus(@PathVariable @Positive Long id, @RequestParam OrderStatus orderStatus){
+            OrderResponseDto updated = orderServiceImpl.updateOrderStatus(id, orderStatus);
+
+            ApiResponseDto<OrderResponseDto> response = new ApiResponseDto<>(
+                    true,
+                    "Order Status updated successfully!",
+                    updated
+            );
+            return ResponseEntity.ok(response);
     }
 }
