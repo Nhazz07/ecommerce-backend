@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,7 @@ public class WishlistController {
 
 
     @PostMapping
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponseDto<WishlistResponseDto>> createWishlist(
             @RequestBody @Valid WishlistRequestDto dto) {
 
@@ -43,6 +45,7 @@ public class WishlistController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ApiResponseDto<WishlistResponseDto>> getWishlistById(
             @PathVariable @Positive Long id) {
 
@@ -60,6 +63,7 @@ public class WishlistController {
     }
 
     @GetMapping("/my")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponseDto<List<WishlistResponseDto>>> getMyWishlist() {
         Long userId = currentUserService.getCurrentUser().getId();
         List<WishlistResponseDto> wishlists =
@@ -76,6 +80,7 @@ public class WishlistController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<List<WishlistResponseDto>>> getAllWishlist() {
 
         List<WishlistResponseDto> wishlists =
@@ -92,6 +97,7 @@ public class WishlistController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponseDto<WishlistResponseDto>> updateWishlist(
             @PathVariable @Positive Long id,
             @RequestBody @Valid WishlistRequestDto dto) {
@@ -110,6 +116,7 @@ public class WishlistController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponseDto<Void>> deleteWishlist(
             @PathVariable @Positive Long id) {
 
@@ -126,6 +133,7 @@ public class WishlistController {
     }
 
     @PostMapping("/{wishlistId}/products/{productId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public WishlistResponseDto addProduct(
             @PathVariable @Positive Long wishlistId,
             @PathVariable @Positive Long productId) {
@@ -137,6 +145,7 @@ public class WishlistController {
     }
 
     @DeleteMapping("/{wishlistId}/products/{productId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public WishlistResponseDto removeProduct(
             @PathVariable @Positive Long wishlistId,
             @PathVariable @Positive Long productId) {

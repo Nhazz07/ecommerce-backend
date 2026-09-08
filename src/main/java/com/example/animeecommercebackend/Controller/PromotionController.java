@@ -5,6 +5,7 @@ import com.example.animeecommercebackend.Dto.Request.PromotionRequestDto;
 import com.example.animeecommercebackend.Dto.Response.PromotionResponseDto;
 import com.example.animeecommercebackend.Entity.Promotion;
 import com.example.animeecommercebackend.Service.Impl.PromotionServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class PromotionController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<PromotionResponseDto>> createPromotion(
             @RequestBody @Valid PromotionRequestDto dto){
         PromotionResponseDto promotion = promotionServiceImpl.createPromotion(dto);
@@ -40,6 +42,7 @@ public class PromotionController {
     }
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<PromotionResponseDto>> getPromotionById(
             @PathVariable @Positive Long id){
         PromotionResponseDto promotion = promotionServiceImpl.getPromotionById(id);
@@ -53,6 +56,7 @@ public class PromotionController {
     }
     @GetMapping("/productId/{productId}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<PromotionResponseDto>> getPromotionByProductId(
             @PathVariable @Positive Long productId){
         PromotionResponseDto promotion = promotionServiceImpl.getPromotionByProductId(productId);
@@ -67,6 +71,7 @@ public class PromotionController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<List<PromotionResponseDto>>> getAllPromotion(){
         List<PromotionResponseDto> promotions = promotionServiceImpl.getAllPromotion();
 
@@ -80,6 +85,7 @@ public class PromotionController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<PromotionResponseDto>> updatePromotion(
             @PathVariable @Positive Long id,
             @RequestBody @Valid PromotionRequestDto dto){
@@ -95,6 +101,7 @@ public class PromotionController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<Void>> deletePromotion(
             @PathVariable @Positive Long id){
         promotionServiceImpl.deletePromotion(id);

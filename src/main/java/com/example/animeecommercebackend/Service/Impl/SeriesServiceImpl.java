@@ -86,6 +86,14 @@ public class SeriesServiceImpl implements SeriesService {
     public void deleteSeries(Long id) {
         Series series = seriesRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Series Not Found"));
+
+        // delete image from Cloudinary
+        if (series.getPublicId() != null) {
+            cloudinaryService.deleteImage(
+                    series.getPublicId()
+            );
+        }
+
         seriesRepository.delete(series);
     }
 }

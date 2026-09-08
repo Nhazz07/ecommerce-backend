@@ -3,13 +3,14 @@ package com.example.animeecommercebackend.Controller;
 import com.example.animeecommercebackend.Dto.ApiResponseDto;
 import com.example.animeecommercebackend.Dto.Request.ShipmentRequestDto;
 import com.example.animeecommercebackend.Dto.Response.ShipmentResponseDto;
-import com.example.animeecommercebackend.Entity.Shipment;
 import com.example.animeecommercebackend.Service.Impl.ShipmentServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,77 +21,127 @@ import java.util.List;
 @Validated
 @RequiredArgsConstructor
 public class ShipmentController {
+
     private final ShipmentServiceImpl shipmentServiceImpl;
 
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<ShipmentResponseDto>> createShipment(
-            @RequestBody @Valid ShipmentRequestDto dto){
-        ShipmentResponseDto shipment = shipmentServiceImpl.createShipment(dto);
+            @RequestBody @Valid ShipmentRequestDto dto) {
 
-        ApiResponseDto<ShipmentResponseDto> response = new ApiResponseDto<>(
-                true,
-                "Shipment Created Successfully",
-                shipment
-        );
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        ShipmentResponseDto shipment =
+                shipmentServiceImpl.createShipment(dto);
+
+        ApiResponseDto<ShipmentResponseDto> response =
+                new ApiResponseDto<>(
+                        true,
+                        "Shipment Created Successfully",
+                        shipment
+                );
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
     }
+
+
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<ShipmentResponseDto>> getShipmentById(
-            @PathVariable @Positive Long id){
-        ShipmentResponseDto shipment = shipmentServiceImpl.getShipmentById(id);
-        ApiResponseDto<ShipmentResponseDto> response = new ApiResponseDto<>(
-                true,
-                "Shipment Retrieved Successfully",
-                shipment
-        );
+            @PathVariable @Positive Long id) {
+
+        ShipmentResponseDto shipment =
+                shipmentServiceImpl.getShipmentById(id);
+
+        ApiResponseDto<ShipmentResponseDto> response =
+                new ApiResponseDto<>(
+                        true,
+                        "Shipment Retrieved Successfully",
+                        shipment
+                );
+
         return ResponseEntity.ok(response);
     }
+
 
     @GetMapping("/orderId/{orderId}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<ShipmentResponseDto>> getShipmentByOrderId(
-            @PathVariable @Positive Long orderId){
-        ShipmentResponseDto shipment = shipmentServiceImpl.getShipmentByOrderId(orderId);
+            @PathVariable @Positive Long orderId) {
 
-        ApiResponseDto<ShipmentResponseDto> response = new ApiResponseDto<>(
-                true,
-                "Shipment Retrieved Successfully",
-                shipment
-        );
+        ShipmentResponseDto shipment =
+                shipmentServiceImpl.getShipmentByOrderId(orderId);
+
+        ApiResponseDto<ShipmentResponseDto> response =
+                new ApiResponseDto<>(
+                        true,
+                        "Shipment Retrieved Successfully",
+                        shipment
+                );
+
         return ResponseEntity.ok(response);
     }
+
+
     @GetMapping
-    public ResponseEntity<ApiResponseDto<List<ShipmentResponseDto>>> getAllShipment(){
-        List<ShipmentResponseDto> shipment = shipmentServiceImpl.getAllShipment();
-        ApiResponseDto<List<ShipmentResponseDto>> response = new ApiResponseDto<>(
-                true,
-                "Shipment Retrieved Successfully",
-                shipment
-        );
+    @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<ApiResponseDto<List<ShipmentResponseDto>>> getAllShipment() {
+
+        List<ShipmentResponseDto> shipment =
+                shipmentServiceImpl.getAllShipment();
+
+        ApiResponseDto<List<ShipmentResponseDto>> response =
+                new ApiResponseDto<>(
+                        true,
+                        "Shipment Retrieved Successfully",
+                        shipment
+                );
+
         return ResponseEntity.ok(response);
     }
-    @PutMapping("{id}")
+
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<ShipmentResponseDto>> updateShipment(
             @PathVariable @Positive Long id,
-            @RequestBody @Valid ShipmentRequestDto dto){
-        ShipmentResponseDto shipment = shipmentServiceImpl.updateShipment(id,dto);
+            @RequestBody @Valid ShipmentRequestDto dto) {
 
-        ApiResponseDto<ShipmentResponseDto> response = new ApiResponseDto<>(
-                true,
-                "Shipment Updated Successfully",
-                shipment
-        );
+        ShipmentResponseDto shipment =
+                shipmentServiceImpl.updateShipment(id, dto);
+
+        ApiResponseDto<ShipmentResponseDto> response =
+                new ApiResponseDto<>(
+                        true,
+                        "Shipment Updated Successfully",
+                        shipment
+                );
+
         return ResponseEntity.ok(response);
     }
+
+
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<Void>> deleteShipment(
-            @PathVariable @Positive Long id){
+            @PathVariable @Positive Long id) {
+
         shipmentServiceImpl.deleteShipment(id);
-        ApiResponseDto<Void> response = new ApiResponseDto<>(
-                true,
-                "Shipment Deleted Successfully",
-                null
-        );
+
+        ApiResponseDto<Void> response =
+                new ApiResponseDto<>(
+                        true,
+                        "Shipment Deleted Successfully",
+                        null
+                );
+
         return ResponseEntity.ok(response);
     }
 }

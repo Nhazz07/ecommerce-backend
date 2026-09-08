@@ -4,6 +4,7 @@ import com.example.animeecommercebackend.Dto.ApiResponseDto;
 import com.example.animeecommercebackend.Dto.Request.RefundRequestDto;
 import com.example.animeecommercebackend.Dto.Response.RefundResponseDto;
 import com.example.animeecommercebackend.Service.Impl.RefundServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class RefundController {
 
     @PostMapping
     @PreAuthorize("hasRole('CUSTOMER')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<RefundResponseDto>> createRefund(
             @RequestBody @Valid RefundRequestDto dto){
         RefundResponseDto refund = refundServiceImpl.createRefund(dto);
@@ -38,6 +40,7 @@ public class RefundController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('CUSTOMER')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<RefundResponseDto>> getRefundId(
             @PathVariable @Positive Long id){
         RefundResponseDto refund = refundServiceImpl.getRefundById(id);
@@ -52,6 +55,7 @@ public class RefundController {
 
     @GetMapping("/refund/{returnId}")
     @PreAuthorize("hasRole('CUSTOMER')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<RefundResponseDto>> getRefundByReturnId(
             @PathVariable @Positive Long returnId){
         RefundResponseDto refund = refundServiceImpl.getRefundByReturnId(returnId);
@@ -65,6 +69,7 @@ public class RefundController {
     }
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<List<RefundResponseDto>>> getAllRefund(){
         List<RefundResponseDto> refunds = refundServiceImpl.getAllRefund();
 
@@ -77,6 +82,7 @@ public class RefundController {
     }
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<RefundResponseDto>> updateRefund(
             @PathVariable @Positive Long id,
             @RequestBody @Valid RefundRequestDto dto){
@@ -91,6 +97,7 @@ public class RefundController {
     }
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<Void>> deleteRefund(
             @PathVariable @Positive Long id){
        refundServiceImpl.deleteRefund(id);

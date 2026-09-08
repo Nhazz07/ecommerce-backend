@@ -4,6 +4,7 @@ import com.example.animeecommercebackend.Dto.ApiResponseDto;
 import com.example.animeecommercebackend.Dto.Request.ProductVariantRequestDto;
 import com.example.animeecommercebackend.Dto.Response.ProductVariantResponseDto;
 import com.example.animeecommercebackend.Service.Impl.ProductVariantServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class ProductVariantController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<ProductVariantResponseDto>> createProductVariant(
             @RequestBody @Valid ProductVariantRequestDto dto){
         ProductVariantResponseDto productVariant = productVariantServiceImpl.createProductVariant(dto);
@@ -40,6 +42,7 @@ public class ProductVariantController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<ProductVariantResponseDto>> getProductVariantById(
             @PathVariable @Positive Long id){
         ProductVariantResponseDto productVariant = productVariantServiceImpl.getProductVariantById(id);
@@ -53,6 +56,7 @@ public class ProductVariantController {
     }
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<List<ProductVariantResponseDto>>> getAllProductVariant(){
         List<ProductVariantResponseDto> productVariants = productVariantServiceImpl.getAllProductVariant();
         ApiResponseDto<List<ProductVariantResponseDto>> response = new ApiResponseDto<>(
@@ -64,6 +68,7 @@ public class ProductVariantController {
     }
     @GetMapping("/productId/{productId}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<List<ProductVariantResponseDto>>> getProductVariantByProductid(
             @PathVariable @Positive Long productId){
         List<ProductVariantResponseDto> productVariants = productVariantServiceImpl.getVariantByProductId(productId);
@@ -77,6 +82,7 @@ public class ProductVariantController {
     }
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<ProductVariantResponseDto>> updateProductVariant(
             @PathVariable @Positive Long id,
             @RequestBody @Valid ProductVariantRequestDto dto){
@@ -91,6 +97,7 @@ public class ProductVariantController {
     }
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<Void>> deleteProductVariant(
             @PathVariable @Positive Long id){
         productVariantServiceImpl.deleteProductVariant(id);

@@ -3,13 +3,16 @@ package com.example.animeecommercebackend.Service.Impl;
 import com.example.animeecommercebackend.Dto.Request.WishlistRequestDto;
 import com.example.animeecommercebackend.Dto.Response.WishlistResponseDto;
 import com.example.animeecommercebackend.Entity.Product;
+import com.example.animeecommercebackend.Entity.User;
 import com.example.animeecommercebackend.Entity.Wishlist;
 import com.example.animeecommercebackend.Exception.ResourceNotFoundException;
 import com.example.animeecommercebackend.Mapper.WishlistMapper;
 import com.example.animeecommercebackend.Repository.ProductRepository;
 import com.example.animeecommercebackend.Repository.WishlistRepository;
+import com.example.animeecommercebackend.Service.CurrentUserService;
 import com.example.animeecommercebackend.Service.WishlistService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +23,7 @@ public class WishlistServiceImpl implements WishlistService {
 
     private final WishlistRepository wishlistRepository;
     private final ProductRepository productRepository;
+    private final CurrentUserService currentUserService;
 
     @Override
     public WishlistResponseDto createWishlist(WishlistRequestDto dto) {
@@ -53,6 +57,13 @@ public class WishlistServiceImpl implements WishlistService {
     @Override
     public List<WishlistResponseDto> getWishlistByUserId(Long userId) {
 
+        User currentUser = currentUserService.getCurrentUser();
+
+        if (!currentUser.getId().equals(userId)) {
+            throw new AccessDeniedException(
+                    "You cannot access another user's wishlist");
+        }
+
         List<Wishlist> wishlists =
                 wishlistRepository.findByUserId(userId);
 
@@ -75,6 +86,13 @@ public class WishlistServiceImpl implements WishlistService {
                         new ResourceNotFoundException(
                                 "Wishlist Not Found"));
 
+        User currentUser = currentUserService.getCurrentUser();
+
+        if (!wishlist.getUser().getId().equals(currentUser.getId())) {
+            throw new AccessDeniedException(
+                    "You cannot update another user's wishlist");
+        }
+
         wishlist.setDescription(dto.getDescription());
         wishlist.setName(dto.getName());
         wishlist.setIsPublic(dto.getIsPublic());
@@ -92,6 +110,13 @@ public class WishlistServiceImpl implements WishlistService {
                         new ResourceNotFoundException(
                                 "Wishlist Not Found"));
 
+        User currentUser = currentUserService.getCurrentUser();
+
+        if (!wishlist.getUser().getId().equals(currentUser.getId())) {
+            throw new AccessDeniedException(
+                    "You cannot delete another user's wishlist");
+        }
+
         wishlistRepository.delete(wishlist);
     }
 
@@ -104,6 +129,13 @@ public class WishlistServiceImpl implements WishlistService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 "Wishlist Not Found"));
+
+        User currentUser = currentUserService.getCurrentUser();
+
+        if (!wishlist.getUser().getId().equals(currentUser.getId())) {
+            throw new AccessDeniedException(
+                    "You cannot modify another user's wishlist");
+        }
 
         Product product = productRepository.findById(productId)
                 .orElseThrow(() ->
@@ -126,6 +158,13 @@ public class WishlistServiceImpl implements WishlistService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 "Wishlist Not Found"));
+
+        User currentUser = currentUserService.getCurrentUser();
+
+        if (!wishlist.getUser().getId().equals(currentUser.getId())) {
+            throw new AccessDeniedException(
+                    "You cannot modify another user's wishlist");
+        }
 
         wishlist.getProducts()
                 .removeIf(product ->

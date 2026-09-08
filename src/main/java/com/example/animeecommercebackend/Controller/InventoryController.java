@@ -4,6 +4,7 @@ import com.example.animeecommercebackend.Dto.ApiResponseDto;
 import com.example.animeecommercebackend.Dto.Request.InventoryRequestDto;
 import com.example.animeecommercebackend.Dto.Response.InventoryResponseDto;
 import com.example.animeecommercebackend.Service.Impl.InventoryServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class InventoryController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<InventoryResponseDto>> createInventory(
             @RequestBody @Valid InventoryRequestDto dto){
         InventoryResponseDto inventory = inventoryServiceImpl.createInventory(dto);
@@ -39,6 +41,7 @@ public class InventoryController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<InventoryResponseDto>> getInventoryById(
             @PathVariable @Positive Long id){
         InventoryResponseDto inventory = inventoryServiceImpl.getInventoryById(id);
@@ -52,6 +55,7 @@ public class InventoryController {
     }
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<List<InventoryResponseDto>>> getAllInventory(){
         List<InventoryResponseDto> inventories = inventoryServiceImpl.getAllInventory();
 
@@ -64,6 +68,7 @@ public class InventoryController {
     }
     @GetMapping("/product-variant/{productVariantId}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<InventoryResponseDto>> getInventoryByProductVariantId(
             @PathVariable @Positive Long productVariantId){
         InventoryResponseDto inventory = inventoryServiceImpl.getInventoryByProductVariantId(productVariantId);
@@ -77,6 +82,7 @@ public class InventoryController {
     }
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<InventoryResponseDto>> updateInventory(
             @PathVariable @Positive Long id,
             @RequestBody @Valid InventoryRequestDto dto){
@@ -92,6 +98,7 @@ public class InventoryController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<Void>> deleteInventory(
             @PathVariable @Positive Long id){
         inventoryServiceImpl.deleteInventory(id);

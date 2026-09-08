@@ -42,6 +42,7 @@ public class OrderController {
 
     @GetMapping("/my")
     @PreAuthorize("hasRole('CUSTOMER')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<List<OrderResponseDto>>> getMyOrder(){
         List<OrderResponseDto> orders = orderServiceImpl.getMyOrders();
 
@@ -54,6 +55,7 @@ public class OrderController {
     }
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('CUSTOMER')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<OrderResponseDto>> getOrderById(
             @PathVariable @Positive Long id){
         OrderResponseDto order = orderServiceImpl.getOrderById(id);
@@ -67,6 +69,7 @@ public class OrderController {
     }
     @GetMapping("/userId/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<OrderResponseDto>> getOrderByUserId(
             @PathVariable @Positive Long userId){
         OrderResponseDto order = orderServiceImpl.getOrderByUserId(userId);
@@ -81,6 +84,7 @@ public class OrderController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<List<OrderResponseDto>>> getAllOrder(){
         List<OrderResponseDto> orders = orderServiceImpl.getAllOrder();
 
@@ -93,6 +97,7 @@ public class OrderController {
     }
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('CUSTOMER')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<OrderResponseDto>> updateOrder(
             @PathVariable @Positive Long id,
             @RequestBody @Valid OrderRequestDto dto){
@@ -107,6 +112,7 @@ public class OrderController {
     }
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('CUSTOMER')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<Void>> deleteOrder(
             @PathVariable @Positive Long id){
         orderServiceImpl.deleteOrder(id);
@@ -121,6 +127,7 @@ public class OrderController {
 
     @PutMapping("{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<OrderResponseDto>> updatedOrderStatus(@PathVariable @Positive Long id, @RequestParam OrderStatus orderStatus){
             OrderResponseDto updated = orderServiceImpl.updateOrderStatus(id, orderStatus);
 

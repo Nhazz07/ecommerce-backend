@@ -10,12 +10,14 @@ import com.example.animeecommercebackend.Mapper.AddressMapper;
 import com.example.animeecommercebackend.Repository.AddressRepository;
 import com.example.animeecommercebackend.Repository.UserRepository;
 import com.example.animeecommercebackend.Service.AddressService;
+import com.example.animeecommercebackend.Service.CurrentUserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -23,16 +25,17 @@ public class AddressServiceImpl implements AddressService {
 
     private final AddressRepository addressRepository;
     private final UserRepository userRepository;
+    private final CurrentUserService currentUserService;
 
     @Override
     @Transactional
     public AddressResponseDto createdAddress(AddressRequestDto dto) {
 
-        User user = userRepository.findById(dto.getUserId()).orElseThrow(() -> new ResourceNotFoundException("User Not Found"));
+        User currentUser = currentUserService.getCurrentUser();
 
         Address address = AddressMapper.toEntity(dto);
 
-        address.setUser(user);
+        address.setUser(currentUser);
 
         Address saved = addressRepository.save(address);
 
@@ -41,28 +44,55 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public AddressResponseDto getAddressById(Long id) {
-        Address address = addressRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Address Not Found"));
+
+        Address address = addressRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Address Not Found"));
+
+        checkOwnership(address);
 
         return AddressMapper.toResponse(address);
     }
 
     @Override
     public List<AddressResponseDto> getAllAddress() {
-         return addressRepository.findAll().stream().map(AddressMapper::toResponse).collect(Collectors.toList());
+
+        User currentUser = currentUserService.getCurrentUser();
+
+        return addressRepository.findByUserId(currentUser.getId())
+                .stream()
+                .map(AddressMapper::toResponse)
+                .toList();
     }
 
     @Override
     public List<AddressResponseDto> getAddressByUserId(Long userId) {
-        List<Address> addresses = addressRepository.findByUserId(userId);
-        return addresses.stream().map(AddressMapper::toResponse).toList();
+
+        User currentUser = currentUserService.getCurrentUser();
+
+        if (!currentUser.getId().equals(userId)) {
+            throw new AccessDeniedException(
+                    "You cannot access another user's addresses"
+            );
+        }
+
+        return addressRepository.findByUserId(userId)
+                .stream()
+                .map(AddressMapper::toResponse)
+                .toList();
     }
 
     @Override
-    public AddressResponseDto updateAddress(Long id, AddressRequestDto dto) {
-        User user =userRepository.findById(dto.getUserId()).orElseThrow(() -> new ResourceNotFoundException("User Not Found"));
-        Address address = addressRepository.findById(id).orElseThrow(() ->  new ResourceNotFoundException("Address Not Found!"));
+    public AddressResponseDto updateAddress(
+            Long id,
+            AddressRequestDto dto) {
 
-        address.setUser(user);
+        Address address = addressRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Address Not Found!"));
+
+        checkOwnership(address);
+
         address.setStreet(dto.getStreet());
         address.setCity(dto.getCity());
         address.setState(dto.getState());
@@ -72,30 +102,68 @@ public class AddressServiceImpl implements AddressService {
         address.setIsDefault(dto.getIsDefault());
 
         Address updated = addressRepository.save(address);
+
         return AddressMapper.toResponse(updated);
     }
 
     @Override
     public void deleteAddress(Long id) {
-        Address address = addressRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Address Not Found"));
+
+        Address address = addressRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Address Not Found"));
+
+        checkOwnership(address);
+
         addressRepository.delete(address);
     }
 
     @Override
-    public AddressResponseDto setDefaultAddress(Long addressId, Long userId) {
-        Address address = addressRepository.findById(addressId).orElseThrow(() -> new ResourceNotFoundException("Address Not Found"));
+    @Transactional
+    public AddressResponseDto setDefaultAddress(
+            Long addressId,
+            Long userId) {
 
-        if(!address.getUser().getId().equals(userId)){
-            throw new IllegalArgumentException("This address does not belong to this user");
+        User currentUser = currentUserService.getCurrentUser();
+
+        if (!currentUser.getId().equals(userId)) {
+            throw new AccessDeniedException(
+                    "You cannot modify another user's address"
+            );
         }
-        List<Address> addresses = addressRepository.findByUserId(userId);
-        for(Address a : addresses){
+
+        Address address = addressRepository.findById(addressId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Address Not Found"));
+
+        if (!address.getUser().getId().equals(currentUser.getId())) {
+            throw new AccessDeniedException(
+                    "This address does not belong to you"
+            );
+        }
+
+        List<Address> addresses =
+                addressRepository.findByUserId(currentUser.getId());
+
+        for (Address a : addresses) {
             a.setIsDefault(false);
         }
-            address.setIsDefault(true);
+
+        address.setIsDefault(true);
+
         addressRepository.saveAll(addresses);
-        addressRepository.save(address);
+
         return AddressMapper.toResponse(address);
     }
-}
 
+    private void checkOwnership(Address address) {
+
+        User currentUser = currentUserService.getCurrentUser();
+
+        if (!address.getUser().getId().equals(currentUser.getId())) {
+            throw new AccessDeniedException(
+                    "You cannot access this address"
+            );
+        }
+    }
+}

@@ -3,10 +3,12 @@ package com.example.animeecommercebackend.Controller;
 import com.example.animeecommercebackend.Dto.ApiResponseDto;
 import com.example.animeecommercebackend.Dto.Response.SeriesResponseDto;
 import com.example.animeecommercebackend.Service.Impl.SeriesServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,9 +22,13 @@ import static org.apache.tomcat.util.http.fileupload.FileUploadBase.MULTIPART_FO
 @Validated
 @RequiredArgsConstructor
 public class SeriesController {
+
     private final SeriesServiceImpl seriesServiceImpl;
 
+
     @PostMapping(consumes = MULTIPART_FORM_DATA)
+    @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<SeriesResponseDto>> createSeries(
 
             @RequestParam("file")
@@ -33,7 +39,8 @@ public class SeriesController {
 
             @RequestParam("description")
             String description
-            ){
+    ){
+
         SeriesResponseDto series = seriesServiceImpl.createSeries(
                 file,
                 name,
@@ -45,33 +52,55 @@ public class SeriesController {
                 "Series Created Successfully!",
                 series
         );
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
     }
 
-    @GetMapping(value = "/{id}", consumes = MULTIPART_FORM_DATA)
-    public ResponseEntity<ApiResponseDto<SeriesResponseDto>> getSeriesById(@PathVariable @Positive Long id){
-        SeriesResponseDto series = seriesServiceImpl.getSeriesById(id);
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<ApiResponseDto<SeriesResponseDto>> getSeriesById(
+            @PathVariable @Positive Long id){
+
+        SeriesResponseDto series =
+                seriesServiceImpl.getSeriesById(id);
 
         ApiResponseDto<SeriesResponseDto> response = new ApiResponseDto<>(
                 true,
                 "Series Retrieved Successfully!",
                 series
         );
+
         return ResponseEntity.ok(response);
     }
+
+
     @GetMapping
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<List<SeriesResponseDto>>> getAllSeries(){
-        List<SeriesResponseDto> series = seriesServiceImpl.getAllSeries();
+
+        List<SeriesResponseDto> series =
+                seriesServiceImpl.getAllSeries();
 
         ApiResponseDto<List<SeriesResponseDto>> response = new ApiResponseDto<>(
                 true,
                 "Series Retrieved Successfully",
                 series
         );
+
         return ResponseEntity.ok(response);
     }
-    @PutMapping("/{id}")
+
+
+    @PutMapping(value = "/{id}", consumes = MULTIPART_FORM_DATA)
+    @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<SeriesResponseDto>> updateSeries(
+
             @PathVariable
             @Positive Long id,
 
@@ -83,30 +112,39 @@ public class SeriesController {
 
             @RequestParam("description")
             String description
-            ){
+    ){
+
         SeriesResponseDto series = seriesServiceImpl.updateSeries(
                 id,
                 file,
                 name,
                 description
-                );
+        );
 
         ApiResponseDto<SeriesResponseDto> response = new ApiResponseDto<>(
                 true,
                 "Series Updated Successfully",
                 series
         );
+
         return ResponseEntity.ok(response);
     }
 
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<Void>> deleteSeries(@PathVariable @Positive Long id){
+    @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<ApiResponseDto<Void>> deleteSeries(
+            @PathVariable @Positive Long id){
+
         seriesServiceImpl.deleteSeries(id);
-        ApiResponseDto<Void> response  = new ApiResponseDto<>(
+
+        ApiResponseDto<Void> response = new ApiResponseDto<>(
                 true,
                 "Series Deleted Successfully",
                 null
         );
+
         return ResponseEntity.ok(response);
     }
 }

@@ -3,6 +3,7 @@ package com.example.animeecommercebackend.Controller;
 import com.example.animeecommercebackend.Dto.ApiResponseDto;
 import com.example.animeecommercebackend.Dto.Response.ProductImageResponseDto;
 import com.example.animeecommercebackend.Service.Impl.ProductImageServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class ProductImageController {
     // CREATE PRODUCT IMAGE
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<ProductImageResponseDto>> createProductImage(
             @RequestParam("productId")
             @Positive Long productId,
@@ -66,6 +68,7 @@ public class ProductImageController {
     // GET PRODUCT IMAGE BY ID
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<ProductImageResponseDto>> getProductImageById(
             @PathVariable
             @Positive Long id
@@ -87,6 +90,7 @@ public class ProductImageController {
     // GET PRODUCT IMAGES BY PRODUCT ID
     @GetMapping("/productId/{productId}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<List<ProductImageResponseDto>>> getProductImageByProductId(
             @PathVariable
             @Positive Long productId
@@ -108,6 +112,7 @@ public class ProductImageController {
     // GET ALL PRODUCT IMAGES
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<List<ProductImageResponseDto>>> getAllProductImage() {
 
         List<ProductImageResponseDto> productImages =
@@ -126,6 +131,7 @@ public class ProductImageController {
     // UPDATE PRODUCT IMAGE
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<ProductImageResponseDto>> updateProductImage(
             @PathVariable
             @Positive Long id,
@@ -162,6 +168,7 @@ public class ProductImageController {
     // DELETE PRODUCT IMAGE
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<Void>> deleteProductImage(
             @PathVariable
             @Positive Long id

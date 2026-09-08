@@ -2,6 +2,7 @@ package com.example.animeecommercebackend.Controller;
 import com.example.animeecommercebackend.Dto.ApiResponseDto;
 import com.example.animeecommercebackend.Dto.Response.BrandResponseDto;
 import com.example.animeecommercebackend.Service.Impl.BrandServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,6 @@ public class BrandController {
 
     // Customer Controller
     @GetMapping("/available")
-    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponseDto<List<BrandResponseDto>>> getALLBrand(){
 
         List<BrandResponseDto> brands = brandServiceImpl.getAllBrand();
@@ -40,6 +40,7 @@ public class BrandController {
     // Admin Controller
     @PostMapping(consumes = MULTIPART_FORM_DATA)
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<BrandResponseDto>> createBrand(
 
             @RequestParam("file")
@@ -66,7 +67,6 @@ public class BrandController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<BrandResponseDto>> getBrandById(@PathVariable @Positive Long id){
         BrandResponseDto brand = brandServiceImpl.getBrandById(id);
 
@@ -78,7 +78,6 @@ public class BrandController {
         return ResponseEntity.ok(response);
     }
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<List<BrandResponseDto>>> getAllBrand(){
         List<BrandResponseDto> brand = brandServiceImpl.getAllBrand();
 
@@ -91,6 +90,7 @@ public class BrandController {
     }
     @PutMapping(value = "/{id}", consumes = MULTIPART_FORM_DATA)
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<BrandResponseDto>> updateBrand(
 
             @PathVariable
@@ -121,6 +121,7 @@ public class BrandController {
     }
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<Void>> deleteBrand(@PathVariable @Positive Long id){
         brandServiceImpl.deleteBrand(id);
 

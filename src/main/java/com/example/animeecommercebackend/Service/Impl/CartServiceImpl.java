@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -28,17 +29,21 @@ public class CartServiceImpl implements CartService {
     private final ProductVariantRepository productVariantRepository;
     private final CurrentUserService currentUserService;
 
+
     @Override
     public CartResponseDto createCart(
             CartRequestDto dto) throws AccessDeniedException {
 
         User user = null;
+
         // Check if a user ID was provided
         if (dto.getUserId() != null) {
 
             user = userRepository.findById(dto.getUserId())
                     .orElseThrow(() ->
-                            new ResourceNotFoundException("User Not Found!"));
+                            new ResourceNotFoundException(
+                                    "User Not Found!"
+                            ));
 
             // If a user ID is provided, make sure the logged-in user
             // is creating their own cart
@@ -61,7 +66,7 @@ public class CartServiceImpl implements CartService {
         Cart cart = CartMapper.toEntity(dto);
 
         // Generate unique token for this cart
-        cart.setCartToken(java.util.UUID.randomUUID().toString());
+        cart.setCartToken(UUID.randomUUID().toString());
 
         // If logged-in user exists, attach the cart to the user
         if (user != null) {
@@ -82,41 +87,64 @@ public class CartServiceImpl implements CartService {
         return CartMapper.toResponse(savedCart);
     }
 
+
     @Override
-    public CartResponseDto getCartById(Long id) {
-        Cart cart = cartRepository.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException(("Cart Not Found!!")));
-        checkCartOwnership(cart);
+    public CartResponseDto getCartById(
+            Long id,
+            String cartToken) {
+
+        Cart cart = cartRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Cart Not Found!!"
+                        ));
+
+        checkCartOwnership(cart, cartToken);
+
         return CartMapper.toResponse(cart);
     }
 
 
     @Override
     public List<CartResponseDto> getAllCart() {
+
         User currentUser = currentUserService.getCurrentUser();
 
-        List<Cart> carts = cartRepository.findByUserId(currentUser.getId());
+        List<Cart> carts =
+                cartRepository.findByUserId(currentUser.getId());
 
-        if(carts.isEmpty()){
-            throw new ResourceNotFoundException("Cart Not Found!!");
+        if (carts.isEmpty()) {
+            throw new ResourceNotFoundException(
+                    "Cart Not Found!!"
+            );
         }
+
         return carts
                 .stream()
                 .map(CartMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
+
     @Override
     public List<CartResponseDto> getCartByUserId(
             Long userId) throws AccessDeniedException {
+
         User currentUser = currentUserService.getCurrentUser();
-        if(!currentUser.getId().equals(userId)){
-            throw new AccessDeniedException("You cannot access another user's cart");
+
+        if (!currentUser.getId().equals(userId)) {
+            throw new AccessDeniedException(
+                    "You cannot access another user's cart"
+            );
         }
 
-        List<Cart> carts = cartRepository.findByUserId(userId);
-        if(carts.isEmpty()){
-            throw new ResourceNotFoundException("Cart Not Found!");
+        List<Cart> carts =
+                cartRepository.findByUserId(userId);
+
+        if (carts.isEmpty()) {
+            throw new ResourceNotFoundException(
+                    "Cart Not Found!"
+            );
         }
 
         return carts
@@ -125,18 +153,30 @@ public class CartServiceImpl implements CartService {
                 .toList();
     }
 
-    @Override
-    public CartResponseDto updateCart(Long id, CartRequestDto dto) {
 
-        Cart cart = cartRepository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException("Cart Not Found")
+    @Override
+    public CartResponseDto updateCart(
+            Long id,
+            CartRequestDto dto,
+            String cartToken) {
+
+        Cart cart = cartRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Cart Not Found"
+                        ));
+
+        checkCartOwnership(cart, cartToken);
+
+        List<ProductVariant> productVariants =
+                productVariantRepository.findAllById(
+                        List.of(dto.getProductVariantId())
                 );
-        checkCartOwnership(cart);
-        List<ProductVariant> productVariants = productVariantRepository.findAllById(
-                List.of(dto.getProductVariantId())
-        );
-        if(productVariants.isEmpty()){
-            throw new ResourceNotFoundException("No Product Variant Found!");
+
+        if (productVariants.isEmpty()) {
+            throw new ResourceNotFoundException(
+                    "No Product Variant Found!"
+            );
         }
 
         for (ProductVariant productVariant : productVariants) {
@@ -155,28 +195,47 @@ public class CartServiceImpl implements CartService {
         return CartMapper.toResponse(updated);
     }
 
+
     @Override
-    public void deleteCart(Long id) throws AccessDeniedException {
-        Cart cart = cartRepository.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException("Cart Not Found"));
-        checkCartOwnership(cart);
+    public void deleteCart(
+            Long id,
+            String cartToken) throws AccessDeniedException {
+
+        Cart cart = cartRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Cart Not Found"
+                        ));
+
+        checkCartOwnership(cart, cartToken);
+
         cartRepository.delete(cart);
     }
 
+
     @Override
-    public CartResponseDto addProductVariant(Long cartId, Long productVariantId) {
+    public CartResponseDto addProductVariant(
+            Long cartId,
+            Long productVariantId,
+            String cartToken) {
 
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Cart Not Found"));
+                        new ResourceNotFoundException(
+                                "Cart Not Found"
+                        ));
 
-        checkCartOwnership(cart);
+        checkCartOwnership(cart, cartToken);
 
-        ProductVariant productVariant = productVariantRepository.findById(productVariantId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Product Variant Not Found!"));
+        ProductVariant productVariant =
+                productVariantRepository.findById(productVariantId)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Product Variant Not Found!"
+                                ));
 
         CartItem cartItem = new CartItem();
+
         cartItem.setCart(cart);
         cartItem.setProductVariant(productVariant);
         cartItem.setQuantity(1);
@@ -188,31 +247,72 @@ public class CartServiceImpl implements CartService {
         return CartMapper.toResponse(updated);
     }
 
+
     @Override
-    public CartResponseDto removeProductVariant(Long cartId, Long productVariantId)  {
+    public CartResponseDto removeProductVariant(
+            Long cartId,
+            Long productVariantId,
+            String cartToken) {
+
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Cart Not Found"));
-        checkCartOwnership(cart);
+                        new ResourceNotFoundException(
+                                "Cart Not Found"
+                        ));
+
+        checkCartOwnership(cart, cartToken);
+
         CartItem cartItem = cart.getCartItems()
                 .stream()
-                .filter(item -> item.getProductVariant().getId().equals(productVariantId)
+                .filter(item ->
+                        item.getProductVariant()
+                                .getId()
+                                .equals(productVariantId)
                 )
                 .findFirst()
-                .orElseThrow(()->
-                        new ResourceNotFoundException("Product Variant is not in the cart")
-                        );
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Product Variant is not in the cart"
+                        )
+                );
+
         cart.getCartItems().remove(cartItem);
+
         Cart updated = cartRepository.save(cart);
 
         return CartMapper.toResponse(updated);
     }
 
-    private void checkCartOwnership(Cart cart) {
-        User currentUser = currentUserService.getCurrentUser();
 
-        if(!cart.getUser().getId().equals(currentUser.getId())){
-            throw new AccessDeniedException("You cannot access this cart");
+    private void checkCartOwnership(
+            Cart cart,
+            String cartToken) {
+
+        // Customer cart
+        if (cart.getUser() != null) {
+
+            User currentUser =
+                    currentUserService.getCurrentUser();
+
+            if (!cart.getUser().getId()
+                    .equals(currentUser.getId())) {
+
+                throw new AccessDeniedException(
+                        "You cannot access this cart"
+                );
+            }
+
+            return;
+        }
+
+        // Guest cart
+        if (cart.getCartToken() == null ||
+                cartToken == null ||
+                !cart.getCartToken().equals(cartToken)) {
+
+            throw new AccessDeniedException(
+                    "Invalid cart token"
+            );
         }
     }
 }

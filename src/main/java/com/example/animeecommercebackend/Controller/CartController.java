@@ -42,9 +42,14 @@ public class CartController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseDto<CartResponseDto>> getCartById(
-            @PathVariable @Positive Long id){
+            @PathVariable @Positive Long id,
+            @RequestHeader(
+                    value = "X-Cart-Token",
+                    required = false
+            ) String cartToken){
 
-        CartResponseDto cart = cartServiceImpl.getCartById(id);
+        CartResponseDto cart =
+                cartServiceImpl.getCartById(id, cartToken);
 
         ApiResponseDto<CartResponseDto> response = new ApiResponseDto<>(
                 true,
@@ -76,9 +81,14 @@ public class CartController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseDto<CartResponseDto>> updateCartById(
             @PathVariable @Positive Long id,
-            @RequestBody @Valid CartRequestDto dto){
+            @RequestBody @Valid CartRequestDto dto,
+            @RequestHeader(
+                    value = "X-Cart-Token",
+                    required = false
+            ) String cartToken){
 
-        CartResponseDto cart = cartServiceImpl.updateCart(id, dto);
+        CartResponseDto cart =
+                cartServiceImpl.updateCart(id, dto, cartToken);
 
         ApiResponseDto<CartResponseDto> response = new ApiResponseDto<>(
                 true,
@@ -92,9 +102,13 @@ public class CartController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseDto<Void>> deleteCart(
-            @PathVariable @Positive Long id){
+            @PathVariable @Positive Long id,
+            @RequestHeader(
+                    value = "X-Cart-Token",
+                    required = false
+            ) String cartToken){
 
-        cartServiceImpl.deleteCart(id);
+        cartServiceImpl.deleteCart(id, cartToken);
 
         ApiResponseDto<Void> response = new ApiResponseDto<>(
                 true,
@@ -109,10 +123,18 @@ public class CartController {
     @PostMapping("/{cartId}/products/{productVariantId}")
     public ResponseEntity<ApiResponseDto<CartResponseDto>> addProductVariant(
             @PathVariable @Positive Long cartId,
-            @PathVariable @Positive Long productVariantId){
+            @PathVariable @Positive Long productVariantId,
+            @RequestHeader(
+                    value = "X-Cart-Token",
+                    required = false
+            ) String cartToken){
 
         CartResponseDto cart =
-                cartServiceImpl.addProductVariant(cartId, productVariantId);
+                cartServiceImpl.addProductVariant(
+                        cartId,
+                        productVariantId,
+                        cartToken
+                );
 
         ApiResponseDto<CartResponseDto> response = new ApiResponseDto<>(
                 true,
@@ -127,10 +149,18 @@ public class CartController {
     @DeleteMapping("/{cartId}/products/{productVariantId}")
     public ResponseEntity<ApiResponseDto<CartResponseDto>> removeProductVariant(
             @PathVariable @Positive Long cartId,
-            @PathVariable @Positive Long productVariantId){
+            @PathVariable @Positive Long productVariantId,
+            @RequestHeader(
+                    value = "X-Cart-Token",
+                    required = false
+            ) String cartToken){
 
         CartResponseDto cart =
-                cartServiceImpl.removeProductVariant(cartId, productVariantId);
+                cartServiceImpl.removeProductVariant(
+                        cartId,
+                        productVariantId,
+                        cartToken
+                );
 
         ApiResponseDto<CartResponseDto> response = new ApiResponseDto<>(
                 true,

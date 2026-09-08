@@ -5,6 +5,7 @@ import com.example.animeecommercebackend.Dto.Request.ProductRequestDto;
 import com.example.animeecommercebackend.Dto.Response.ProductResponseDto;
 import com.example.animeecommercebackend.Service.Impl.ProductImageServiceImpl;
 import com.example.animeecommercebackend.Service.Impl.ProductServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class ProductController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<ProductResponseDto>> createProduct(
             @RequestBody @Valid ProductRequestDto dto){
         ProductResponseDto product = productServiceImpl.createProduct(dto);
@@ -43,6 +45,7 @@ public class ProductController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<Page<ProductResponseDto>>> getAllProduct(
             Pageable pageable){
         Page<ProductResponseDto> products = productServiceImpl.getAllProduct(pageable);
@@ -57,6 +60,7 @@ public class ProductController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<ProductResponseDto>> getProductById(
             @PathVariable @Positive Long id){
         ProductResponseDto product = productServiceImpl.getProductById(id);
@@ -70,6 +74,7 @@ public class ProductController {
     }
     @GetMapping("/category/{categoryId}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<List<ProductResponseDto>>> getProductByCategoryId(
             @PathVariable @Positive Long categoryId){
         List<ProductResponseDto> products = productServiceImpl.getProductByCategoryId(categoryId);
@@ -83,6 +88,7 @@ public class ProductController {
     }
     @GetMapping("/brand/{brandId}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<List<ProductResponseDto>>> getProductByBrandId(
             @PathVariable @Positive Long brandId){
         List<ProductResponseDto> products = productServiceImpl.getProductByBrandId(brandId);
@@ -95,6 +101,7 @@ public class ProductController {
     }
     @GetMapping("/series/{seriesId}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<List<ProductResponseDto>>> getProductBySeriesId(
             @PathVariable @Positive Long seriesId){
         List<ProductResponseDto> products = productServiceImpl.getProductBySeriesId(seriesId);
@@ -108,6 +115,7 @@ public class ProductController {
     }
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<ProductResponseDto>> updateProductById(
             @PathVariable @Positive Long id,
             @RequestBody @Valid ProductRequestDto dto){
@@ -123,6 +131,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<Void>> deleteProduct(
             @PathVariable @Positive Long id){
         productServiceImpl.deleteProduct(id);

@@ -4,6 +4,7 @@ import com.example.animeecommercebackend.Dto.ApiResponseDto;
 import com.example.animeecommercebackend.Dto.Request.GiftCardRequestDto;
 import com.example.animeecommercebackend.Dto.Response.GiftCardResponseDto;
 import com.example.animeecommercebackend.Service.Impl.GiftCardServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class GiftCardController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<GiftCardResponseDto>> createGiftCard(
             @RequestBody @Valid GiftCardRequestDto dto){
         GiftCardResponseDto giftCard = giftCardServiceImpl.createGiftCard(dto);
@@ -38,6 +40,7 @@ public class GiftCardController {
     }
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('CUSTOMER','ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<GiftCardResponseDto>> getGiftCard(
             @PathVariable @Positive Long id){
         GiftCardResponseDto giftCard = giftCardServiceImpl.getGiftCardById(id);
@@ -51,6 +54,7 @@ public class GiftCardController {
     }
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<List<GiftCardResponseDto>>> getAllGiftCard(){
         List<GiftCardResponseDto> giftCard = giftCardServiceImpl.getAllGiftCard();
 
@@ -63,6 +67,7 @@ public class GiftCardController {
     }
     @GetMapping("/user/{userId}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<List<GiftCardResponseDto>>> getGiftCardByUser(
             @PathVariable @Positive Long userId){
         List<GiftCardResponseDto> giftCards = giftCardServiceImpl.getGiftCardsByUserId(userId);
@@ -76,6 +81,7 @@ public class GiftCardController {
     }
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<GiftCardResponseDto>> updateGiftCard(
             @PathVariable @Positive Long id,
             @RequestBody @Valid GiftCardRequestDto dto){
@@ -90,6 +96,7 @@ public class GiftCardController {
     }
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<Void>> deleteGiftCard(
             @PathVariable @Positive Long id){
         giftCardServiceImpl.deleteGiftCard(id);

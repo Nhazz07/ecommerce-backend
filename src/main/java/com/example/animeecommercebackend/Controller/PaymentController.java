@@ -4,6 +4,7 @@ import com.example.animeecommercebackend.Dto.ApiResponseDto;
 import com.example.animeecommercebackend.Dto.Request.PaymentRequestDto;
 import com.example.animeecommercebackend.Dto.Response.PaymentResponseDto;
 import com.example.animeecommercebackend.Service.Impl.PaymentServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class PaymentController {
 
     @PostMapping
     @PreAuthorize("hasRole('CUSTOMER')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<PaymentResponseDto>> createPayment(
             @RequestBody @Valid PaymentRequestDto dto) {
         PaymentResponseDto payment = paymentServiceImpl.creatPayment(dto);
@@ -39,6 +41,7 @@ public class PaymentController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('CUSTOMER')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<PaymentResponseDto>> getPaymentById(
             @PathVariable @Positive Long id) {
         PaymentResponseDto payment = paymentServiceImpl.getPaymentById(id);
@@ -53,6 +56,7 @@ public class PaymentController {
 
     @GetMapping("/order/{orderId}")
     @PreAuthorize("hasRole('CUSTOMER')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<PaymentResponseDto>> getPaymentByOrderId(
             @PathVariable @Positive Long orderId) {
         PaymentResponseDto payment = paymentServiceImpl.getPaymentByOrderId(orderId);
@@ -67,6 +71,7 @@ public class PaymentController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<List<PaymentResponseDto>>> getAllPayment() {
         List<PaymentResponseDto> payments = paymentServiceImpl.getAllPayment();
 
