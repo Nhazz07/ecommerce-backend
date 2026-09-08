@@ -6,6 +6,7 @@ import com.example.animeecommercebackend.Entity.*;
 import com.example.animeecommercebackend.Exception.ResourceNotFoundException;
 import com.example.animeecommercebackend.Mapper.CartMapper;
 import com.example.animeecommercebackend.Repository.CartRepository;
+import com.example.animeecommercebackend.Repository.ProductRepository;
 import com.example.animeecommercebackend.Repository.ProductVariantRepository;
 import com.example.animeecommercebackend.Repository.UserRepository;
 import com.example.animeecommercebackend.Service.CartService;
@@ -23,6 +24,7 @@ public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
     private final UserRepository userRepository;
+    private final ProductRepository productRepository;
     private final ProductVariantRepository productVariantRepository;
     private final CurrentUserService currentUserService;
 

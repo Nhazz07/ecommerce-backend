@@ -53,6 +53,8 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()
+                        .requestMatchers("/api/cart/**")
+                        .hasRole("CUSTOMER")
 
                         // every other end points requires JWT
                         .anyRequest().authenticated()

@@ -18,7 +18,6 @@ import java.util.List;
 @RequestMapping("/api/cart")
 @Validated
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('CUSTOMER')")
 public class CartController {
 
     private final CartServiceImpl cartServiceImpl;
@@ -37,6 +36,7 @@ public class CartController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponseDto<CartResponseDto>> getCartById(
             @PathVariable @Positive Long id){
         CartResponseDto cart = cartServiceImpl.getCartById(id);
@@ -49,6 +49,7 @@ public class CartController {
         return ResponseEntity.ok(response);
     }
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<List<CartResponseDto>>> getAllCart(){
         List<CartResponseDto> cart = cartServiceImpl.getAllCart();
 
@@ -60,6 +61,7 @@ public class CartController {
         return ResponseEntity.ok(response);
     }
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponseDto<CartResponseDto>> updateCartById(
             @PathVariable @Positive Long id,
             @RequestBody @Valid CartRequestDto dto){
@@ -73,6 +75,7 @@ public class CartController {
         return ResponseEntity.ok(response);
     }
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponseDto<Void>> deleteCart(
             @PathVariable @Positive Long id){
         cartServiceImpl.deleteCart(id);
@@ -84,6 +87,7 @@ public class CartController {
         return ResponseEntity.ok(response);
     }
     @PostMapping("/{cartId}/products/{productVariantId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponseDto<CartResponseDto>> addProductVariant(
             @PathVariable @Positive Long cartId,
             @PathVariable @Positive Long productVariantId){
@@ -97,6 +101,7 @@ public class CartController {
         return ResponseEntity.ok(response);
     }
     @DeleteMapping("/{cartId}/products/{productVariantId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponseDto<CartResponseDto>> removeProductVariant(
             @PathVariable @Positive Long cartId,
             @PathVariable @Positive Long productVariantId){
