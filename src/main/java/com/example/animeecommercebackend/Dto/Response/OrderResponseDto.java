@@ -20,10 +20,10 @@ public class OrderResponseDto {
     private Integer orderNumber;
     private LocalDateTime orderDate;
     private OrderStatus status;
-    private BigDecimal totalAmount;
     private BigDecimal subTotal;
     private BigDecimal shippingFee;
     private BigDecimal discountAmount;
+    private BigDecimal totalAmount;
     private String shippingAddress;
     private Long userId;
     private List<Long> productVariantIds;

@@ -37,6 +37,7 @@ public class CartItem {
     @Column(nullable = false)
     private Integer quantity;
 
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
             name = "cart_id",

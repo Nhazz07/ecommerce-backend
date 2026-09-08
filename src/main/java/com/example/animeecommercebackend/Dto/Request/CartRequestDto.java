@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CartRequestDto {
 
-    @NotNull(message = "User ID is required")
+
     private Long userId;
 
     @NotNull(message = "Product ID is required")

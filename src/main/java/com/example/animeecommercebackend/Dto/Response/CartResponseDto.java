@@ -17,6 +17,9 @@ public class CartResponseDto {
 
     private Long id;
 
+
+    private String cartToken;
+
     private Long userId;
 
     private List<CartItemResponseDto> items;

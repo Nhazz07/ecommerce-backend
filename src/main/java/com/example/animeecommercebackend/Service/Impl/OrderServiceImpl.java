@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +55,8 @@ public class OrderServiceImpl implements OrderService {
 
         order.setUser(user);
         order.setStatus(OrderStatus.PENDING);
+        order.setOrderNumber((int) (Math.random() * 90000000) + 10000000);
+        order.setOrderDate(LocalDateTime.now());
 
         BigDecimal subTotal = BigDecimal.ZERO;
 

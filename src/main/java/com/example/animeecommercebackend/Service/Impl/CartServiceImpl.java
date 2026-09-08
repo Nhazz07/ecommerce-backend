@@ -31,35 +31,51 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartResponseDto createCart(
             CartRequestDto dto) throws AccessDeniedException {
-        User currentUser = currentUserService.getCurrentUser();
-        User user = userRepository.findById(dto.getUserId()).orElseThrow(() ->
-                new ResourceNotFoundException("User Not Found!"));
 
-        // make sure customer can only create a cart by themselves
-        if(!user.getId().equals(currentUser.getId())){
-            throw new AccessDeniedException("You Cannot create a cart for another user");
-        }
-        List<ProductVariant> productVariants =
-                productVariantRepository.findAllById(
-                        List.of(dto.getProductVariantId()).stream().toList()
+        User user = null;
+        // Check if a user ID was provided
+        if (dto.getUserId() != null) {
+
+            user = userRepository.findById(dto.getUserId())
+                    .orElseThrow(() ->
+                            new ResourceNotFoundException("User Not Found!"));
+
+            // If a user ID is provided, make sure the logged-in user
+            // is creating their own cart
+            User currentUser = currentUserService.getCurrentUser();
+
+            if (!user.getId().equals(currentUser.getId())) {
+                throw new AccessDeniedException(
+                        "You Cannot create a cart for another user"
                 );
-        if(productVariants.isEmpty()){
-            throw new ResourceNotFoundException("No Product Variant Found!");
+            }
         }
+
+        ProductVariant productVariant =
+                productVariantRepository.findById(dto.getProductVariantId())
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Product Variant Not Found!"
+                                ));
+
         Cart cart = CartMapper.toEntity(dto);
 
-        cart.setUser(user);
+        // Generate unique token for this cart
+        cart.setCartToken(java.util.UUID.randomUUID().toString());
 
-        for (ProductVariant productVariant : productVariants) {
-
-            CartItem cartItem = new CartItem();
-
-            cartItem.setCart(cart);
-            cartItem.setProductVariant(productVariant);
-            cartItem.setQuantity(1);
-
-            cart.getCartItems().add(cartItem);
+        // If logged-in user exists, attach the cart to the user
+        if (user != null) {
+            cart.setUser(user);
+            user.setCart(cart);
         }
+
+        CartItem cartItem = new CartItem();
+
+        cartItem.setCart(cart);
+        cartItem.setProductVariant(productVariant);
+        cartItem.setQuantity(dto.getQuantity());
+
+        cart.getCartItems().add(cartItem);
 
         Cart savedCart = cartRepository.save(cart);
 

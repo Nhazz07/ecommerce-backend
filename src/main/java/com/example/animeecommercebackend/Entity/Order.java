@@ -38,6 +38,7 @@ public class Order {
     @NotNull(message = "Order date is required")
     private LocalDateTime orderDate;
 
+    @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
     @NotNull(message = "Total amount is required")

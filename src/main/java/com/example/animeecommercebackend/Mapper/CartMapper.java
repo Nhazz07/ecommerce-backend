@@ -25,6 +25,7 @@ public class CartMapper {
         CartResponseDto dto = new CartResponseDto();
 
         dto.setId(cart.getId());
+        dto.setCartToken(cart.getCartToken());
 
         if (cart.getUser() != null) {
             dto.setUserId(cart.getUser().getId());
@@ -58,18 +59,25 @@ public class CartMapper {
 
         CartItemResponseDto dto = new CartItemResponseDto();
 
+        // CartItem information
         dto.setId(cartItem.getId());
         dto.setQuantity(cartItem.getQuantity());
         dto.setCreatedAt(cartItem.getCreatedAt());
         dto.setUpdatedAt(cartItem.getUpdatedAt());
-        dto.setCreatedAt(cartItem.getCreatedAt());
-        dto.setCreatedAt(cartItem.getUpdatedAt());
+
+        // Product Variant information
         if (cartItem.getProductVariant() != null) {
 
             dto.setProductVariantId(
                     cartItem.getProductVariant().getId()
             );
 
+            BigDecimal price =
+                    cartItem.getProductVariant().getPrice();
+
+            dto.setPrice(price);
+
+            // Product information
             if (cartItem.getProductVariant().getProduct() != null) {
 
                 dto.setProductId(
@@ -85,20 +93,16 @@ public class CartMapper {
                 );
             }
 
-            BigDecimal price =
-                    cartItem.getProductVariant().getPrice();
-
-            dto.setPrice(price);
-
+            // Calculate subtotal
             if (price != null && cartItem.getQuantity() != null) {
 
-                dto.setSubtotal(
-                        price.multiply(
-                                BigDecimal.valueOf(
-                                        cartItem.getQuantity()
-                                )
+                BigDecimal subtotal = price.multiply(
+                        BigDecimal.valueOf(
+                                cartItem.getQuantity()
                         )
                 );
+
+                dto.setSubtotal(subtotal);
             }
         }
 
