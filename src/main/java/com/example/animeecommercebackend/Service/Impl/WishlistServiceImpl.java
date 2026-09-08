@@ -25,15 +25,22 @@ public class WishlistServiceImpl implements WishlistService {
     private final ProductRepository productRepository;
     private final CurrentUserService currentUserService;
 
+
     @Override
     public WishlistResponseDto createWishlist(WishlistRequestDto dto) {
 
+        User currentUser = currentUserService.getCurrentUser();
+
         Wishlist wishlist = WishlistMapper.toEntity(dto);
+
+        // Always assign the authenticated user
+        wishlist.setUser(currentUser);
 
         Wishlist saved = wishlistRepository.save(wishlist);
 
         return WishlistMapper.toResponse(saved);
     }
+
 
     @Override
     public WishlistResponseDto getWIshListById(Long id) {
@@ -42,8 +49,19 @@ public class WishlistServiceImpl implements WishlistService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Wishlist Not Found"));
 
+        User currentUser = currentUserService.getCurrentUser();
+
+        System.out.println("CURRENT USER ID = " + currentUser.getId());
+        System.out.println("WISHLIST USER ID = " + wishlist.getUser().getId());
+
+        if (!wishlist.getUser().getId().equals(currentUser.getId())) {
+            throw new AccessDeniedException(
+                    "You do not have access to this wishlist");
+        }
+
         return WishlistMapper.toResponse(wishlist);
     }
+
 
     @Override
     public List<WishlistResponseDto> getAllWishlist() {
@@ -54,11 +72,13 @@ public class WishlistServiceImpl implements WishlistService {
                 .toList();
     }
 
+
     @Override
     public List<WishlistResponseDto> getWishlistByUserId(Long userId) {
 
         User currentUser = currentUserService.getCurrentUser();
 
+        // User can only access their own wishlist
         if (!currentUser.getId().equals(userId)) {
             throw new AccessDeniedException(
                     "You cannot access another user's wishlist");
@@ -68,13 +88,16 @@ public class WishlistServiceImpl implements WishlistService {
                 wishlistRepository.findByUserId(userId);
 
         if (wishlists.isEmpty()) {
-            throw new ResourceNotFoundException("Wishlist Not Found");
+            throw new ResourceNotFoundException(
+                    "Wishlist Not Found");
         }
 
-        return wishlists.stream()
+        return wishlists
+                .stream()
                 .map(WishlistMapper::toResponse)
                 .toList();
     }
+
 
     @Override
     public WishlistResponseDto updateWishlist(
@@ -88,6 +111,7 @@ public class WishlistServiceImpl implements WishlistService {
 
         User currentUser = currentUserService.getCurrentUser();
 
+        // Ownership check
         if (!wishlist.getUser().getId().equals(currentUser.getId())) {
             throw new AccessDeniedException(
                     "You cannot update another user's wishlist");
@@ -102,6 +126,7 @@ public class WishlistServiceImpl implements WishlistService {
         return WishlistMapper.toResponse(updated);
     }
 
+
     @Override
     public void deleteWishlist(Long id) {
 
@@ -112,6 +137,7 @@ public class WishlistServiceImpl implements WishlistService {
 
         User currentUser = currentUserService.getCurrentUser();
 
+        // Ownership check
         if (!wishlist.getUser().getId().equals(currentUser.getId())) {
             throw new AccessDeniedException(
                     "You cannot delete another user's wishlist");
@@ -119,6 +145,7 @@ public class WishlistServiceImpl implements WishlistService {
 
         wishlistRepository.delete(wishlist);
     }
+
 
     @Override
     public WishlistResponseDto addProduct(
@@ -132,6 +159,7 @@ public class WishlistServiceImpl implements WishlistService {
 
         User currentUser = currentUserService.getCurrentUser();
 
+        // Ownership check
         if (!wishlist.getUser().getId().equals(currentUser.getId())) {
             throw new AccessDeniedException(
                     "You cannot modify another user's wishlist");
@@ -149,6 +177,7 @@ public class WishlistServiceImpl implements WishlistService {
         return WishlistMapper.toResponse(updated);
     }
 
+
     @Override
     public WishlistResponseDto removeProduct(
             Long wishlistId,
@@ -161,6 +190,7 @@ public class WishlistServiceImpl implements WishlistService {
 
         User currentUser = currentUserService.getCurrentUser();
 
+        // Ownership check
         if (!wishlist.getUser().getId().equals(currentUser.getId())) {
             throw new AccessDeniedException(
                     "You cannot modify another user's wishlist");

@@ -5,6 +5,7 @@ import com.example.animeecommercebackend.Dto.Request.WishlistRequestDto;
 import com.example.animeecommercebackend.Dto.Response.WishlistResponseDto;
 import com.example.animeecommercebackend.Service.CurrentUserService;
 import com.example.animeecommercebackend.Service.Impl.WishlistServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class WishlistController {
 
     @PostMapping
     @PreAuthorize("hasRole('CUSTOMER')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<WishlistResponseDto>> createWishlist(
             @RequestBody @Valid WishlistRequestDto dto) {
 
@@ -46,12 +48,14 @@ public class WishlistController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
+
     public ResponseEntity<ApiResponseDto<WishlistResponseDto>> getWishlistById(
             @PathVariable @Positive Long id) {
 
         WishlistResponseDto wishlist =
                 wishlistServiceImpl.getWIshListById(id);
-
+        System.out.println("GET WISHLIST CONTROLLER REACHED");
         ApiResponseDto<WishlistResponseDto> response =
                 new ApiResponseDto<>(
                         true,
@@ -64,6 +68,7 @@ public class WishlistController {
 
     @GetMapping("/my")
     @PreAuthorize("hasRole('CUSTOMER')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<List<WishlistResponseDto>>> getMyWishlist() {
         Long userId = currentUserService.getCurrentUser().getId();
         List<WishlistResponseDto> wishlists =
@@ -81,6 +86,7 @@ public class WishlistController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<List<WishlistResponseDto>>> getAllWishlist() {
 
         List<WishlistResponseDto> wishlists =
@@ -98,6 +104,7 @@ public class WishlistController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('CUSTOMER')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<WishlistResponseDto>> updateWishlist(
             @PathVariable @Positive Long id,
             @RequestBody @Valid WishlistRequestDto dto) {
@@ -117,6 +124,7 @@ public class WishlistController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('CUSTOMER')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<Void>> deleteWishlist(
             @PathVariable @Positive Long id) {
 
@@ -134,6 +142,7 @@ public class WishlistController {
 
     @PostMapping("/{wishlistId}/products/{productId}")
     @PreAuthorize("hasRole('CUSTOMER')")
+    @SecurityRequirement(name = "bearerAuth")
     public WishlistResponseDto addProduct(
             @PathVariable @Positive Long wishlistId,
             @PathVariable @Positive Long productId) {
@@ -146,6 +155,7 @@ public class WishlistController {
 
     @DeleteMapping("/{wishlistId}/products/{productId}")
     @PreAuthorize("hasRole('CUSTOMER')")
+    @SecurityRequirement(name = "bearerAuth")
     public WishlistResponseDto removeProduct(
             @PathVariable @Positive Long wishlistId,
             @PathVariable @Positive Long productId) {

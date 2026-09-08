@@ -25,9 +25,6 @@ public class WishlistRequestDto {
     @NotNull(message = "Public status is required")
     private Boolean isPublic;
 
-    @NotNull(message = "User ID is required")
-    private Long userId;
-
     @NotEmpty(message = "At least one product variant is required")
     private List<Long> productIds;
 }
