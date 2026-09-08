@@ -1,6 +1,5 @@
 package com.example.animeecommercebackend.Security;
 
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,60 +16,74 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-@Configuration // Tell that This class contains configuration that Spring needs to load.
+@Configuration
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-   private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-   // password encoder
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    // Password Encoder
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // security filter chains
+    // Security Filter Chain
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity httpSecurity) throws Exception {
+
         httpSecurity
-                // disable csrf
+
+                // Disable CSRF because we are using JWT
                 .csrf(csrf -> csrf.disable())
 
-                // enable CORS
-                .cors(cors-> cors.configurationSource(corsConfiguration()))
+                // Enable CORS
+                .cors(cors ->
+                        cors.configurationSource(corsConfiguration())
+                )
 
-                // jwt is stateless
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // JWT authentication is stateless
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(
+                                SessionCreationPolicy.STATELESS
+                        )
+                )
 
-                // authorization rules
-                .authorizeHttpRequests(auth->auth
+                // Authorization rules
+                .authorizeHttpRequests(auth -> auth
 
-                        // Public endpoint
+                        // Public endpoints
                         .requestMatchers(
                                 "/api/auth/register",
                                 "/api/auth/login",
 
+                                // Swagger UI
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()
-                        .requestMatchers("/api/cart/**")
-                        .permitAll()
 
-                        // every other end points requires JWT
+                        // Every other endpoint requires authentication
                         .anyRequest().authenticated()
                 )
 
-                // add jwt filter
-                .addFilterBefore(jwtAuthenticationFilter,
-                                  UsernamePasswordAuthenticationFilter.class
+                // JWT filter
+                .addFilterBefore(
+                        jwtAuthenticationFilter,
+                        UsernamePasswordAuthenticationFilter.class
                 );
+
         return httpSecurity.build();
     }
 
-    // cors Configuration
+    // CORS Configuration
     private CorsConfigurationSource corsConfiguration() {
-        CorsConfiguration configuration = new CorsConfiguration();
 
+        CorsConfiguration configuration =
+                new CorsConfiguration();
+
+        // Allowed frontend origins
         configuration.setAllowedOrigins(
                 List.of(
                         "http://localhost:3000",
@@ -78,7 +91,7 @@ public class SecurityConfig {
                 )
         );
 
-        // http method
+        // Allowed HTTP methods
         configuration.setAllowedMethods(
                 List.of(
                         "GET",
@@ -89,21 +102,24 @@ public class SecurityConfig {
                         "OPTIONS"
                 )
         );
-        // header
+
+        // Allowed headers
         configuration.setAllowedHeaders(
                 List.of("*")
         );
-        // credentials
+
+        // Allow credentials
         configuration.setAllowCredentials(true);
 
-        // apply cors configuration to all endpoints
+        // Apply CORS configuration to all endpoints
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
+
         source.registerCorsConfiguration(
                 "/**",
                 configuration
-                );
+        );
+
         return source;
     }
-
 }
