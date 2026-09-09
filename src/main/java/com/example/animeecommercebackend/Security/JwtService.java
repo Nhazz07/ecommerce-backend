@@ -3,6 +3,7 @@ package com.example.animeecommercebackend.Security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +14,11 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-    private final String secretKey = "my-super-secret-key-my-super-secret-key-123456";
+    @Value("${jwt.secret}")
+    private String secretKey;
 
-    private final long expiration = 1000 * 60 * 60; // 1 hour
+    @Value("${jwt.expiration}")
+    private long expiration;
 
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(
