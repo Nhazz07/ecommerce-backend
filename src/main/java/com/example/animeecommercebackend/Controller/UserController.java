@@ -6,6 +6,7 @@ import com.example.animeecommercebackend.Dto.Response.UserResponseDto;
 import com.example.animeecommercebackend.Entity.User;
 import com.example.animeecommercebackend.Service.CurrentUserService;
 import com.example.animeecommercebackend.Service.Impl.UserServiceImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class UserController {
     // Customer controller
     @GetMapping("/me")
     @PreAuthorize("hasRole('CUSTOMER')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<UserResponseDto>> getMyProfile(){
         User currentUser = currentUserService.getCurrentUser();
 
@@ -42,6 +44,7 @@ public class UserController {
 
     @PutMapping("/me")
     @PreAuthorize("hasRole('CUSTOMER')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<UserResponseDto>> updateProfile(@RequestBody @Valid UserRequestDto dto){
         User currentUser = currentUserService.getCurrentUser();
 
@@ -58,7 +61,8 @@ public class UserController {
     // Admin Controller
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole(ADMIN)")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<UserResponseDto>> getUserById(
             @PathVariable @Positive Long id) {
 
@@ -77,7 +81,8 @@ public class UserController {
 
 
     @GetMapping
-    @PreAuthorize("hasRole(ADMIN)")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<List<UserResponseDto>>> getAllUsers() {
 
         List<UserResponseDto> users =
@@ -95,7 +100,8 @@ public class UserController {
 
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole(ADMIN)")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<UserResponseDto>> updateUser(
             @PathVariable @Positive Long id,
             @RequestBody @Valid UserRequestDto dto) {
@@ -115,7 +121,8 @@ public class UserController {
 
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole(ADMIN)")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ApiResponseDto<Void>> deleteUser(
             @PathVariable @Positive Long id) {
 
