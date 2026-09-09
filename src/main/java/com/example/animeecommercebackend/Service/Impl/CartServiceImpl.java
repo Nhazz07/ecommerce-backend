@@ -13,8 +13,11 @@ import com.example.animeecommercebackend.Service.CartService;
 import com.example.animeecommercebackend.Service.CurrentUserService;
 import org.springframework.security.access.AccessDeniedException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.UUID;
@@ -24,36 +27,25 @@ import java.util.UUID;
 public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
-    private final UserRepository userRepository;
-    private final ProductRepository productRepository;
     private final ProductVariantRepository productVariantRepository;
     private final CurrentUserService currentUserService;
 
 
     @Override
-    public CartResponseDto createCart(
-            CartRequestDto dto) throws AccessDeniedException {
+    public CartResponseDto createCart(CartRequestDto dto) {
 
-        User user = null;
+        User currentUser = null;
 
-        // Check if a user ID was provided
-        if (dto.getUserId() != null) {
+        // Check if a user is authenticated
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
 
-            user = userRepository.findById(dto.getUserId())
-                    .orElseThrow(() ->
-                            new ResourceNotFoundException(
-                                    "User Not Found!"
-                            ));
+        if (authentication != null &&
+                authentication.isAuthenticated() &&
+                !authentication.getAuthorities().stream()
+                        .anyMatch(a -> a.getAuthority().equals("ROLE_ANONYMOUS"))) {
 
-            // If a user ID is provided, make sure the logged-in user
-            // is creating their own cart
-            User currentUser = currentUserService.getCurrentUser();
-
-            if (!user.getId().equals(currentUser.getId())) {
-                throw new AccessDeniedException(
-                        "You Cannot create a cart for another user"
-                );
-            }
+            currentUser = currentUserService.getCurrentUser();
         }
 
         ProductVariant productVariant =
@@ -65,17 +57,10 @@ public class CartServiceImpl implements CartService {
 
         Cart cart = CartMapper.toEntity(dto);
 
-        // Generate unique token for this cart
+        cart.setUser(currentUser);
         cart.setCartToken(UUID.randomUUID().toString());
 
-        // If logged-in user exists, attach the cart to the user
-        if (user != null) {
-            cart.setUser(user);
-            user.setCart(cart);
-        }
-
         CartItem cartItem = new CartItem();
-
         cartItem.setCart(cart);
         cartItem.setProductVariant(productVariant);
         cartItem.setQuantity(dto.getQuantity());
@@ -86,7 +71,6 @@ public class CartServiceImpl implements CartService {
 
         return CartMapper.toResponse(savedCart);
     }
-
 
     @Override
     public CartResponseDto getCartById(
@@ -108,10 +92,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public List<CartResponseDto> getAllCart() {
 
-        User currentUser = currentUserService.getCurrentUser();
-
-        List<Cart> carts =
-                cartRepository.findByUserId(currentUser.getId());
+        List<Cart> carts = cartRepository.findAll();
 
         if (carts.isEmpty()) {
             throw new ResourceNotFoundException(
@@ -122,7 +103,7 @@ public class CartServiceImpl implements CartService {
         return carts
                 .stream()
                 .map(CartMapper::toResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 
 
@@ -282,7 +263,6 @@ public class CartServiceImpl implements CartService {
 
         return CartMapper.toResponse(updated);
     }
-
 
     private void checkCartOwnership(
             Cart cart,
