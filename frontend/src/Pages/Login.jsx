@@ -1,10 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
 
 export default function Login() {
-
     const { login } = useAuth();
-
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -12,27 +12,17 @@ export default function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         setError("");
         setLoading(true);
 
         try {
-            await login({
-                email,
-                password,
-            });
-
+            await login({ email, password });
             console.log("Login successful!");
-
         } catch (error) {
-
-            console.error(error);
-
             setError(
                 error.response?.data?.message ||
                 "Invalid email or password"
             );
-
         } finally {
             setLoading(false);
         }
@@ -43,176 +33,108 @@ export default function Login() {
             className="min-h-screen flex items-center justify-center px-4 bg-cover bg-center"
             style={{
                 backgroundImage: `
-                    linear-gradient(
-                        rgba(8, 12, 18, 0.75),
-                        rgba(8, 12, 18, 0.75)
-                    ),
-                    url(https://i.pinimg.com/1200x/2c/de/6b/2cde6b4a0f2f790f2d9042ebcee0133f.jpg)
+                    linear-gradient(rgba(11,16,32,.88), rgba(11,16,32,.96)),
+                    url("https://i.pinimg.com/1200x/2c/de/6b/2cde6b4a0f2f790f2d9042ebcee0133f.jpg")
                 `,
             }}
         >
+            <div className="w-full max-w-md">
 
-            {/* Login Card */}
-            <div
-                className="
-                    w-full
-                    max-w-md
-                    bg-white/10
-                    backdrop-blur-xl
-                    border
-                    border-white/20
-                    p-8
-                    rounded-2xl
-                    shadow-2xl
-                "
-            >
+                {/* Logo */}
+                <div className="text-center mb-8">
+                    <h1 className="text-4xl font-bold text-white">
+                        Ani<span className="text-pink-400">Store</span>
+                    </h1>
+                    <p className="text-gray-400 mt-2">
+                        Welcome back
+                    </p>
+                </div>
 
-                {/* Title */}
-                <h1 className="text-3xl font-bold text-center text-white mb-2">
-                    Welcome Back
-                </h1>
+                {/* Card */}
+                <div className="bg-[#0B1020]/90 backdrop-blur-xl border border-pink-400/20 rounded-2xl p-8 shadow-2xl">
 
-                <p className="text-center text-gray-300 mb-8">
-                    Sign in to your account
+                    <h2 className="text-xl font-semibold text-white mb-6">
+                        Sign in to your account
+                    </h2>
+
+                    {error && (
+                        <p className="mb-5 text-sm text-pink-400">
+                            {error}
+                        </p>
+                    )}
+
+                    <form onSubmit={handleSubmit} className="space-y-5">
+
+                        {/* Email */}
+                        <div>
+                            <label className="block text-sm text-gray-300 mb-2">
+                                Email
+                            </label>
+
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="you@example.com"
+                                required
+                                className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 outline-none focus:border-pink-400 transition"
+                            />
+                        </div>
+
+                        {/* Password */}
+                        <div>
+                            <label className="block text-sm text-gray-300 mb-2">
+                                Password
+                            </label>
+
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="••••••••"
+                                required
+                                className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 outline-none focus:border-pink-400 transition"
+                            />
+                        </div>
+
+                        {/* Login */}
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full py-3 rounded-lg bg-pink-400 text-[#0B1020] font-semibold hover:bg-pink-300 transition disabled:opacity-50"
+                        >
+                            {loading ? "Signing in..." : "Sign in"}
+                        </button>
+
+                    </form>
+
+                    {/* Divider */}
+                    <div className="flex items-center gap-3 my-6">
+                        <div className="h-px flex-1 bg-white/10" />
+                        <span className="text-xs text-gray-500">OR</span>
+                        <div className="h-px flex-1 bg-white/10" />
+                    </div>
+
+
+                    <p className="text-center text-sm text-gray-500 mt-6">
+                        Don't have an account?
+                        <button
+                        type="button"
+                        onClick={() => navigate("/register")}
+                        className="text-pink-400 ml-1 hover:text-pink-300"
+                        >
+
+                            Create account
+                        </button>
+                    </p>
+
+                </div>
+
+                <p className="text-center text-xs text-gray-600 mt-6">
+                    © 2026 AniStore
                 </p>
 
-                {/* Error Message */}
-                {error && (
-                    <div
-                        className="
-                            mb-5
-                            p-3
-                            bg-red-500/20
-                            border
-                            border-red-400/30
-                            text-red-300
-                            rounded-lg
-                            text-sm
-                        "
-                    >
-                        {error}
-                    </div>
-                )}
-
-                {/* Login Form */}
-                <form
-                    onSubmit={handleSubmit}
-                    className="space-y-5"
-                >
-
-                    {/* Email */}
-                    <div>
-
-                        <label
-                            className="
-                                block
-                                mb-2
-                                text-sm
-                                font-medium
-                                text-gray-200
-                            "
-                        >
-                            Email
-                        </label>
-
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) =>
-                                setEmail(e.target.value)
-                            }
-                            placeholder="Enter your email"
-                            required
-                            className="
-                                w-full
-                                px-4
-                                py-3
-                                bg-black/30
-                                border
-                                border-white/20
-                                text-white
-                                placeholder-gray-400
-                                rounded-lg
-                                outline-none
-                                focus:border-white/50
-                                focus:ring-2
-                                focus:ring-white/20
-                                transition
-                            "
-                        />
-
-                    </div>
-
-                    {/* Password */}
-                    <div>
-
-                        <label
-                            className="
-                                block
-                                mb-2
-                                text-sm
-                                font-medium
-                                text-gray-200
-                            "
-                        >
-                            Password
-                        </label>
-
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) =>
-                                setPassword(e.target.value)
-                            }
-                            placeholder="Enter your password"
-                            required
-                            className="
-                                w-full
-                                px-4
-                                py-3
-                                bg-black/30
-                                border
-                                border-white/20
-                                text-white
-                                placeholder-gray-400
-                                rounded-lg
-                                outline-none
-                                focus:border-white/50
-                                focus:ring-2
-                                focus:ring-white/20
-                                transition
-                            "
-                        />
-
-                    </div>
-
-                    {/* Login Button */}
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="
-                            w-full
-                            bg-white
-                            text-black
-                            py-3
-                            rounded-lg
-                            font-semibold
-                            transition
-                            hover:bg-gray-200
-                            disabled:opacity-50
-                            disabled:cursor-not-allowed
-                        "
-                    >
-                        {loading
-                            ? "Logging in..."
-                            : "Login"
-                        }
-                    </button>
-
-                </form>
-
             </div>
-
         </div>
     );
 }
