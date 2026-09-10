@@ -13,68 +13,92 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Component // component tell spring to manage an object of this class
+@Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final CustomerUserDetailService customerUserDetailService;
 
-    public JwtAuthenticationFilter(JwtService jwtService,
-                                   CustomerUserDetailService customerUserDetailService) {
+    public JwtAuthenticationFilter(
+            JwtService jwtService,
+            CustomerUserDetailService customerUserDetailService) {
+
         this.jwtService = jwtService;
         this.customerUserDetailService = customerUserDetailService;
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+
+        return request.getServletPath().equals("/api/auth/login")
+                || request.getServletPath().equals("/api/auth/register");
+    }
+
+    @Override
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain)
             throws ServletException, IOException {
 
-        // Get Authorization header
         String authHeader = request.getHeader("Authorization");
 
-        // No token
-        if(authHeader == null || !authHeader.startsWith("Bearer ")){
+        if (authHeader == null ||
+                !authHeader.startsWith("Bearer ")) {
+
             filterChain.doFilter(request, response);
             return;
         }
-        // remove bearer from the token
+
         String jwt = authHeader.substring(7);
+
         try {
 
-
-            // get email from token
             String email = jwtService.extractUsername(jwt);
 
-            // check if users is not already authenticated
-            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = customerUserDetailService.loadUserByUsername(email);
+            if (email != null &&
+                    SecurityContextHolder
+                            .getContext()
+                            .getAuthentication() == null) {
 
-                // validate token
+                UserDetails userDetails =
+                        customerUserDetailService
+                                .loadUserByUsername(email);
+
                 if (jwtService.isTokenValid(jwt, userDetails)) {
+
                     UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(userDetails,
+                            new UsernamePasswordAuthenticationToken(
+                                    userDetails,
                                     null,
-                                    userDetails.getAuthorities());
+                                    userDetails.getAuthorities()
+                            );
 
                     authentication.setDetails(
                             new WebAuthenticationDetailsSource()
                                     .buildDetails(request)
                     );
-                    System.out.println("EMAIL: " + userDetails.getUsername());
-                    System.out.println("AUTHORITIES: " + userDetails.getAuthorities());
-                    // Tell spring security who is the user
+
+                    System.out.println(
+                            "EMAIL: " + userDetails.getUsername()
+                    );
+
+                    System.out.println(
+                            "AUTHORITIES: " + userDetails.getAuthorities()
+                    );
+
                     SecurityContextHolder
                             .getContext()
                             .setAuthentication(authentication);
                 }
             }
-        } catch (Exception e){
-            // invalid or malformed JWT
+
+        } catch (Exception e) {
+
             SecurityContextHolder.clearContext();
         }
-        // continue the request
+
         filterChain.doFilter(request, response);
     }
 }
+

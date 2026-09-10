@@ -4,6 +4,7 @@ import com.example.animeecommercebackend.Security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -35,40 +36,35 @@ public class SecurityConfig {
             HttpSecurity httpSecurity) throws Exception {
 
         httpSecurity
-
-                // Disable CSRF because we are using JWT
                 .csrf(csrf -> csrf.disable())
 
-                // Enable CORS
                 .cors(cors ->
                         cors.configurationSource(corsConfiguration())
                 )
 
-                // JWT authentication is stateless
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS
                         )
                 )
 
-                // Authorization rules
                 .authorizeHttpRequests(auth -> auth
+
+                        // Allow CORS preflight
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                         // Public endpoints
                         .requestMatchers(
                                 "/api/auth/register",
                                 "/api/auth/login",
-                                "/api/cart/**",
-                                // Swagger UI
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()
 
-                        // Every other endpoint requires authentication
+                        // Everything else requires JWT
                         .anyRequest().authenticated()
                 )
 
-                // JWT filter
                 .addFilterBefore(
                         jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class
@@ -78,20 +74,18 @@ public class SecurityConfig {
     }
 
     // CORS Configuration
-    private CorsConfigurationSource corsConfiguration() {
+    @Bean
+    public CorsConfigurationSource corsConfiguration() {
 
         CorsConfiguration configuration =
                 new CorsConfiguration();
 
-        // Allowed frontend origins
         configuration.setAllowedOrigins(
-                List.of(
-                        "http://localhost:3000",
-                        "http://localhost:5173"
-                )
+                List.of("http://localhost:3000",
+                        "http://localhost:5173",
+                        "http://localhost:5174")
         );
 
-        // Allowed HTTP methods
         configuration.setAllowedMethods(
                 List.of(
                         "GET",
@@ -103,15 +97,12 @@ public class SecurityConfig {
                 )
         );
 
-        // Allowed headers
         configuration.setAllowedHeaders(
                 List.of("*")
         );
 
-        // Allow credentials
         configuration.setAllowCredentials(true);
 
-        // Apply CORS configuration to all endpoints
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
 
