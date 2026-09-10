@@ -1,26 +1,26 @@
 import axios from "axios";
 
 const api = axios.create({
-    // get a request from backend in localhost
     baseURL: "http://localhost:8080",
-    header: {
+    headers: {
         "Content-Type": "application/json",
     },
 });
 
-// Add Jwt automatically to every request
 api.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem(token);
 
-        if(token){
-            config.header.Authorization = `Bearer ${token}`;
+        const storedToken = localStorage.getItem("token");
+
+        if (storedToken) {
+            config.headers.Authorization = `Bearer ${storedToken}`;
         }
+
         return config;
     },
     (error) => {
-        return  Promise.reject(error);
+        return Promise.reject(error);
     }
-)
+);
 
 export default api;
