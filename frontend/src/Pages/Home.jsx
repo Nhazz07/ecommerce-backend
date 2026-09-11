@@ -41,7 +41,7 @@ function Home() {
                         </h1>
 
                         <p className="mt-6 text-gray-500 dark:text-gray-400 max-w-lg">
-                            Discover authentic figures, apparel, accessories
+                            Discover    authentic figures, apparel, accessories
                             and more from the anime you love.
                         </p>
 
