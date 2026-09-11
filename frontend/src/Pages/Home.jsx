@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import bleach from "../assets/figurebleach.jpg"
+import ProductCard from "../Components/ProductCard"
 
 const categories = [
     "All",
@@ -15,8 +16,11 @@ const categories = [
 
 const products = [
     { name: "Gojo Satoru Figure", category: "Jujutsu Kaisen", price: "$59.00" },
+
     { name: "Akatsuki Hoodie", category: "Naruto", price: "$45.00" },
+
     { name: "Straw Hat", category: "One Piece", price: "$25.00" },
+    
     { name: "Tanjiro Poster", category: "Demon Slayer", price: "$18.00" },
 ];
 
@@ -121,31 +125,13 @@ function Home() {
                     </button>
                 </div>
 
+
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
                     {products.map((product) => (
-                        <div
-                            key={product.name}
-                            className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden hover:border-pink-400 transition"
-                        >
-                            <div className="h-56 bg-gray-100 dark:bg-white/5" />
-
-                            <div className="p-4">
-                                <p className="font-semibold">{product.name}</p>
-                                <p className="text-sm text-gray-500 mt-1">
-                                    {product.category}
-                                </p>
-
-                                <div className="flex justify-between items-center mt-4">
-                                    <span className="font-bold">
-                                        {product.price}
-                                    </span>
-
-                                    <button className="px-3 py-2 rounded-lg bg-pink-400 text-[#0B1020] font-semibold">
-                                        🛒
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        <ProductCard
+                            key={product.id}
+                            product={product}
+                        />
                     ))}
                 </div>
             </section>
