@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import {
+    Moon,
     Search,
     ShoppingCart,
-    Heart,
-    Sun,
-    Moon,
+    Sun
 } from "lucide-react";
-
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useCart } from "../Context/CartContent";
 export default function Navbar() {
     const navigate = useNavigate();
     const location = useLocation();
-
+    const {cartCount} = useCart();
     const [darkMode, setDarkMode] = useState(
         localStorage.getItem("theme") === "dark"
     );
@@ -103,7 +102,7 @@ export default function Navbar() {
                         <ShoppingCart size={20} strokeWidth={2} />
 
                         <span className="absolute -top-3 -right-3 min-w-4 h-4 px-1 flex items-center justify-center rounded-full bg-pink-400 text-[#0B1020] text-[10px] font-bold">
-                            0
+                            {cartCount}
                         </span>
                     </button>
 

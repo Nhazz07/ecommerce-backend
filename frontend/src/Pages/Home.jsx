@@ -1,7 +1,6 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
-import bleach from "../assets/figurebleach.jpg"
-import ProductCard from "../Components/ProductCard"
+import bleach from "../assets/figurebleach.jpg";
+import ProductCard from "../Components/ProductCard";
 
 const categories = [
     "All",
@@ -15,13 +14,34 @@ const categories = [
 ];
 
 const products = [
-    { name: "Gojo Satoru Figure", category: "Jujutsu Kaisen", price: "$59.00" },
-
-    { name: "Akatsuki Hoodie", category: "Naruto", price: "$45.00" },
-
-    { name: "Straw Hat", category: "One Piece", price: "$25.00" },
-    
-    { name: "Tanjiro Poster", category: "Demon Slayer", price: "$18.00" },
+    {
+        id: 1,
+        name: "Gojo Satoru Figure",
+        category: "Jujutsu Kaisen",
+        price: "$59.00",
+        image: bleach,
+    },
+    {
+        id: 2,
+        name: "Akatsuki Hoodie",
+        category: "Naruto",
+        price: "$45.00",
+        image: bleach,
+    },
+    {
+        id: 3,
+        name: "Straw Hat",
+        category: "One Piece",
+        price: "$25.00",
+        image: bleach,
+    },
+    {
+        id: 4,
+        name: "Tanjiro Poster",
+        category: "Demon Slayer",
+        price: "$18.00",
+        image: bleach,
+    },
 ];
 
 function Home() {

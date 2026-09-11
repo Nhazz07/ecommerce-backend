@@ -1,10 +1,11 @@
 import React from "react";
 import { ShoppingCart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import {useCart} from "../Context/CartContent"
 
 function ProductCard({ product }) {
     const navigate = useNavigate();
-
+    const {addToCart} = useCart();
     return (
         <div
             onClick={() => navigate(`/products/${product.id}`)}
@@ -37,7 +38,7 @@ function ProductCard({ product }) {
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
-                            console.log("Add to cart:", product.name);
+                            addToCart(product);
                         }}
                         className="p-2 rounded-lg bg-pink-400 text-[#0B1020] hover:bg-pink-300 transition"
                         title="Add to cart"
