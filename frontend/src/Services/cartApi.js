@@ -1,5 +1,6 @@
 const API_URL = "http://localhost:8080/api/cart";
-export const createCart = async(prooductId, productVariantId,quantity) => {
+
+export const createCart = async(productId, productVariantId,quantity) => {
     const response = await fetch(API_URL, {
         method: "POST",
         headers:{
@@ -11,8 +12,12 @@ export const createCart = async(prooductId, productVariantId,quantity) => {
             quantity
         }),
     });
+
+    const result = await response.json();
+
+    console.log("Backend cart response:", result);
     if(!response.ok){
-        throw new Error("Failed to create cart");
+        throw new Error(`Failed to create cart: ${response.status}` );
     }
-    return response.json;
+    return result;
 }

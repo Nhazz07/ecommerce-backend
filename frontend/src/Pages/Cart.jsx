@@ -1,5 +1,6 @@
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useCart } from "../Context/CartContent";
+import bleach from "../assets/figurebleach.jpg";
 
 function Cart(){
   const {
@@ -7,10 +8,11 @@ function Cart(){
     removeFromCart,
     updateQuantity,
   } = useCart();
-  const totalPrice = cartItems.reduce(
-    (total,item) => total + parseFloat(item.price.replace("$", "")) * item.quantity,
+const totalPrice = cartItems.reduce(
+    (total, item) =>
+        total + Number(item.price) * item.quantity,
     0
-  );
+);
   if(cartItems.length === 0){
     return (
       <main className="min-h-screen pt-24 px-6 bg-white text-[#0B1020] dark:bg-[#0B1020] dark:text-white">
@@ -29,64 +31,72 @@ return (
         {/* Cart Item */}
         <div className="lg:col-span-2 space-y-4">
           {cartItems.map((item) => (
-            <div
-            key={item.id}
-            className="flex gap-4 p-4 rounded-xl border-gray-200 dark:border-white/10 bg-white dark:bg-white/5"
-            >
-              <img
-              src={item.image}
-              alt={item.name}
-              className="w-28 h-28 rounded-lg object-cover"
-              />
-              <div className="flex-1">
-                <div className="flex justify-between gap-4">
-                  <div>
-                    <h2 className="font-semibold">
-                      {item.name}
-                    </h2>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                      {item.category}
-                    </p>
-                  </div>
-                  <button
-                  onClick={() => removeFromCart(item.id)}
-                  className="text-gray-400 hover:text-red-500 transition"
-                  title="Remove items"
-                  >
-                    <Trash2 size={18}/>
-                  </button>
-                </div>
-                <div className="flex items-center justify-between mt-6">
-                  <span className="font-bold">
-                    {item.price}
-                  </span>
-                  <div className="flex items-center gap-3">
-                    <button
-                    onClick={() => updateQuantity(
-                      item.id,
-                      Math.max(1, item.quantity - 1)
-                    )}
-                    className="p-1 rounded border bordder-gray-200 dark:border-white/10 hover:border-pink-400"
-                    >
-                      <Minus size={15}/>
-                    </button>
-                    <span className="min-w-5 text-center">
-                      {item.quantity}
-                    </span>
-                    <button
-                    onClick={() => updateQuantity(
-                      item.id,
-                      item.quantity + 1
-                    )}
-                    className="p-1 rounded border border-gray-200 dark:border-white/10 hover:border-pink-400"
-                    >
-                      <Plus size={15}/>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
+  <div
+    key={item.id}
+    className="flex gap-4 p-4 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5"
+  >
+    <img
+      src={bleach}
+      alt={item.productName}
+      className="w-28 h-28 rounded-lg object-cover"
+    />
+
+    <div className="flex-1">
+      <div className="flex justify-between gap-4">
+        <div>
+          <h2 className="font-semibold">
+            {item.productName}
+          </h2>
+
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            Anime Figure
+          </p>
+        </div>
+
+        <button
+          onClick={() => removeFromCart(item.id)}
+          className="text-gray-400 hover:text-red-500 transition"
+          title="Remove item"
+        >
+          <Trash2 size={18} />
+        </button>
+      </div>
+
+      <div className="flex items-center justify-between mt-6">
+        <span className="font-bold">
+          ${Number(item.price).toFixed(2)}
+        </span>
+
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() =>
+              updateQuantity(
+                item.id,
+                Math.max(1, item.quantity - 1)
+              )
+            }
+            className="p-1 rounded border border-gray-200 dark:border-white/10 hover:border-pink-400"
+          >
+            <Minus size={15} />
+          </button>
+
+          <span className="min-w-5 text-center">
+            {item.quantity}
+          </span>
+
+          <button
+            onClick={() =>
+              updateQuantity(item.id, item.quantity + 1)
+            }
+            className="p-1 rounded border border-gray-200 dark:border-white/10 hover:border-pink-400"
+          >
+            <Plus size={15} />
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+))}
         </div>
         {/* Order Summary */}
         <div className="h-fit p-6 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5">

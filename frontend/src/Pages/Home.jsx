@@ -16,32 +16,28 @@ const categories = [
 const products = [
     {
         id: 1,
-        name: "Gojo Satoru Figure",
-        category: "Jujutsu Kaisen",
-        price: "$59.00",
-        image: bleach,
-    },
-    {
-        id: 2,
-        name: "Akatsuki Hoodie",
-        category: "Naruto",
-        price: "$45.00",
-        image: bleach,
+        productVariantId: 7,
+        name: "Bleach Figure",
+        category: "Bleach",
+        price: "$85.00",
+        image: bleach
     },
     {
         id: 3,
-        name: "Straw Hat",
-        category: "One Piece",
-        price: "$25.00",
-        image: bleach,
+        productVariantId: null,
+        name: "Bleach Figure",
+        category: "Bleach",
+        price: "$85.00",
+        image: bleach
     },
     {
         id: 4,
-        name: "Tanjiro Poster",
-        category: "Demon Slayer",
-        price: "$18.00",
-        image: bleach,
-    },
+        productVariantId: null,
+        name: "Black Clover Figure",
+        category: "Black Clover",
+        price: "$85.00",
+        image: bleach
+    }
 ];
 
 function Home() {

@@ -1,26 +1,40 @@
 import React, { createContext, useContext, useState } from "react";
+import {createCart} from "../Services/cartApi";
 
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
     const [cartItems, setCartItems] = useState([]);
+    const [cartId, setCartId] = useState(null);
+    const [cartToken, setCartToken] = useState(
+        localStorage.getItem("cartToken")
+    );
 
-    const addToCart = (product) => {
-        setCartItems((prevItems) => {
-            const existingItem = prevItems.find(
-                (item) => item.id === product.id
+    const addToCart = async(product) => {
+        try{
+
+            console.log("Product being added:", product);
+            console.log("Prduct ID: ", product.id);
+            console.log("Product Variant ID:", product.productVariantId);
+
+            const response = await createCart(
+                product.id,
+                product.productVariantId,
+                1
             );
+            const cart = response.data;
 
-            if (existingItem) {
-                return prevItems.map((item) =>
-                    item.id === product.id
-                        ? { ...item, quantity: item.quantity + 1 }
-                        : item
-                );
-            }
+            setCartId(cart.id);
+            setCartToken(cart.cartToken);
+            setCartItems(cart.items);
 
-            return [...prevItems, { ...product, quantity: 1 }];
-        });
+            localStorage.setItem("cartId", cart.id);
+            localStorage.setItem("cartToken", cart.cartToken);
+
+            console.log("Cart added successfully", cart);
+        }catch(error){
+            console.log("Failed to add product to cart:", error);
+        }
     };
 
     const removeFromCart = (productId) => {
@@ -48,6 +62,8 @@ export function CartProvider({ children }) {
         <CartContext.Provider
             value={{
                 cartItems,
+                cartId,
+                cartToken,
                 addToCart,
                 removeFromCart,
                 updateQuantity,
